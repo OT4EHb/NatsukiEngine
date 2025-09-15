@@ -1,21 +1,19 @@
 #pragma once
+#include <SourceManager.hpp>
+#include <StateManager.hpp>
 #include <Renderer.hpp>
 #include <KeyState.hpp>
 #include <GlobalTime.hpp>
 class GameSystems {
 private:
-    GameSystems();
+    GameSystems() = default;
 public:
-    Window window;
-    Renderer renderer;
-    GameState *currentState;
-    SDL_FRect rect;
+    SourceManager<Window> windowManager;
+    SourceManager<Renderer> rendererManager;
+    StateManager stateManager;
     ~GameSystems() = default;
-    static GameSystems *get();
-    void changeState(GameState *state) {
-        currentState->exit(this);
-        currentState = state;
-        currentState->enter(this);
+    static GameSystems *get() {
+        static GameSystems systems;
+        return &systems;
     }
-    bool isValidState() const;
 };

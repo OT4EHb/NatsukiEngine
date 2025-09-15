@@ -8,8 +8,8 @@
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 	SDL::init();
 	GameSystems *systems = GameSystems::get();
-	systems->currentState = (GameDll::init("Saper.dll"));
-	if (!systems->isValidState()) {
+	GameDll::init("Example.dll", systems);
+	if (!systems->stateManager.getCurrent()) {
 		SDL_SetError("Invalid DLL");
 		return SDL_APP_FAILURE;
 	}
@@ -18,7 +18,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
 	auto *systems = GameSystems::get();
-	GameState *curr = systems->currentState;
+	GameState *curr = systems->stateManager.getCurrent();
 	curr->update(systems, GlobalTime::getDelta());
 	curr->render(systems);
 	return SDL_APP_CONTINUE;
@@ -26,7 +26,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 	auto *systems = GameSystems::get();
-	return systems->currentState->eventHandler(systems, event);
+	return systems->stateManager.getCurrent()->eventHandler(systems, event);
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {

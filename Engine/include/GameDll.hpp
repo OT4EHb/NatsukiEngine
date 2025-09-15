@@ -3,21 +3,21 @@
 #include <GameState.hpp>
 
 class GameDll {
-	typedef GameState *(*InitGameFunc)();
+	typedef void (*InitGameFunc)(GameSystems *);
 private:
 	HMODULE dll;
 	GameDll(const char *name) {
 		dll = LoadLibraryA(name);
 	}
 public:
-	static GameState *init(const char *name) {
+	static void init(const char *name, GameSystems *systems) {
 		static GameDll instance(name);
 		if (!instance.isLoaded()) {
-			return nullptr;
+			return;
 		}
 		auto create = (InitGameFunc)GetProcAddress(instance.dll, "createStartState");
-		if (create == nullptr) return nullptr;
-		return create();
+		if (create == nullptr) return;
+		return create(systems);
 	}
 	bool isLoaded() const {
 		return dll != nullptr;

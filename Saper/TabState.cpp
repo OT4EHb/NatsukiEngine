@@ -9,53 +9,23 @@ TabState::TabState() {
 			return SDL_APP_SUCCESS; }
 	);
 	registerKeyDown(
-		SDL_SCANCODE_A,
-		[](GameSystems *systems, SDL_Event *e) {
-			systems->rect.x -= 100;
-			return SDL_APP_CONTINUE;
-		}
-	);
-	registerKeyDown(
-		SDL_SCANCODE_D,
-		[](GameSystems *systems, SDL_Event *e) {
-			systems->rect.x += 100;
-			return SDL_APP_CONTINUE;
-		}
-	);
-	registerKeyDown(
-		SDL_SCANCODE_W,
-		[](GameSystems *systems, SDL_Event *e) {
-			systems->rect.y -= 100;
-			return SDL_APP_CONTINUE;
-		}
-	);
-	registerKeyDown(
-		SDL_SCANCODE_S,
-		[](GameSystems *systems, SDL_Event *e) {
-			systems->rect.y += 100;
-			return SDL_APP_CONTINUE;
-		}
-	);
-	registerKeyDown(
 		SDL_SCANCODE_TAB,
 		[](GameSystems *systems, SDL_Event *e) {
-			systems->changeState(StartState::get());
+			systems->stateManager.change<StartState>(systems);
 			return SDL_APP_CONTINUE;
 		}
 	);
 }
-TabState *TabState::get() {
-	return &instance;
-}
+
 void TabState::update(GameSystems *systems, Uint64 deltaTime) {
 	std::cout << SDL_SECONDS_TO_NS(1) / deltaTime << "\n";
 }
-void TabState::render(GameSystems *systems) {
-	const Renderer &ren = systems->renderer;
-	ren.clear();
-	ren.setDrawColor({255, 0, 0, 255});
-	ren.rect(&systems->rect);
-	ren.present();
-}
 
-TabState TabState::instance{};
+void TabState::render(GameSystems *systems) {
+	const auto ren = systems->rendererManager.get("main");
+	ren->clear();
+	ren->setDrawColor({255, 0, 0, 255});
+	const SDL_FRect f{0, 0, 100, 100};
+	ren->rect(&f);
+	ren->present();
+}
