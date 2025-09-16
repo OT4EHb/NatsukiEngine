@@ -13,3 +13,4 @@
 *.filters
 *.dll
 /Saper/x64
+/Source/Source.vcxitems
