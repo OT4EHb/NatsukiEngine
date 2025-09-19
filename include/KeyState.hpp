@@ -19,12 +19,14 @@ public:
 			if (it != keyUpHandlers.end()) {
 				return it->second(systems, event);
 			}
+			return SDL_APP_CONTINUE;
 		}
 		if (event->type == SDL_EVENT_KEY_DOWN) {
 			auto it = keyDownHandlers.find(static_cast<SDL_Scancode>(event->key.scancode));
 			if (it != keyDownHandlers.end()) {
 				return it->second(systems, event);
 			}
+			return SDL_APP_CONTINUE;
 		}
 		return GameState::eventHandler(systems, event);
 	}
