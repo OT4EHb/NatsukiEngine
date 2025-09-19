@@ -14,16 +14,16 @@ public:
 	void registerHandler(SDL_EventType type, EventHandler handler) {
 		eventHandlers[type] = handler;
 	}
-	virtual SDL_AppResult eventHandler(GameSystems *systems, SDL_Event *event) {
+	virtual SDL_AppResult eventHandler(GameSystems *systems, SDL_Event *event) const {
 		auto it = eventHandlers.find(static_cast<SDL_EventType>(event->type));
 		if (it != eventHandlers.end()) {
 			return it->second(systems, event);
 		}
 		return SDL_APP_CONTINUE;
 	}
-	virtual void enter(GameSystems *systems) {};
-	virtual void exit(GameSystems *systems) {};
-	virtual void update(GameSystems *systems, Uint64 deltaTime) = 0;
-	virtual void render(GameSystems *systems) = 0;
+	virtual void enter() {};
+	virtual void exit() {};
+	virtual void update(Uint64 deltaTime) = 0;
+	virtual void render() = 0;
 	virtual ~GameState() = default;
 };

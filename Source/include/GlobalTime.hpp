@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL3/SDL_timer.h>
+#include <SDL3/SDL_init.h>
 class GlobalTime {
 	friend SDL_AppResult SDL_AppIterate(void *);
 private:

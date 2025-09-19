@@ -6,12 +6,8 @@ class Renderer {
 private:
 	SDL_Renderer *renderer;
 public:
-	Renderer(Window *window, const std::string &name) {
+	Renderer(Window *window, const std::string &name = "") {
 		renderer = SDL_CreateRenderer(window->window, name.c_str());
-	}
-
-	Renderer(Window *window, const char *name = nullptr) {
-		renderer = SDL_CreateRenderer(window->window, name);
 	}
 
 	~Renderer() {
