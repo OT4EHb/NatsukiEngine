@@ -14,3 +14,7 @@
 *.dll
 /Saper/x64
 /Source/Source.vcxitems
+/Natsuki
+/Engine/Saper.hpp
+/Engine/Saper.cpp
+/Engine
