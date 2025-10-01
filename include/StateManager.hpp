@@ -30,18 +30,28 @@ public:
 		return nullptr;
 	}
 
-	const GameState *getCurrent() const {
+	template<GameStateType T>
+	bool release() {
+		std::type_index type = typeid(T);
+		if (auto it = states.find(type); it != states.end() && current != *it) {
+			states.erase(it);
+			return true;
+		}
+		return false;
+	}
+
+	GameState *getCurrent() const {
 		return current;
 	}
 
 	template<GameStateType T>
-	bool change(GameSystems *systems) {
+	bool change(Game * game) {
 		if (auto state = get<T>()) {
 			if (current) {
-				current->exit(systems);
+				current->exit(game);
 			}
 			current = state;
-			current->enter(systems);
+			current->enter(game);
 			return true;
 		}
 		return false;

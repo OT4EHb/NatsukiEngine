@@ -1,16 +1,11 @@
 #pragma once
-#include <SDL3/SDL.h>
+#include <SDL3/SDL_init.h>
+#include <Natsuki.hpp>
 
-class SDL {
-private:
-	SDL(SDL_InitFlags flags) {
-		SDL_Init(flags);
-	}
+class NATSUKI SDL {
 public:
-	static void init(SDL_InitFlags flags = SDL_INIT_VIDEO) {
-		static SDL instance(flags);
-	}
-	~SDL() {
-		SDL_Quit();
-	}
+	SDL() = delete;
+	static bool init(SDL_InitFlags flags);
+	static void quit();
+	static const char *getError();
 };

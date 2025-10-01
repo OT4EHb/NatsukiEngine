@@ -1,7 +1,7 @@
 #pragma once
-#include <functional>
-#include <unordered_map>
 #include <Handler.hpp>
+
+class Game;
 
 class GameState : Handler {
 public:
@@ -12,9 +12,8 @@ public:
 		}
 		return SDL_APP_CONTINUE;
 	}
-	virtual void enter() {};
-	virtual void exit() {};
-	virtual void update(Uint64 deltaTime) = 0;
-	virtual void render(Renderer*) = 0;
+	virtual void enter(Game*) {};
+	virtual void exit(Game *) {};
+	virtual SDL_AppResult iterate(Game *) = 0;
 	virtual ~GameState() = default;
 };
