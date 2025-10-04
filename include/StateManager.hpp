@@ -4,6 +4,8 @@
 #include <type_traits>
 #include <GameState.hpp>
 
+class Context;
+
 template<typename T>
 concept GameStateType = std::is_base_of_v<GameState, T>;
 
@@ -45,13 +47,13 @@ public:
 	}
 
 	template<GameStateType T>
-	bool change(GAME * game) {
+	bool change(Context &context) {
 		if (auto state = get<T>()) {
 			if (current) {
-				current->exit(game);
+				current->exit(context);
 			}
 			current = state;
-			current->enter(game);
+			current->enter(context);
 			return true;
 		}
 		return false;
