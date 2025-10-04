@@ -2,8 +2,8 @@
 #include <Window.hpp>
 #include <Renderer.hpp>
 
-Renderer::Renderer(Window *window, const char *name) {
-	renderer = SDL_CreateRenderer(window->window, name);
+Renderer::Renderer(Window *window, const char *driverName) {
+	renderer = SDL_CreateRenderer(window->window, driverName);
 }
 
 Renderer::~Renderer() {

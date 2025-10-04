@@ -8,7 +8,7 @@ class NATSUKI Renderer {
 private:
 	SDL_Renderer *renderer;
 public:
-	Renderer(Window *window, const char *name = "");
+	Renderer(Window *window, const char *driverName = "");
 	~Renderer();
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;

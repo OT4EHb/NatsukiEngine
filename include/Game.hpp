@@ -1,8 +1,11 @@
 #pragma once
 #include <SDL3/SDL_init.h>
 
+class Context;
+
 class Game {
 public:
-	virtual SDL_AppResult iterate() = 0;
-	virtual SDL_AppResult eventHandler(SDL_Event *) = 0;
+	Game() = delete;
+	static SDL_AppResult iterate(Context&);
+	static SDL_AppResult eventHandler(Context&,SDL_Event *);
 };

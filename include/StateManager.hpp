@@ -45,7 +45,7 @@ public:
 	}
 
 	template<GameStateType T>
-	bool change(Game * game) {
+	bool change(GAME * game) {
 		if (auto state = get<T>()) {
 			if (current) {
 				current->exit(game);

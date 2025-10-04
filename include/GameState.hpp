@@ -1,8 +1,6 @@
 #pragma once
 #include <Handler.hpp>
 
-class Game;
-
 class GameState : Handler {
 public:
 	virtual SDL_AppResult eventHandler(SDL_Event *event) const {
@@ -12,8 +10,8 @@ public:
 		}
 		return SDL_APP_CONTINUE;
 	}
-	virtual void enter(Game*) {};
-	virtual void exit(Game *) {};
-	virtual SDL_AppResult iterate(Game *) = 0;
+	virtual void enter(GAME*) {};
+	virtual void exit(GAME *) {};
+	virtual SDL_AppResult iterate(GAME *) = 0;
 	virtual ~GameState() = default;
 };

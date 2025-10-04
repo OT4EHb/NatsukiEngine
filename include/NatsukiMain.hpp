@@ -9,7 +9,7 @@
 #include <SDL.hpp>
 
 #ifndef INIT_FLAGS
-#define INIT_FLAGS SDL_INIT_VIDEO&1
+#define INIT_FLAGS SDL_INIT_VIDEO
 #endif // !INIT_FLAGS
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
@@ -32,8 +32,7 @@ inline SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
-	Game *game = static_cast<Game *>(appstate);
-	delete game;
+	delete static_cast<Game *>(appstate);
 	if (result == SDL_APP_FAILURE) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), nullptr);
 	}
