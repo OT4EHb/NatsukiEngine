@@ -1,5 +1,5 @@
-#include <Game.hpp>
-#include "Context.hpp"
+//#define INIT_FLAGS SDL_INIT_VIDEO
+#include <NatsukiMain.hpp>
 
 SDL_AppResult Game::iterate(Context &context) {
 

@@ -7,6 +7,7 @@
 
 #include <Game.hpp>
 #include <SDL.hpp>
+#include "Context.hpp"
 
 #ifndef INIT_FLAGS
 #define INIT_FLAGS SDL_INIT_VIDEO
@@ -16,25 +17,25 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 	if (!SDL::init(INIT_FLAGS)) {
 		return SDL_APP_FAILURE;
 	}
-	Game *game = new GAME();
-	*appstate = static_cast<void *>(game);
+	Context *context = new Context();
+	*appstate = static_cast<void *>(context);
 	return SDL_APP_CONTINUE;
 }
 
 inline SDL_AppResult SDL_AppIterate(void *appstate) {
-	Game *game = static_cast<Game *>(appstate);
-	return game->iterate();
+	Context *context = static_cast<Context *>(appstate);
+	return Game::iterate(*context);
 }
 
 inline SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-	Game *game = static_cast<Game *>(appstate);
-	return game->eventHandler(event);
+	Context *context = static_cast<Context *>(appstate);
+	return Game::eventHandler(*context,event);
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
-	delete static_cast<Game *>(appstate);
 	if (result == SDL_APP_FAILURE) {
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), nullptr);
 	}
+	delete static_cast<Context *>(appstate);
 	SDL::quit();
 }
