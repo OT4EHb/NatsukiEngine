@@ -1,15 +1,16 @@
 #pragma once
-#include <Natsuki.hpp>
+#include <SDL3/SDL_render.h>
 
-class Window;
 struct SDL_Renderer;
+struct SDL_FRect;
+class Window;
 
-class NATSUKI Renderer {
+class Renderer {
 private:
 	SDL_Renderer *renderer;
 public:
-	Renderer(Window *window, const char *driverName = "");
-	~Renderer();
+	inline Renderer(Window *window, const char *driverName = "");
+	inline ~Renderer();
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
 	inline bool present() const;
@@ -17,3 +18,23 @@ public:
 	inline bool rect(const SDL_FRect *rect) const;
 };
 
+inline bool Renderer::setDrawColor(const SDL_Color &c) const {
+	return SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+}
+
+inline bool Renderer::clear(const SDL_Color &color) const {
+	setDrawColor(color);
+	return SDL_RenderClear(renderer);
+}
+
+inline bool Renderer::present() const {
+	return SDL_RenderPresent(renderer);
+}
+
+inline bool Renderer::fillRect(const SDL_FRect *rect) const {
+	return SDL_RenderFillRect(renderer, rect);
+}
+
+inline bool Renderer::rect(const SDL_FRect *rect) const {
+	return SDL_RenderRect(renderer, rect);
+}

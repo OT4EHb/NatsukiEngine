@@ -1,5 +1,6 @@
-#pragma comment(lib,"Natsuki.lib")
 #pragma comment(lib,"SDL3.lib")
+#pragma comment(lib,"SDL3_ttf.lib")
+#pragma comment(lib,"SDL3_image.lib")
 
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>

@@ -12,6 +12,6 @@ public:
 		return delta;
 	}
 	static Uint64 getTicks() {
-		return SDL_GetTicksNS();
+		return SDL_GetTicks();
 	}
 };

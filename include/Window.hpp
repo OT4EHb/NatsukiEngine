@@ -1,10 +1,9 @@
 #pragma once
 #include <SDL3/SDL_video.h>
-#include <Natsuki.hpp>
 
 class Renderer;
 
-class NATSUKI Window {
+class Window {
 	friend class Renderer;
 private:
 	SDL_Window *window;
