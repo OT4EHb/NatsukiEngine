@@ -9,10 +9,14 @@ private:
 	Loger() = default;
 	static void clear();
 public:
-	~Loger();
+	inline ~Loger();
 	static void setStream(std::ostream &stream);
 	static void setStream(const std::string &filename);
 	static std::ostream &get();
 };
+
+Loger::~Loger() {
+	clear();
+}
 
 #define LOGER (Loger::get())

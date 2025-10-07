@@ -10,10 +10,6 @@ void Loger::clear() {
 	}
 }
 
-Loger::~Loger() {
-	clear();
-}
-
 void Loger::setStream(std::ostream &stream) {
 	clear();
 	loger.stream = &stream;
