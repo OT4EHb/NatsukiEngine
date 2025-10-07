@@ -9,8 +9,8 @@ class Renderer {
 private:
 	SDL_Renderer *renderer;
 public:
-	inline Renderer(Window *window, const char *driverName = "");
-	inline ~Renderer();
+	Renderer(Window *window, const char *driverName = "");
+	~Renderer();
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
 	inline bool present() const;
