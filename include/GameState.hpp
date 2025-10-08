@@ -1,14 +1,12 @@
 #pragma once
 #include <Handler.hpp>
 
-class Context;
-
-class GameState : Handler {
+class GameState :public Handler {
 public:
-	virtual SDL_AppResult eventHandler(Context&,SDL_Event *event) const {
+	virtual SDL_AppResult eventHandler(Context &context, SDL_Event *event) const {
 		auto it = eventHandlers.find(static_cast<SDL_EventType>(event->type));
 		if (it != eventHandlers.end()) {
-			return it->second(event);
+			return it->second(context, event);
 		}
 		return SDL_APP_CONTINUE;
 	}

@@ -14,4 +14,7 @@ public:
 	static Uint64 getTicks() {
 		return SDL_GetTicks();
 	}
+	static Uint64 getTicksNS() {
+		return SDL_GetTicksNS();
+	}
 };

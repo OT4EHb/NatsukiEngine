@@ -1,11 +1,11 @@
 #pragma once
 #include <SDL3/SDL_render.h>
 
-struct SDL_Renderer;
-struct SDL_FRect;
 class Window;
+class Texture;
 
 class Renderer {
+	friend class Texture;
 private:
 	SDL_Renderer *renderer;
 public:

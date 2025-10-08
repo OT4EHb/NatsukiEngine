@@ -1,5 +1,5 @@
-#include <SDL3/SDL_video.h>
 #include <Window.hpp>
+#include <SDL3/SDL_video.h>
 
 Window::Window(SDL_Window *window) :window(window) {}
 
