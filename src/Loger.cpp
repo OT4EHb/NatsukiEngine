@@ -1,5 +1,6 @@
-#include <Loger.hpp>
+module;
 #include <fstream>
+module Loger;
 
 Loger Loger::loger;
 
@@ -19,8 +20,4 @@ void Loger::setStream(const std::string &filename) {
 	auto file = new std::ofstream(filename+".log");
 	setStream(*file);
 	loger.isTemp = true;
-}
-
-std::ostream &Loger::get() {
-	return *loger.stream;
 }

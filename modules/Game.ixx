@@ -1,9 +1,9 @@
-#pragma once
-#include <SDL3/SDL_init.h>
-
+module;
 class Context;
+export module Game;
+import <SDL3/SDL_init.h>;
 
-class Game {
+export class Game {
 public:
 	Game() = delete;
 	static SDL_AppResult iterate(Context&);

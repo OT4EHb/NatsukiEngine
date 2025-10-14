@@ -1,7 +1,9 @@
-#pragma once
-#include <Renderer.hpp>
+module;
+class Renderer;
+export module RendererGuard;
+export import Renderer;
 
-class RendererGuard {
+export class RendererGuard {
 private:
 	Renderer *renderer;
 public:

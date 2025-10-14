@@ -1,7 +1,7 @@
-#pragma once
-#include <SDL3/SDL_timer.h>
+export module GlobalTime;
+import <SDL3/SDL_timer.h>;
 
-class GlobalTime {
+export class GlobalTime {
 public:
 	GlobalTime() = delete;
 	static Uint64 getDelta(){

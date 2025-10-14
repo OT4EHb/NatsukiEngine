@@ -1,10 +1,11 @@
-#pragma once
-#include <SDL3/SDL_render.h>
-
+module;
 class Window;
 class Texture;
+export module Renderer;
+import <SDL3/SDL_render.h>;
+import Window;
 
-class Renderer {
+export class Renderer {
 	friend class Texture;
 private:
 	SDL_Renderer *renderer;
@@ -17,6 +18,14 @@ public:
 	inline bool fillRect(const SDL_FRect *rect) const;
 	inline bool rect(const SDL_FRect *rect) const;
 };
+
+Renderer::Renderer(Window *window, const char *driverName) {
+	renderer = SDL_CreateRenderer(window->window, driverName);
+}
+
+Renderer::~Renderer() {
+	SDL_DestroyRenderer(renderer);
+}
 
 inline bool Renderer::setDrawColor(const SDL_Color &c) const {
 	return SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);

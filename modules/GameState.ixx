@@ -1,7 +1,7 @@
-#pragma once
-#include <Handler.hpp>
+export module GameState;
+import Handler;
 
-class GameState :public Handler {
+export class GameState :public Handler {
 public:
 	virtual SDL_AppResult eventHandler(Context &context, SDL_Event *event) const {
 		auto it = eventHandlers.find(static_cast<SDL_EventType>(event->type));

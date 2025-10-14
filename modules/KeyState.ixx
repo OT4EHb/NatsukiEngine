@@ -1,8 +1,8 @@
-#pragma once
-#include <initializer_list>
-#include <GameState.hpp>
+export module KeyState;
+import <initializer_list>;
+import GameState;
 
-class KeyState :
+export class KeyState :
 	public GameState {
 protected:
 	std::unordered_map<SDL_Scancode, EventHandler> keyDownHandlers;

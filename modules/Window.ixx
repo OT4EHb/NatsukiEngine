@@ -1,9 +1,9 @@
-#pragma once
-#include <SDL3/SDL_video.h>
-
+module;
 class Renderer;
+export module Window;
+import <SDL3/SDL_video.h>;
 
-class Window {
+export class Window {
 	friend class Renderer;
 private:
 	SDL_Window *window;
@@ -17,6 +17,15 @@ public:
 	inline bool flash(SDL_FlashOperation operation=SDL_FLASH_CANCEL);
 	inline bool raise();
 };
+
+Window::Window(SDL_Window *window) :window(window) {}
+
+Window::Window(const char *title, int width, int height, SDL_WindowFlags flags) :
+	window(SDL_CreateWindow(title, width, height, flags)) {}
+
+Window::~Window() {
+	SDL_DestroyWindow(window);
+}
 
 bool Window::show() {
 	return SDL_ShowWindow(window);

@@ -1,15 +1,15 @@
-#pragma once
-#include <typeindex>
-#include <unordered_map>
-#include <type_traits>
-#include <GameState.hpp>
-
+module;
 class Context;
+export module StateManager;
+import <typeindex>;
+import <unordered_map>;
+import <type_traits>;
+import GameState;
 
 template<typename T>
 concept GameStateType = std::is_base_of_v<GameState, T>;
 
-class StateManager {
+export class StateManager {
 private:
 	std::unordered_map<std::type_index, GameState*> states;
 	GameState *current;

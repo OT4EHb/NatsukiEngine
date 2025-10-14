@@ -1,8 +1,8 @@
-#pragma once
-#include <unordered_map>
-#include <string>
+export module SourceManager;
+import <unordered_map>;
+import <string>;
 
-template<typename T>
+export template<typename T>
 class SourceManager {
 private:
 	std::unordered_map<std::string, T*> resources;

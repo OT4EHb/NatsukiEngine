@@ -1,7 +1,7 @@
-#pragma once
-#include <ostream>
+export module Loger;
+export import <ostream>;
 
-class Loger {
+export class Loger {
 private:
 	static Loger loger;
 	std::ostream *stream = nullptr;
@@ -12,11 +12,13 @@ public:
 	inline ~Loger();
 	static void setStream(std::ostream &stream);
 	static void setStream(const std::string &filename);
-	static std::ostream &get();
+	inline static std::ostream &get();
 };
 
 Loger::~Loger() {
 	clear();
 }
 
-#define LOGER (Loger::get())
+std::ostream &Loger::get() {
+	return *loger.stream;
+}
