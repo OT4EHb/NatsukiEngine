@@ -1,14 +1,16 @@
 module Game;
+import Context;
 
-SDL_AppResult Game::iterate(Context &context) {
+SDL_AppResult Game::result{SDL_APP_CONTINUE};
 
-	return SDL_APP_CONTINUE;
+void Game::iterate() {
+	//
 }
 
-SDL_AppResult Game::eventHandler(Context &context, SDL_Event *event) {
+void Game::eventHandler(SDL_Event *event) {
 	if (event->type == SDL_EVENT_QUIT) {
-		return SDL_APP_SUCCESS;
+		setResult(SDL_APP_SUCCESS);
+		return;
 	}
-
-	return SDL_APP_CONTINUE;
+	//
 }

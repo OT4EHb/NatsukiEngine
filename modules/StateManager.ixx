@@ -1,10 +1,8 @@
-module;
-class Context;
 export module StateManager;
 import <typeindex>;
 import <unordered_map>;
 import <type_traits>;
-import GameState;
+export import GameState;
 
 template<typename T>
 concept GameStateType = std::is_base_of_v<GameState, T>;
@@ -47,13 +45,13 @@ public:
 	}
 
 	template<GameStateType T>
-	bool change(Context &context) {
+	bool change() {
 		if (auto state = get<T>()) {
 			if (current) {
-				current->exit(context);
+				current->exit();
 			}
 			current = state;
-			current->enter(context);
+			current->enter();
 			return true;
 		}
 		return false;

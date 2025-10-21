@@ -1,6 +1,6 @@
 export module KeyState;
 import <initializer_list>;
-import GameState;
+export import GameState;
 
 export class KeyState :
 	public GameState {
@@ -22,21 +22,21 @@ public:
 		for (SDL_Scancode type : types)
 			registerKeyUp(type, handler);
 	}
-	SDL_AppResult eventHandler(Context &context, SDL_Event *event) const override {
+	void eventHandler(SDL_Event *event) const override {
 		if (event->type == SDL_EVENT_KEY_UP) {
 			auto it = keyUpHandlers.find(static_cast<SDL_Scancode>(event->key.scancode));
 			if (it != keyUpHandlers.end()) {
-				return it->second(context, event);
+				it->second(event);
 			}
-			return SDL_APP_CONTINUE;
+			return;
 		}
 		if (event->type == SDL_EVENT_KEY_DOWN) {
 			auto it = keyDownHandlers.find(static_cast<SDL_Scancode>(event->key.scancode));
 			if (it != keyDownHandlers.end()) {
-				return it->second(context, event);
+				it->second(event);
 			}
-			return SDL_APP_CONTINUE;
+			return;
 		}
-		return GameState::eventHandler(context, event);
+		GameState::eventHandler(event);
 	}
 };

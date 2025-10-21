@@ -1,8 +1,11 @@
 export module Context;
 
-export import Window;
-
 export class Context {
+private:
+	Context();
 public:
-	Window *window;
+	static Context &get() {
+		static Context context{};
+		return context;
+	}
 };

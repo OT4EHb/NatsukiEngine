@@ -1,7 +1,10 @@
+module;
+class Texture;
 export module Surface;
 import <SDL3_image/SDL_image.h>;
 
 export class Surface {
+	friend class Texture;
 private:
 	SDL_Surface *surface;
 public:
