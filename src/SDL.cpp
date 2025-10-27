@@ -7,11 +7,7 @@ bool SDL::init(SDL_InitFlags flags) {
 		TTF_Init();
 }
 
-void SDL::quit() {
+void SDL::quit() noexcept {
 	TTF_Quit();
 	SDL_Quit();
-}
-
-const char *SDL::getError() {
-	return SDL_GetError();
 }

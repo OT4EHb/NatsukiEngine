@@ -1,8 +1,6 @@
 module Game;
 import Context;
 
-SDL_AppResult Game::result{SDL_APP_CONTINUE};
-
 void Game::iterate() {
 	//
 }

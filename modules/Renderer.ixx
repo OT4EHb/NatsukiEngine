@@ -10,7 +10,7 @@ export class Renderer {
 private:
 	SDL_Renderer *renderer;
 public:
-	Renderer(Window *window, const char *driverName = "");
+	Renderer(Window &window, const char *driverName = "");
 	~Renderer();
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
@@ -23,10 +23,11 @@ public:
 	inline bool renderLines(const SDL_FPoint *points, int size) const;
 	inline bool renderPoint(const SDL_FPoint &point) const;
 	inline bool renderPoints(const SDL_FPoint *points, int size) const;
+	inline bool setVSync(int vsync=1) const;
 };
 
-Renderer::Renderer(Window *window, const char *driverName) {
-	renderer = SDL_CreateRenderer(window->window, driverName);
+Renderer::Renderer(Window &window, const char *driverName) {
+	renderer = SDL_CreateRenderer(window.window, driverName);
 }
 
 Renderer::~Renderer() {
@@ -76,4 +77,8 @@ inline bool Renderer::renderPoint(const SDL_FPoint &point) const {
 
 inline bool Renderer::renderPoints(const SDL_FPoint *points, int size) const {
 	return SDL_RenderPoints(renderer, points, size);
+}
+
+inline bool Renderer::setVSync(int vsync) const {
+	return SDL_SetRenderVSync(renderer, vsync);
 }

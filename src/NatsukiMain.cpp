@@ -4,10 +4,20 @@
 
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
-//#include <SDL3/SDL.h>
 
+import <string>;
 import SDL;
+import SDLException;
 import Game;
+import MessageBox;
+
+static void errorCallback(std::string_view error) {
+	MessageBox()
+		.setTitle("Error SDL")
+		.setFlag(MessageBoxFlags::ERROR)
+		.setMessage(error)
+		.show();
+}
 
 static SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 	if (!SDL::init()) {
@@ -17,18 +27,27 @@ static SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 }
 
 SDL_AppResult SDL_AppIterate(void *appstate) {
-	Game::iterate();
+	try {
+		Game::iterate();
+	}
+	catch (SDLException&e) {
+		Game::setResult(SDL_APP_FAILURE);
+		errorCallback(e.what());
+	}
 	return Game::getResult();
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
-	Game::eventHandler(event);
+	try {
+		Game::eventHandler(event);
+	}
+	catch (SDLException&e) {
+		Game::setResult(SDL_APP_FAILURE);
+		errorCallback(e.what());
+	}
 	return Game::getResult();
 }
 
 void SDL_AppQuit(void *appstate, SDL_AppResult result) {
-	if (result == SDL_APP_FAILURE) {
-		//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), nullptr);
-	}
 	SDL::quit();
 }

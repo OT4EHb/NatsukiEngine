@@ -3,7 +3,7 @@ import <SDL3/SDL_init.h>;
 
 export class Game {
 private:
-	static SDL_AppResult result;
+	static inline SDL_AppResult result{SDL_APP_CONTINUE};
 public:
 	Game() = delete;
 	static inline SDL_AppResult getResult();

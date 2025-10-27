@@ -8,18 +8,18 @@ protected:
 	std::unordered_map<SDL_Scancode, EventHandler> keyDownHandlers;
 	std::unordered_map<SDL_Scancode, EventHandler> keyUpHandlers;
 public:
-	inline void registerKeyDown(SDL_Scancode type, EventHandler handler) {
+	inline void registerKeyDown(const SDL_Scancode type, EventHandler handler) {
 		keyDownHandlers[type] = handler;
 	}
-	void registerKeyDown(std::initializer_list<SDL_Scancode> types, EventHandler handler) {
-		for (SDL_Scancode type : types)
+	void registerKeyDown(std::initializer_list<const SDL_Scancode> types, EventHandler handler) {
+		for (const SDL_Scancode &type : types)
 			registerKeyDown(type, handler);
 	}
-	inline void registerKeyUp(SDL_Scancode type, EventHandler handler) {
+	inline void registerKeyUp(const SDL_Scancode type, EventHandler handler) {
 		keyUpHandlers[type] = handler;
 	}
 	void registerKeyUp(std::initializer_list<SDL_Scancode> types, EventHandler handler) {
-		for (SDL_Scancode type : types)
+		for (const SDL_Scancode &type : types)
 			registerKeyUp(type, handler);
 	}
 	void eventHandler(SDL_Event *event) const override {

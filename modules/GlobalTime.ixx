@@ -11,10 +11,17 @@ public:
 		prev = curr;
 		return delta;
 	}
-	static Uint64 getTicks() {
+	static Uint64 getDeltaNS() {
+		static Uint64 prev = getTicksNS();
+		Uint64 curr = getTicksNS();
+		Uint64 delta = curr - prev;
+		prev = curr;
+		return delta;
+	}
+	inline static Uint64 getTicks() {
 		return SDL_GetTicks();
 	}
-	static Uint64 getTicksNS() {
+	inline static Uint64 getTicksNS() {
 		return SDL_GetTicksNS();
 	}
 };

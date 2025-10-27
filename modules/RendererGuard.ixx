@@ -5,12 +5,12 @@ export import Renderer;
 
 export class RendererGuard {
 private:
-	Renderer *renderer;
+	Renderer &renderer;
 public:
-	RendererGuard(Renderer *renderer):renderer(renderer) {
-		renderer->clear();
+	RendererGuard(Renderer &renderer):renderer(renderer) {
+		renderer.clear();
 	}
 	~RendererGuard() {
-		renderer->present();
+		renderer.present();
 	}
 };
