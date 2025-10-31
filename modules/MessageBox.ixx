@@ -19,10 +19,11 @@ private:
 	MessageBoxFlags flags{MessageBoxFlags::ERROR};
 public:
 	MessageBox() = default;
-	inline MessageBox& setFlag(MessageBoxFlags flag) noexcept;
+	inline MessageBox &setFlag(MessageBoxFlags flag) noexcept;
 	inline MessageBox &addFlag(MessageBoxFlags flag) noexcept;
 	inline MessageBox &setTitle(std::string_view str);
 	inline MessageBox &setMessage(std::string_view str);
+	inline MessageBox &setParrent(Window &window);
 	inline bool show();
 };
 
@@ -46,6 +47,10 @@ inline MessageBox &MessageBox::setTitle(std::string_view str) {
 inline MessageBox &MessageBox::setMessage(std::string_view str) {
 	message = str;
 	return *this;
+}
+
+inline MessageBox &MessageBox::setParrent(Window &window) {
+	parrent = window.window;
 }
 
 inline bool MessageBox::show() {

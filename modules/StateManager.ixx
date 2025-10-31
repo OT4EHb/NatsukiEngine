@@ -10,9 +10,9 @@ concept GameStateType = std::is_base_of_v<GameState, T>;
 export class StateManager {
 private:
 	std::unordered_map<std::type_index, GameState*> states;
-	GameState *current;
+	std::type_index current;
 public:
-	StateManager() :current(nullptr) {}
+	StateManager() :current(typeid(GameState)) {}
 	~StateManager() = default;
 
 	template<GameStateType T, typename... Args>
@@ -34,24 +34,26 @@ public:
 	bool release() {
 		std::type_index type = typeid(T);
 		if (auto it = states.find(type); it != states.end() && current != *it) {
+			delete *it;
 			states.erase(it);
 			return true;
 		}
 		return false;
 	}
 
-	GameState *getCurrent() const {
-		return current;
+	GameState* getCurrent() const {
+		return states.at(current);
 	}
 
 	template<GameStateType T>
 	bool change() {
 		if (auto state = get<T>()) {
-			if (current) {
-				current->exit();
+			GameState *curr = getCurrent();
+			if (curr) {
+				curr->exit();
 			}
-			current = state;
-			current->enter();
+			curr = state;
+			curr->enter();
 			return true;
 		}
 		return false;

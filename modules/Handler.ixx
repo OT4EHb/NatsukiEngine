@@ -2,6 +2,7 @@ export module Handler;
 import <functional>;
 import <unordered_map>;
 import <SDL3/SDL_init.h>;
+
 export class Handler {
 protected:
 	using EventHandler = std::function<void(SDL_Event *)>;

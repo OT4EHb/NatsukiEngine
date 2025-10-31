@@ -1,16 +1,17 @@
-module;
-class Renderer;
 export module RendererGuard;
+import <SDL3/SDL_pixels.h>;
 export import Renderer;
+import SDLException;
 
 export class RendererGuard {
 private:
 	Renderer &renderer;
 public:
-	RendererGuard(Renderer &renderer):renderer(renderer) {
-		renderer.clear();
+	RendererGuard(Renderer &renderer, const SDL_Color &color = {0,0,0,255}) :
+		renderer(renderer) {
+		checkCallSDL(renderer.clear(color));
 	}
 	~RendererGuard() {
-		renderer.present();
+		checkCallSDL(renderer.present());
 	}
 };

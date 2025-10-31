@@ -2,15 +2,17 @@ module;
 class Window;
 class Texture;
 export module Renderer;
+import <string_view>;
 import <SDL3/SDL_render.h>;
 import Window;
+import SDLException;
 
 export class Renderer {
 	friend class Texture;
 private:
 	SDL_Renderer *renderer;
 public:
-	Renderer(Window &window, const char *driverName = "");
+	Renderer(Window &window, std::string_view driverName = "");
 	~Renderer();
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
@@ -23,11 +25,14 @@ public:
 	inline bool renderLines(const SDL_FPoint *points, int size) const;
 	inline bool renderPoint(const SDL_FPoint &point) const;
 	inline bool renderPoints(const SDL_FPoint *points, int size) const;
-	inline bool setVSync(int vsync=1) const;
+	inline bool setVSync(int vsync = 1) const;
 };
 
-Renderer::Renderer(Window &window, const char *driverName) {
-	renderer = SDL_CreateRenderer(window.window, driverName);
+Renderer::Renderer(Window &window, std::string_view driverName) {
+	renderer = SDL_CreateRenderer(window.window, driverName.data());
+	if (renderer == nullptr) {
+		throw SDLException();
+	}
 }
 
 Renderer::~Renderer() {

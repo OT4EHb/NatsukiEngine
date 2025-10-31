@@ -2,6 +2,7 @@ module;
 class Renderer;
 class MessageBox;
 export module Window;
+import <string_view>;
 import <SDL3/SDL_video.h>;
 import SDLException;
 
@@ -12,7 +13,7 @@ private:
 	SDL_Window *window;
 public:
 	inline Window(SDL_Window *window);
-	inline Window(const char *title, int width, int height, SDL_WindowFlags flags = 0);
+	inline Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0);
 	inline ~Window();
 	inline bool show();
 	inline bool hide();
@@ -23,8 +24,8 @@ public:
 
 Window::Window(SDL_Window *window) :window(window) {}
 
-Window::Window(const char *title, int width, int height, SDL_WindowFlags flags) :
-	window(SDL_CreateWindow(title, width, height, flags)) {
+Window::Window(std::string_view title, int width, int height, SDL_WindowFlags flags) :
+	window(SDL_CreateWindow(title.data(), width, height, flags)) {
 	if (window == nullptr)
 		throw SDLException();
 }

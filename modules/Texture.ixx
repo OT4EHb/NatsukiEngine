@@ -1,6 +1,7 @@
 module;
 class Surface;
 export module Texture;
+import <string_view>;
 import <SDL3_image/SDL_image.h>;
 export import Renderer;
 
@@ -9,15 +10,15 @@ private:
 	SDL_Texture *texture;
 	Renderer &renderer;
 public:
-	inline Texture(Renderer &renderer, const char *file);
+	inline Texture(Renderer &renderer, std::string_view file);
 	//inline Texture(Renderer *renderer, Surface *surface);
 	inline ~Texture();
 	inline bool render(const SDL_FRect *srcrect = nullptr, const SDL_FRect *dstrect = nullptr) const;
 };
 
-Texture::Texture(Renderer &renderer, const char *file) :
+Texture::Texture(Renderer &renderer, std::string_view file) :
 	renderer(renderer) {
-	texture = IMG_LoadTexture(renderer.renderer, file);
+	texture = IMG_LoadTexture(renderer.renderer, file.data());
 }
 
 Texture::~Texture() {

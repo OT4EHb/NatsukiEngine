@@ -1,6 +1,7 @@
 module;
 class Texture;
 export module Surface;
+import <string_view>;
 import <SDL3_image/SDL_image.h>;
 
 export class Surface {
@@ -8,12 +9,12 @@ export class Surface {
 private:
 	SDL_Surface *surface;
 public:
-	Surface(const char *file);
+	Surface(std::string_view file);
 	~Surface();
 };
 
-Surface::Surface(const char *file) {
-	surface = IMG_Load(file);
+Surface::Surface(std::string_view file) {
+	surface = IMG_Load(file.data());
 }
 
 Surface::~Surface() {

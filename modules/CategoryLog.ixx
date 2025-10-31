@@ -4,7 +4,7 @@ import <source_location>;
 
 export class CategoryLog {
 public:
-	CategoryLog(const std::string_view &category,
+	CategoryLog(std::string_view category,
 				const std::source_location loc = std::source_location::current()) {
 		Loger::get()
 			<< "file: " << loc.file_name()
