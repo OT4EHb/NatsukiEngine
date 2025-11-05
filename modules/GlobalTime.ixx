@@ -4,24 +4,29 @@ import <SDL3/SDL_timer.h>;
 export class GlobalTime {
 public:
 	GlobalTime() = delete;
-	static Uint64 getDelta(){
-		static Uint64 prev = getTicks();
-		Uint64 curr = getTicks();
-		Uint64 delta = curr - prev;
-		prev = curr;
-		return delta;
+	static inline Uint64 getDelta() {
+		return getTicks() - time;
 	}
-	static Uint64 getDeltaNS() {
-		static Uint64 prev = getTicksNS();
-		Uint64 curr = getTicksNS();
-		Uint64 delta = curr - prev;
-		prev = curr;
-		return delta;
+	static inline Uint64 update() {
+		Uint64 tmp = time;
+		time = getTicks();
+		return time - tmp;
 	}
-	inline static Uint64 getTicks() {
+	static inline Uint64 getDeltaNS() {
+		return getTicksNS() - timeNS;
+	}
+	static inline Uint64 updateNS() {
+		Uint64 tmp = timeNS;
+		timeNS = getTicksNS();
+		return timeNS - tmp;
+	}
+	static inline Uint64 getTicks() {
 		return SDL_GetTicks();
 	}
-	inline static Uint64 getTicksNS() {
+	static inline Uint64 getTicksNS() {
 		return SDL_GetTicksNS();
 	}
+private:
+	static inline Uint64 time{getTicks()};
+	static inline Uint64 timeNS{getTicksNS()};
 };
