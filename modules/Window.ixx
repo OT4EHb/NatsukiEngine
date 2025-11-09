@@ -20,14 +20,14 @@ public:
 	inline Window *createPopupWindow(int offset_x, int offset_y, int width, int height, SDL_WindowFlags flags = SDL_WINDOW_TOOLTIP);
 	inline bool flash(SDL_FlashOperation operation = SDL_FLASH_CANCEL);
 	inline bool raise();
+	inline SDL_Point getSize();
 };
 
 Window::Window(SDL_Window *window) :window(window) {}
 
 Window::Window(std::string_view title, int width, int height, SDL_WindowFlags flags) :
 	window(SDL_CreateWindow(title.data(), width, height, flags)) {
-	if (window == nullptr)
-		throw SDLException();
+	checkCallSDL(window != nullptr);
 }
 
 Window::~Window() {
@@ -52,4 +52,10 @@ bool Window::flash(SDL_FlashOperation operation) {
 
 bool Window::raise() {
 	return SDL_RaiseWindow(window);
+}
+
+SDL_Point Window::getSize() {
+	SDL_Point p;
+	SDL_GetWindowSize(window, &p.x, &p.y);
+	return p;
 }

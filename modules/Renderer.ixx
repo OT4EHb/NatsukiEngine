@@ -30,9 +30,7 @@ public:
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
 	renderer = SDL_CreateRenderer(window.window, driverName.data());
-	if (renderer == nullptr) {
-		throw SDLException();
-	}
+	checkCallSDL(renderer != nullptr);
 }
 
 Renderer::~Renderer() {

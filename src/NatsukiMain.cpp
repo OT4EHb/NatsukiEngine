@@ -11,10 +11,11 @@ import SDLException;
 import Game;
 import MessageBox;
 
-static void errorCallback(std::string_view error) {
+static void errorCallback(std::string_view title, std::string_view error) {
+	Game::setResult(SDL_APP_FAILURE);
 	MessageBox()
-		.setTitle("Error SDL")
-		.setFlag(MessageBoxFlags::ERROR)
+		.setTitle(title)
+		.setFlag(MessageBox::Flags::ERROR)
 		.setMessage(error)
 		.show();
 }
@@ -31,8 +32,10 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 		Game::iterate();
 	}
 	catch (SDLException&e) {
-		Game::setResult(SDL_APP_FAILURE);
-		errorCallback(e.what());
+		errorCallback("SDL Error", e.what());
+	}
+	catch (std::runtime_error &e) {
+		errorCallback("Runtime Error", e.what());
 	}
 	return Game::getResult();
 }
@@ -42,8 +45,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 		Game::eventHandler(event);
 	}
 	catch (SDLException&e) {
-		Game::setResult(SDL_APP_FAILURE);
-		errorCallback(e.what());
+		errorCallback("SDL Error", e.what());
+	}
+	catch (std::runtime_error &e) {
+		errorCallback("Runtime Error", e.what());
 	}
 	return Game::getResult();
 }

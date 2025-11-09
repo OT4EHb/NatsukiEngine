@@ -1,21 +1,41 @@
 export module Movement;
-import System;
 import ECS;
 import GlobalTime;
 
-export class Movement :public System {
+export class Movement :System {
 public:
 	Movement() = delete;
 	template<size_t Size, ComponentType...components>
-		requires includes<Position, components...> &&includes<Velocity, components...>
+		requires includeDerived<Position, components...> &&include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs) {
 		auto delta = GlobalTime::getDelta();
 		size_t size = ecs.getSize();
-		auto &positions = ecs.getComponent<Position>();
 		auto &velocitys = ecs.getComponent<Velocity>();
 		for (size_t i{}; i < size; ++i) {
-			positions[i].x += velocitys[i].dx * delta;
-			positions[i].y += velocitys[i].dy * delta;
+			auto &position = ecs.getComponent<Position>(i);
+			position.x += velocitys[i].dx * delta;
+			position.y += velocitys[i].dy * delta;
+		}
+	}
+
+	template<size_t Size, ComponentType...components>
+		requires includeDerived<Position, components...> &&include<Velocity, components...>
+	static void update(ECS<Size, components...> &ecs, PositionSize rect) {
+		auto delta = GlobalTime::getDelta();
+		size_t size = ecs.getSize();
+		auto &velocitys = ecs.getComponent<Velocity>();
+		for (size_t i{}; i < size; ++i) {
+			auto &position = ecs.getComponent<Position>(i);
+			position.x += velocitys[i].dx * delta;
+			if (position.x < rect.x || position.x>rect.x + rect.width) {
+				velocitys[i].dx *= -1;
+				velocitys[i].dy += 0.1f;
+			}
+			position.y += velocitys[i].dy * delta;
+			if (position.y < rect.y || position.y>rect.y + rect.height) {
+				velocitys[i].dy *= -1;
+				velocitys[i].dx += 0.1f;
+			}
 		}
 	}
 };

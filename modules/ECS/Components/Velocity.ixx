@@ -1,6 +1,7 @@
 export module Velocity;
-import Component;
-export struct Velocity:Component {
+
+export struct Velocity {
+	using componentTag = void;
 	float dx;
 	float dy;
 };

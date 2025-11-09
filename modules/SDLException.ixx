@@ -14,6 +14,6 @@ public:
 		) {}
 };
 
-export constexpr void checkCallSDL(bool v) {
+export inline void checkCallSDL(bool v) {
 	if (!v) throw SDLException();
 }

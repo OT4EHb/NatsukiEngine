@@ -1,6 +1,7 @@
 export module Position;
-import Component;
-export struct Position :Component {
+
+export struct Position {
+	using componentTag = void;
 	float x;
 	float y;
 };
