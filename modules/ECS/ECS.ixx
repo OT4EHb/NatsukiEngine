@@ -33,7 +33,18 @@ public:
 		return res;
 	}
 
-	size_t getSize() {
+	void dropEntity(size_t index) {
+		if (index < --currentSize) {
+			/*for (auto&comp:data) {
+				comp[index] = std::move(comp[currentSize]);
+			}*/
+			std::apply([index, size=currentSize](auto&... comp) {
+				((comp[index] = std::move(comp[size])), ...);
+					   }, data);
+		}
+	}
+
+	inline size_t getSize() {
 		return currentSize;
 	}
 

@@ -7,7 +7,7 @@ public:
 	RenderRect() = delete;
 	template<size_t Size, ComponentType...components>
 		requires include<PositionSize, components...>
-	static void update(Renderer &ren, ECS<Size, components...> &ecs) {
+	static void update(ECS<Size, components...> &ecs, Renderer &ren) {
 		size_t size = ecs.getSize();
 		auto &rects = ecs.getComponent<PositionSize>();
 		for (size_t i{}; i < size; ++i) {

@@ -19,22 +19,28 @@ public:
 	}
 
 	template<size_t Size, ComponentType...components>
-		requires includeDerived<Position, components...> &&include<Velocity, components...>
+		requires include<PositionSize, components...> &&include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs, PositionSize rect) {
 		auto delta = GlobalTime::getDelta();
 		size_t size = ecs.getSize();
 		auto &velocitys = ecs.getComponent<Velocity>();
 		for (size_t i{}; i < size; ++i) {
-			auto &position = ecs.getComponent<Position>(i);
-			position.x += velocitys[i].dx * delta;
-			if (position.x < rect.x || position.x>rect.x + rect.width) {
-				velocitys[i].dx *= -1;
-				velocitys[i].dy += 0.1f;
+			auto &ps = ecs.getComponent<PositionSize>(i);
+			ps.x += velocitys[i].dx * delta;
+			if (ps.x < rect.x) {
+				velocitys[i].dx = fabs(velocitys[i].dx);
 			}
-			position.y += velocitys[i].dy * delta;
-			if (position.y < rect.y || position.y>rect.y + rect.height) {
-				velocitys[i].dy *= -1;
-				velocitys[i].dx += 0.1f;
+			else if (ps.x + ps.width > rect.x + rect.width) {
+				velocitys[i].dx = -fabs(velocitys[i].dx);
+			}
+
+			ps.y += velocitys[i].dy * delta;
+			if (ps.y < rect.y) {
+				velocitys[i].dy = fabs(velocitys[i].dy);
+			}
+			else if (ps.y + ps.height > rect.y + rect.height) {
+				velocitys[i].dy = -fabs(velocitys[i].dy);
+
 			}
 		}
 	}

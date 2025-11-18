@@ -5,6 +5,10 @@ export class GlobalTime {
 public:
 	GlobalTime() = delete;
 	static inline Uint64 getDelta() {
+	#ifdef _DEBUG
+		auto tmp = getTicks() - time;
+		return tmp > 100 ? 10 : tmp;
+	#endif
 		return getTicks() - time;
 	}
 	static inline Uint64 update() {
@@ -13,6 +17,10 @@ public:
 		return time - tmp;
 	}
 	static inline Uint64 getDeltaNS() {
+	#ifdef _DEBUG
+		auto tmp = getTicksNS() - time;
+		return tmp > 10000 ? 1000 : tmp;
+	#endif
 		return getTicksNS() - timeNS;
 	}
 	static inline Uint64 updateNS() {
