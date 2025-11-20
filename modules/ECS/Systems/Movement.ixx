@@ -1,6 +1,6 @@
 export module Movement;
 import ECS;
-import GlobalTime;
+import DeltaTime;
 
 export class Movement :System {
 public:
@@ -8,7 +8,8 @@ public:
 	template<size_t Size, ComponentType...components>
 		requires includeDerived<Position, components...> &&include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs) {
-		auto delta = GlobalTime::getDelta();
+		static DeltaTime deltaTime;
+		Uint64 delta = deltaTime.update();
 		size_t size = ecs.getSize();
 		auto &velocitys = ecs.getComponent<Velocity>();
 		for (size_t i{}; i < size; ++i) {
@@ -21,7 +22,8 @@ public:
 	template<size_t Size, ComponentType...components>
 		requires include<PositionSize, components...> &&include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs, PositionSize rect) {
-		auto delta = GlobalTime::getDelta();
+		static DeltaTime deltaTime;
+		Uint64 delta = deltaTime.update();
 		size_t size = ecs.getSize();
 		auto &velocitys = ecs.getComponent<Velocity>();
 		for (size_t i{}; i < size; ++i) {
@@ -29,18 +31,21 @@ public:
 			ps.x += velocitys[i].dx * delta;
 			if (ps.x < rect.x) {
 				velocitys[i].dx = fabs(velocitys[i].dx);
+				ps.x += 10;
 			}
 			else if (ps.x + ps.width > rect.x + rect.width) {
 				velocitys[i].dx = -fabs(velocitys[i].dx);
+				ps.x -= 10;
 			}
 
 			ps.y += velocitys[i].dy * delta;
 			if (ps.y < rect.y) {
 				velocitys[i].dy = fabs(velocitys[i].dy);
+				ps.y += 10;
 			}
 			else if (ps.y + ps.height > rect.y + rect.height) {
 				velocitys[i].dy = -fabs(velocitys[i].dy);
-
+				ps.y -= 10;
 			}
 		}
 	}

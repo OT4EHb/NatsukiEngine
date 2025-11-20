@@ -7,4 +7,13 @@ export struct Color {
 	inline SDL_Color &asSDL() {
 		return color;
 	}
+	bool operator==(const Color &other) const {
+		return color.r == other.color.r
+			&& color.g == other.color.g
+			&& color.b == other.color.b
+			&& color.a == other.color.a;
+	}
+	bool operator!=(const Color &other) const {
+		return !(*this == other);
+	}
 };
