@@ -1,19 +1,19 @@
 export module Color;
 import <SDL3/SDL_pixels.h>;
+export import Component;
 
-export struct Color {
-	using componentTag = void;
-	SDL_Color color;
-	inline SDL_Color &asSDL() {
-		return color;
-	}
-	bool operator==(const Color &other) const {
-		return color.r == other.color.r
-			&& color.g == other.color.g
-			&& color.b == other.color.b
-			&& color.a == other.color.a;
-	}
-	bool operator!=(const Color &other) const {
-		return !(*this == other);
-	}
-};
+export using Color = SDL_Color;
+
+export template<>
+struct traitComponent<Color> :std::true_type {};
+
+export bool operator==(const Color &left, const Color &right) {
+	return left.r == right.r
+		&& left.g == right.g
+		&& left.b == right.b
+		&& left.a == right.a;
+}
+
+export bool operator!=(const Color &left, const Color &right) {
+	return !(left == right);
+}

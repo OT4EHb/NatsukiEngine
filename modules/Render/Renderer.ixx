@@ -1,11 +1,12 @@
-module;
-class Window;
 export module Renderer;
 import <string_view>;
+export import <span>;
 import <SDL3/SDL_render.h>;
 import Window;
 import SDLException;
+import CategoryLog;
 
+export SDL_Vertex;
 export class Renderer {
 	friend class Texture;
 	friend class FPSDisplay;
@@ -22,13 +23,16 @@ public:
 	inline bool present() const;
 	inline bool setVSync(int vsync = 1) const;
 	inline bool renderFillRect(const SDL_FRect &rect) const;
-	inline bool renderFillRects(const SDL_FRect *rects, int size) const;
+	inline bool renderFillRects(std::span<const SDL_FRect>) const;
 	inline bool renderRect(const SDL_FRect &rect) const;
-	inline bool renderRects(const SDL_FRect *rects, int size) const;
+	inline bool renderRects(std::span<const SDL_FRect>) const;
 	inline bool renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const;
-	inline bool renderLines(const SDL_FPoint *points, int size) const;
+	inline bool renderLines(std::span<const SDL_FPoint>) const;
 	inline bool renderPoint(const SDL_FPoint &point) const;
-	inline bool renderPoints(const SDL_FPoint *points, int size) const;
+	inline bool renderPoints(std::span<const SDL_FPoint>) const;
+	inline bool renderGeometry(std::span<const SDL_Vertex>,
+							   std::span <const int> = {},
+							   SDL_Texture * = nullptr) const;
 };
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
@@ -77,30 +81,38 @@ inline bool Renderer::renderFillRect(const SDL_FRect &rect) const {
 	return SDL_RenderFillRect(renderer, &rect);
 }
 
-inline bool Renderer::renderFillRects(const SDL_FRect *rects, int size) const {
-	return SDL_RenderFillRects(renderer, rects, size);
+inline bool Renderer::renderFillRects(std::span<const SDL_FRect>rects) const {
+	return SDL_RenderFillRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
 inline bool Renderer::renderRect(const SDL_FRect &rect) const {
 	return SDL_RenderRect(renderer, &rect);
 }
 
-inline bool Renderer::renderRects(const SDL_FRect *rects, int size) const {
-	return SDL_RenderRects(renderer, rects, size);
+inline bool Renderer::renderRects(std::span<const SDL_FRect>rects) const {
+	return SDL_RenderRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
 inline bool Renderer::renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const {
 	return SDL_RenderLine(renderer, p1.x, p1.y, p2.x, p2.y);
 }
 
-inline bool Renderer::renderLines(const SDL_FPoint *points, int size) const {
-	return SDL_RenderLines(renderer, points, size);
+inline bool Renderer::renderLines(std::span<const SDL_FPoint>points) const {
+	return SDL_RenderLines(renderer, points.data(), static_cast<int>(points.size()));
 }
 
 inline bool Renderer::renderPoint(const SDL_FPoint &point) const {
 	return SDL_RenderPoint(renderer, point.x, point.y);
 }
 
-inline bool Renderer::renderPoints(const SDL_FPoint *points, int size) const {
-	return SDL_RenderPoints(renderer, points, size);
+inline bool Renderer::renderPoints(std::span<const SDL_FPoint>points) const {
+	return SDL_RenderPoints(renderer, points.data(), static_cast<int>(points.size()));
+}
+
+inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
+									 std::span<const int>indices, SDL_Texture *texture) const {
+	return SDL_RenderGeometry(renderer, texture,
+							  vertices.data(), static_cast<int>(vertices.size()),
+							  indices.data(), static_cast<int>(indices.size())
+	);
 }

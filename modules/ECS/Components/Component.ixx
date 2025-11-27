@@ -1,12 +1,8 @@
 export module Component;
-import <concepts>;
-
-export struct Component {
-	using componentTag = void;
-};
+export import <concepts>;
 
 export template<class T>
-concept ComponentType = std::is_default_constructible_v<T> &&
-	requires{
-	typename T::componentTag;
-};
+struct traitComponent :std::false_type {};
+
+export template<class T>
+concept ComponentType = std::is_default_constructible_v<T> && traitComponent<T>::value;

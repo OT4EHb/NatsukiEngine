@@ -6,11 +6,6 @@ import DeltaTime;
 import Timer;
 
 export class FPSDisplay {
-private:
-	static inline std::string fps;
-	static inline DeltaTimeNS deltaTime;
-	static inline Uint64 delta;
-	static inline Uint64 count;
 public:
 	FPSDisplay() = delete;
 	static void render(Renderer &ren) {
@@ -22,17 +17,26 @@ public:
 		SDL_RenderDebugText(ren.renderer, 0, 0, fps.c_str());
 		ren.setDrawColor(tmpColor);
 		ren.setScale(scale);
-		delta += deltaTime.update();
-		++count;
+		delta = deltaTime.update();
 	}
 	static void update() {
-		fps = std::to_string(static_cast<Uint64>(round((1'000'000'000. / delta) * count)));
-		count = 0;
-		delta = 0;
+		fps = std::to_string(
+			static_cast<Uint64>(
+				//lround(
+					(1'000'000'000 / delta)
+				//)
+				)
+		);
+		//count = 0;
+		delta = 1;
 	}
 private:
+	static inline std::string fps;
+	static inline DeltaTimeNS deltaTime;
+	static inline Uint64 delta{1};
+	static inline Uint64 count;
 	static inline Timer timer{
-		100,
+		80,
 		[](Uint64 interval) {
 			FPSDisplay::update();
 			return interval;
