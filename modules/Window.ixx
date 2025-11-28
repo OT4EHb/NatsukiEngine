@@ -1,6 +1,3 @@
-module;
-class Renderer;
-class MessageBox;
 export module Window;
 import <string_view>;
 import <SDL3/SDL_video.h>;

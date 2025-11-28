@@ -16,6 +16,7 @@ public:
 	~StateManager() = default;
 
 	template<GameStateType T, typename... Args>
+		requires std::constructible_from<T, Args...>
 	void addState(Args&&... args) {
 		std::type_index type = typeid(T);
 		states[type] = new T(std::forward<Args>(args)...);
@@ -34,7 +35,7 @@ public:
 	bool release() {
 		std::type_index type = typeid(T);
 		if (auto it = states.find(type); it != states.end() && current != *it) {
-			delete *it;
+			delete it->second;
 			states.erase(it);
 			return true;
 		}
