@@ -5,7 +5,7 @@ import <type_traits>;
 export import GameState;
 
 template<typename T>
-concept GameStateType = std::is_base_of_v<GameState, T>;
+concept GameStateType = std::derived_from<T, GameState>;
 
 export class StateManager {
 private:
@@ -13,7 +13,11 @@ private:
 	GameState* current;
 public:
 	StateManager() :current(nullptr) {}
-	~StateManager() = default;
+	~StateManager() {
+		for (auto &i : states) {
+			delete i.second;
+		}
+	}
 
 	template<GameStateType T, typename... Args>
 		requires std::constructible_from<T, Args...>
