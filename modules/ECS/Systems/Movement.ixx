@@ -12,7 +12,7 @@ template<class...Args>
 concept findPosition = (isPosition<Args> || ...);
 
 template<class B, class ...Args>
-	consteval auto extractPosition() {
+consteval auto extractPosition() {
 	if constexpr (isPosition<B>) {
 		return std::type_identity_t<B>{};
 	}
@@ -24,7 +24,7 @@ export class Movement :System {
 public:
 	Movement() = delete;
 	template<size_t Size, ComponentType...components>
-		requires findPosition<components...>&& include<Velocity, components...>
+		requires findPosition<components...> && include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs) {
 		static DeltaTime deltaTime;
 		Uint64 delta = deltaTime.update();
@@ -41,7 +41,7 @@ public:
 	}
 
 	template<size_t Size, ComponentType...components>
-		requires include<PositionSize, components...> &&include<Velocity, components...>
+		requires include<PositionSize, components...> && include<Velocity, components...>
 	static void update(ECS<Size, components...> &ecs, PositionSize rect) {
 		static DeltaTime deltaTime;
 		Uint64 delta = deltaTime.update();

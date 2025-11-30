@@ -2,6 +2,7 @@ export module SourceManager;
 import <unordered_map>;
 import <string>;
 import <memory>;
+import <optional>;
 
 export template<typename T>
 class SourceManager {
@@ -26,11 +27,11 @@ public:
 		}
 	}
 
-	std::shared_ptr<T> get(const std::string &name) {
+	std::optional<std::shared_ptr<T>> get(const std::string &name) {
 		auto res = resources.find(name);
 		if (res != resources.end()) {
 			return res->second;
 		}
-		return nullptr;
+		return std::nullopt;
 	}
 };

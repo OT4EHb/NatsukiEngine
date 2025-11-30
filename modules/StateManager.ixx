@@ -22,6 +22,7 @@ public:
 	template<GameStateType T, typename... Args>
 		requires std::constructible_from<T, Args...>
 	void addState(Args&&... args) {
+		if (get<T>()) return;
 		std::type_index type = typeid(T);
 		states[type] = new T(std::forward<Args>(args)...);
 	}
