@@ -13,3 +13,4 @@
 *.dll
 /Engine
 /out
+/static
