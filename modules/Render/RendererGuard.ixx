@@ -1,7 +1,6 @@
 export module RendererGuard;
 import <SDL3/SDL_pixels.h>;
 export import Renderer;
-import SDLException;
 
 export class RendererGuard {
 private:

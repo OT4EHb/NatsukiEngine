@@ -1,30 +1,33 @@
-module;
-class Surface;
 export module Texture;
 import <string_view>;
 import <SDL3_image/SDL_image.h>;
-export import Renderer;
+import SDLException;
 
 export class Texture {
+	friend class Renderer;
 private:
 	SDL_Texture *texture;
-	Renderer &renderer;
 public:
-	inline Texture(Renderer &renderer, std::string_view file);
+	inline Texture(SDL_Renderer* renderer, std::string_view file);
 	//inline Texture(Renderer *renderer, Surface *surface);
+	explicit inline operator SDL_Texture *() {
+		return texture;
+	}
 	inline ~Texture();
-	inline bool render(const SDL_FRect *srcrect = nullptr, const SDL_FRect *dstrect = nullptr) const;
+	inline SDL_FPoint getSize() const;
 };
 
-Texture::Texture(Renderer &renderer, std::string_view file) :
-	renderer(renderer) {
-	texture = IMG_LoadTexture(renderer.renderer, file.data());
+Texture::Texture(SDL_Renderer *renderer, std::string_view file) {
+	texture = IMG_LoadTexture(renderer, file.data());
+	checkCallSDL(texture != nullptr);
 }
 
 Texture::~Texture() {
 	SDL_DestroyTexture(texture);
 }
 
-bool Texture::render(const SDL_FRect *srcrect, const SDL_FRect *dstrect) const {
-	return SDL_RenderTexture(renderer.renderer, texture, srcrect, dstrect);
+inline SDL_FPoint Texture::getSize() const {
+	SDL_FPoint p;
+	SDL_GetTextureSize(texture, &p.x, &p.y);
+	return p;
 }

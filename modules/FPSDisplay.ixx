@@ -14,7 +14,7 @@ public:
 		SDL_FPoint scale = ren.getScale();
 		ren.setDrawColor(color);
 		ren.setScale({2.f * scale.x, 2.f * scale.y});
-		SDL_RenderDebugText(ren.renderer, 0, 0, fps.c_str());
+		SDL_RenderDebugText(static_cast<SDL_Renderer*>(ren), 0, 0, fps.c_str());
 		ren.setDrawColor(tmpColor);
 		ren.setScale(scale);
 		delta = deltaTime.update();

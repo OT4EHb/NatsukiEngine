@@ -3,36 +3,49 @@ import <string_view>;
 export import <span>;
 import <SDL3/SDL_render.h>;
 import Window;
-import SDLException;
+export import SDLException;
 import CategoryLog;
+export import Sprite;
 
 export SDL_Vertex;
 export class Renderer {
-	friend class Texture;
-	friend class FPSDisplay;
 private:
 	SDL_Renderer *renderer;
 public:
 	Renderer(Window &window, std::string_view driverName = "");
 	~Renderer();
+	inline operator SDL_Renderer*() {
+		return renderer;
+	}
+
 	inline bool setDrawColor(const SDL_Color &c) const;
 	inline SDL_Color getDrawColor() const;
+
 	inline bool setScale(const SDL_FPoint) const;
 	inline SDL_FPoint getScale() const;
+
 	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
 	inline bool present() const;
 	inline bool setVSync(int vsync = 1) const;
+
 	inline bool renderFillRect(const SDL_FRect &rect) const;
 	inline bool renderFillRects(std::span<const SDL_FRect>) const;
-	inline bool renderRect(const SDL_FRect &rect) const;
-	inline bool renderRects(std::span<const SDL_FRect>) const;
+
+	inline bool render(const SDL_FRect &rect) const;
+	inline bool render(std::span<const SDL_FRect>) const;
+
 	inline bool renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const;
 	inline bool renderLines(std::span<const SDL_FPoint>) const;
-	inline bool renderPoint(const SDL_FPoint &point) const;
-	inline bool renderPoints(std::span<const SDL_FPoint>) const;
+
+	inline bool render(const SDL_FPoint &point) const;
+	inline bool render(std::span<const SDL_FPoint>) const;
+
 	inline bool renderGeometry(std::span<const SDL_Vertex>,
 							   std::span <const int> = {},
 							   SDL_Texture * = nullptr) const;
+	inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
+	inline bool render(Sprite &) const;
+	inline bool renderBorder(Sprite &) const;
 };
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
@@ -85,11 +98,11 @@ inline bool Renderer::renderFillRects(std::span<const SDL_FRect>rects) const {
 	return SDL_RenderFillRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
-inline bool Renderer::renderRect(const SDL_FRect &rect) const {
+inline bool Renderer::render(const SDL_FRect &rect) const {
 	return SDL_RenderRect(renderer, &rect);
 }
 
-inline bool Renderer::renderRects(std::span<const SDL_FRect>rects) const {
+inline bool Renderer::render(std::span<const SDL_FRect>rects) const {
 	return SDL_RenderRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
@@ -101,11 +114,11 @@ inline bool Renderer::renderLines(std::span<const SDL_FPoint>points) const {
 	return SDL_RenderLines(renderer, points.data(), static_cast<int>(points.size()));
 }
 
-inline bool Renderer::renderPoint(const SDL_FPoint &point) const {
+inline bool Renderer::render(const SDL_FPoint &point) const {
 	return SDL_RenderPoint(renderer, point.x, point.y);
 }
 
-inline bool Renderer::renderPoints(std::span<const SDL_FPoint>points) const {
+inline bool Renderer::render(std::span<const SDL_FPoint>points) const {
 	return SDL_RenderPoints(renderer, points.data(), static_cast<int>(points.size()));
 }
 
@@ -115,4 +128,26 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 							  vertices.data(), static_cast<int>(vertices.size()),
 							  indices.data(), static_cast<int>(indices.size())
 	);
+}
+
+inline bool Renderer::render(Texture &texture, const SDL_FRect*src,const SDL_FRect*dst) const {
+	return SDL_RenderTexture(renderer, texture.texture, src, dst);
+}
+
+inline bool Renderer::render(Sprite &sprite) const {
+	return SDL_RenderTextureRotated(renderer, static_cast<SDL_Texture *>(sprite.texture),
+									&sprite.src, &sprite.dst, sprite.angle,
+									&sprite.centerRotated, SDL_FLIP_NONE);
+}
+
+
+inline bool Renderer::renderBorder(Sprite &sprite) const {
+	SDL_FPoint points[5]{
+		{.x = sprite.dst.x, .y = sprite.dst.y}
+		, {.x = sprite.dst.x + sprite.dst.w, .y = sprite.dst.y}
+		, {.x = sprite.dst.x + sprite.dst.w, .y = sprite.dst.y + sprite.dst.h}
+		, {.x = sprite.dst.x, .y = sprite.dst.y + sprite.dst.h}
+		, {.x = sprite.dst.x, .y = sprite.dst.y}
+	};
+	return renderLines(points);
 }
