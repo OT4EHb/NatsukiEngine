@@ -1,5 +1,6 @@
+module;
+#include <SDL3/SDL_init.h>
 export module Game;
-import <SDL3/SDL_init.h>;
 
 export class Game {
 private:

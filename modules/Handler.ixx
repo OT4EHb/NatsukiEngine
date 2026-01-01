@@ -1,7 +1,8 @@
+module;
+#include <functional>
+#include <unordered_map>
+#include <SDL3/SDL_init.h>
 export module Handler;
-import <functional>;
-import <unordered_map>;
-import <SDL3/SDL_init.h>;
 
 export class Handler {
 protected:

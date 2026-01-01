@@ -1,8 +1,9 @@
+module;
+#include <unordered_map>
+#include <string>
+#include <memory>
+#include <optional>
 export module SourceManager;
-import <unordered_map>;
-import <string>;
-import <memory>;
-import <optional>;
 
 export template<typename T>
 class SourceManager {

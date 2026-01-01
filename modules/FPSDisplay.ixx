@@ -1,7 +1,8 @@
+module;
+#include <string>
+#include <SDL3/SDL_render.h>
 export module FPSDisplay;
 import Renderer;
-import <string>;
-import <SDL3/SDL_render.h>;
 import DeltaTime;
 import Timer;
 

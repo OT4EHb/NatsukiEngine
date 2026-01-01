@@ -1,5 +1,7 @@
+module;
+#include <initializer_list>
+#include <SDL3/SDL_scancode.h>
 export module KeyState;
-import <initializer_list>;
 export import GameState;
 
 export class KeyState :

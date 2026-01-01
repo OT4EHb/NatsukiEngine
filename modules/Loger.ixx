@@ -1,5 +1,6 @@
+module;
+#include <ostream>
 export module Loger;
-export import <ostream>;
 
 export class Loger {
 private:

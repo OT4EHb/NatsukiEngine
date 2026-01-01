@@ -1,5 +1,7 @@
+module;
+#include <SDL3/SDL_timer.h>
 export module GlobalTime;
-import <SDL3/SDL_timer.h>;
+
 export Uint64;
 
 export class GlobalTime {

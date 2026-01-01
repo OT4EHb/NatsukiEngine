@@ -1,5 +1,5 @@
 module SDL;
-import <SDL3_ttf/SDL_ttf.h>;
+#include <SDL3_ttf/SDL_ttf.h>
 
 bool SDL::init(SDL_InitFlags flags) {
 	return SDL_Init(flags) &&

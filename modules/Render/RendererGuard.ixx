@@ -1,5 +1,6 @@
+module;
+#include <SDL3/SDL_pixels.h>
 export module RendererGuard;
-import <SDL3/SDL_pixels.h>;
 export import Renderer;
 
 export class RendererGuard {

@@ -1,5 +1,6 @@
+module;
+#include <concepts>
 export module System;
-import <concepts>;
 
 export class System {};
 

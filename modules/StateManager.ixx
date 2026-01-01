@@ -1,7 +1,8 @@
+module;
+#include <typeindex>
+#include <unordered_map>
+#include <type_traits>
 export module StateManager;
-import <typeindex>;
-import <unordered_map>;
-import <type_traits>;
 export import GameState;
 
 template<typename T>

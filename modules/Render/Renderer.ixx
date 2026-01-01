@@ -1,10 +1,10 @@
+module;
+#include <string_view>
+#include <span>
+#include <SDL3/SDL_render.h>
 export module Renderer;
-import <string_view>;
-export import <span>;
-import <SDL3/SDL_render.h>;
 import Window;
 export import SDLException;
-import CategoryLog;
 export import Sprite;
 
 export SDL_Vertex;

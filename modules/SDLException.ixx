@@ -1,8 +1,9 @@
+module;
+#include <stdexcept>
+#include <source_location>
+#include <string>
+#include <filesystem>
 export module SDLException;
-import <stdexcept>;
-import <source_location>;
-import <string>;
-import <filesystem>;
 import SDL;
 
 export class SDLException :

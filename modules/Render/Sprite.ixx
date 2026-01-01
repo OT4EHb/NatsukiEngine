@@ -1,5 +1,6 @@
+module;
+#include <SDL3/SDL_rect.h>
 export module Sprite;
-import <SDL3/SDL_rect.h>;
 export import Texture;
 
 export class Sprite {

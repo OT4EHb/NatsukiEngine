@@ -1,7 +1,8 @@
+module;
+#include <array>
+#include <tuple>
+#include <concepts>
 export module ECS;
-import <array>;
-import <tuple>;
-import <concepts>;
 export import Components;
 export import System;
 export using Entity = size_t;

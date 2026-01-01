@@ -1,6 +1,7 @@
+module;
+#include <SDL3/SDL_timer.h>
+#include <functional>
 export module Timer;
-import <SDL3/SDL_timer.h>;
-import <functional>;
 
 inline Uint32 callback(void *timer, Uint32 id, Uint32 interval);
 

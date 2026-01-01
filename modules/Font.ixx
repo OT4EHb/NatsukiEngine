@@ -1,6 +1,7 @@
+module;
+#include <string>
+#include <SDL3_ttf/SDL_ttf.h>
 export module Font;
-import <string>;
-import <SDL3_ttf/SDL_ttf.h>;
 import SDLException;
 
 export class Font {

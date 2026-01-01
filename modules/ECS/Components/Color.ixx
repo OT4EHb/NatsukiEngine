@@ -1,5 +1,6 @@
+module;
+#include <SDL3/SDL_pixels.h>
 export module Color;
-import <SDL3/SDL_pixels.h>;
 export import Component;
 
 export using Color = SDL_Color;

@@ -2,7 +2,7 @@ export module Context;
 
 export class Context {
 private:
-	Context();
+	Context() = default;
 public:
 	Context(Context &) = delete;
 	Context(Context &&) = delete;

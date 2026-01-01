@@ -1,6 +1,6 @@
+#include <string_view>
+#include <SDL3_image/SDL_image.h>
 export module Texture;
-import <string_view>;
-import <SDL3_image/SDL_image.h>;
 import SDLException;
 
 export class Texture {

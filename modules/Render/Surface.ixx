@@ -1,8 +1,6 @@
-module;
-class Texture;
+#include <string_view>
+#include <SDL3_image/SDL_image.h>
 export module Surface;
-import <string_view>;
-import <SDL3_image/SDL_image.h>;
 
 export class Surface {
 	friend class Texture;

@@ -1,6 +1,6 @@
+#include <string_view>
+#include <SDL3/SDL_video.h>
 export module Window;
-import <string_view>;
-import <SDL3/SDL_video.h>;
 import SDLException;
 
 export class Window {

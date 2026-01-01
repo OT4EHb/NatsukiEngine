@@ -1,6 +1,7 @@
+module;
+#include <string>
+#include <SDL3/SDL_messagebox.h>
 export module MessageBox;
-import <string>;
-import <SDL3/SDL_messagebox.h>;
 import Window;
 
 export class MessageBox {

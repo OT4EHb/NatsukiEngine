@@ -1,3 +1,5 @@
+module;
+#include <concepts>
 export module Movement;
 import ECS;
 import DeltaTime;
