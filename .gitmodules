@@ -1,9 +1,12 @@
 [submodule "vendored/SDL"]
 	path = vendored/SDL
 	url = https://github.com/libsdl-org/SDL.git
+	branch = release-3.2.x
 [submodule "vendored/SDL_image"]
 	path = vendored/SDL_image
 	url = https://github.com/libsdl-org/SDL_image.git
+	branch = release-3.2.x
 [submodule "vendored/SDL_ttf"]
 	path = vendored/SDL_ttf
 	url = https://github.com/libsdl-org/SDL_ttf.git
+	branch = release-3.2.x
