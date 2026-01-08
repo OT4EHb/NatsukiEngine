@@ -22,19 +22,22 @@ if(MSVC)
 endif()
 
 add_executable(${EXECUTABLE_NAME})
+add_subdirectory("test")
+
+if(WIN32)
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
+elseif(APPLE)
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
 
 file(GLOB_RECURSE SRC_FILES 
     CONFIGURE_DEPENDS
-    #"${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/templates/*.cpp"
 )
 
 file(GLOB_RECURSE MODULES_FILES 
     CONFIGURE_DEPENDS
-    #"${CMAKE_CURRENT_SOURCE_DIR}/test/*.ixx"
     "${CMAKE_CURRENT_SOURCE_DIR}/modules/*.ixx"
-    "${CMAKE_CURRENT_SOURCE_DIR}/templates/*.ixx"
 )
 
 target_sources(${EXECUTABLE_NAME}
@@ -59,14 +62,11 @@ endif()
 
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
-set(SDLTTF_VENDORED ON)
+set(SDLTTF_VENDORED ON CACHE BOOL "")
 add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 
-set(SDLIMAGE_VENDORED ON)
-set(SDLIMAGE_AVIF OFF)
-set(SDLIMAGE_BMP OFF)
-set(SDLIMAGE_JPEG OFF)
-set(SDLIMAGE_WEBP OFF)
+set(SDLIMAGE_VENDORED ON CACHE BOOL "")
+set(SDLIMAGE_AVIF OFF CACHE BOOL "")
 add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE 

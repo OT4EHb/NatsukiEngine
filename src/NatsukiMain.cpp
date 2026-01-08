@@ -2,10 +2,12 @@
 #include <SDL3/SDL_main.h>
 #include <string>
 
-import SDL;
-import SDLException;
+import Natsuki.SDL;
+import Natsuki.SDLException;
 import Game;
-import MessageBox;
+import Natsuki.MessageBox;
+
+using namespace Natsuki;
 
 static void errorCallback(std::string_view title, std::string_view error) {
 	Game::setResult(SDL_APP_FAILURE);
@@ -27,9 +29,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 	try {
 		Game::iterate();
 	}
-	catch (SDLException&e) {
-		errorCallback("SDL Error", e.what());
-	}
 	catch (std::runtime_error &e) {
 		errorCallback("Runtime Error", e.what());
 	}
@@ -39,9 +38,6 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 	try {
 		Game::eventHandler(event);
-	}
-	catch (SDLException&e) {
-		errorCallback("SDL Error", e.what());
 	}
 	catch (std::runtime_error &e) {
 		errorCallback("Runtime Error", e.what());

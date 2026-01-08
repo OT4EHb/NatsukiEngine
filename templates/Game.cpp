@@ -1,5 +1,8 @@
 module Game;
 import Context;
+import Natsuki;
+
+using namespace Natsuki;
 
 void Game::iterate() {
 	//

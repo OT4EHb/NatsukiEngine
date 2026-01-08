@@ -2,51 +2,56 @@ module;
 #include <string_view>
 #include <span>
 #include <SDL3/SDL_render.h>
-export module Renderer;
-import Window;
-export import SDLException;
-export import Sprite;
+export module Natsuki.Render.Renderer;
+import Natsuki.Window;
+export import Natsuki.SDLException;
+export import Natsuki.Render.Sprite;
 
 export SDL_Vertex;
-export class Renderer {
-private:
-	SDL_Renderer *renderer;
-public:
-	Renderer(Window &window, std::string_view driverName = "");
-	~Renderer();
-	inline operator SDL_Renderer*() {
-		return renderer;
-	}
 
-	inline bool setDrawColor(const SDL_Color &c) const;
-	inline SDL_Color getDrawColor() const;
+export namespace Natsuki {
+	class Renderer {
+	private:
+		SDL_Renderer *renderer;
+	public:
+		Renderer(Window &window, std::string_view driverName = "");
+		~Renderer();
+		inline operator SDL_Renderer *() {
+			return renderer;
+		}
 
-	inline bool setScale(const SDL_FPoint) const;
-	inline SDL_FPoint getScale() const;
+		inline bool setDrawColor(const SDL_Color &c) const;
+		inline SDL_Color getDrawColor() const;
 
-	inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
-	inline bool present() const;
-	inline bool setVSync(int vsync = 1) const;
+		inline bool setScale(const SDL_FPoint) const;
+		inline SDL_FPoint getScale() const;
 
-	inline bool renderFillRect(const SDL_FRect &rect) const;
-	inline bool renderFillRects(std::span<const SDL_FRect>) const;
+		inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
+		inline bool present() const;
+		inline bool setVSync(int vsync = 1) const;
 
-	inline bool render(const SDL_FRect &rect) const;
-	inline bool render(std::span<const SDL_FRect>) const;
+		inline bool renderFillRect(const SDL_FRect &rect) const;
+		inline bool renderFillRects(std::span<const SDL_FRect>) const;
 
-	inline bool renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const;
-	inline bool renderLines(std::span<const SDL_FPoint>) const;
+		inline bool render(const SDL_FRect &rect) const;
+		inline bool render(std::span<const SDL_FRect>) const;
 
-	inline bool render(const SDL_FPoint &point) const;
-	inline bool render(std::span<const SDL_FPoint>) const;
+		inline bool renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const;
+		inline bool renderLines(std::span<const SDL_FPoint>) const;
 
-	inline bool renderGeometry(std::span<const SDL_Vertex>,
-							   std::span <const int> = {},
-							   SDL_Texture * = nullptr) const;
-	inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
-	inline bool render(Sprite &) const;
-	inline bool renderBorder(Sprite &) const;
-};
+		inline bool render(const SDL_FPoint &point) const;
+		inline bool render(std::span<const SDL_FPoint>) const;
+
+		inline bool renderGeometry(std::span<const SDL_Vertex>,
+								   std::span <const int> = {},
+								   SDL_Texture * = nullptr) const;
+		inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
+		inline bool render(Sprite &) const;
+		inline bool renderBorder(Sprite &) const;
+	};
+}
+
+using namespace Natsuki;
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
 	renderer = SDL_CreateRenderer(window.window, driverName.data());

@@ -1,15 +1,20 @@
+module;
 #include <string_view>
 #include <SDL3_image/SDL_image.h>
-export module Surface;
+export module Natsuki.Render.Surface;
 
-export class Surface {
-	friend class Texture;
-private:
-	SDL_Surface *surface;
-public:
-	Surface(std::string_view file);
-	~Surface();
-};
+export namespace Natsuki {
+	class Surface {
+		friend class Texture;
+	private:
+		SDL_Surface *surface;
+	public:
+		Surface(std::string_view file);
+		~Surface();
+	};
+}
+
+using namespace Natsuki;
 
 Surface::Surface(std::string_view file) {
 	surface = IMG_Load(file.data());

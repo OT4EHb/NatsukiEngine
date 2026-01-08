@@ -1,24 +1,28 @@
 #include <string_view>
 #include <SDL3/SDL_video.h>
-export module Window;
-import SDLException;
+export module Natsuki.Window;
+import Natsuki.SDLException;
 
-export class Window {
-	friend class Renderer;
-	friend class MessageBox;
-private:
-	SDL_Window *window;
-public:
-	inline Window(SDL_Window *window);
-	inline Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0);
-	inline ~Window();
-	inline bool show();
-	inline bool hide();
-	inline Window *createPopupWindow(int offset_x, int offset_y, int width, int height, SDL_WindowFlags flags = SDL_WINDOW_TOOLTIP);
-	inline bool flash(SDL_FlashOperation operation = SDL_FLASH_CANCEL);
-	inline bool raise();
-	inline SDL_Point getSize();
-};
+export namespace Natsuki {
+	class Window {
+		friend class Renderer;
+		friend class MessageBox;
+	private:
+		SDL_Window *window;
+	public:
+		inline Window(SDL_Window *window);
+		inline Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0);
+		inline ~Window();
+		inline bool show();
+		inline bool hide();
+		inline Window *createPopupWindow(int offset_x, int offset_y, int width, int height, SDL_WindowFlags flags = SDL_WINDOW_TOOLTIP);
+		inline bool flash(SDL_FlashOperation operation = SDL_FLASH_CANCEL);
+		inline bool raise();
+		inline SDL_Point getSize();
+	};
+}
+
+using namespace Natsuki;
 
 Window::Window(SDL_Window *window) :window(window) {}
 

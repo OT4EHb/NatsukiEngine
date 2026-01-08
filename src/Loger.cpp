@@ -1,6 +1,8 @@
 module;
 #include <fstream>
-module Loger;
+module Natsuki.Loger;
+
+using namespace Natsuki;
 
 Loger Loger::loger;
 

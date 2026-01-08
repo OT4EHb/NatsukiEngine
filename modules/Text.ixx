@@ -1,8 +1,10 @@
-export module Text;
+export module Natsuki.Text;
 
-export class Text {
-private:
-public:
-	Text();
-	~Text();
-};
+export namespace Natsuki {
+	class Text {
+	private:
+	public:
+		Text();
+		~Text();
+	};
+}
