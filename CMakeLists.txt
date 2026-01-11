@@ -60,19 +60,39 @@ if(EMSCRIPTEN)
 	set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
 endif()
 
-add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+find_package(SDL3 QUIET CONFIG
+    PATHS ${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL
+    NO_DEFAULT_PATH
+)
+if(NOT SDL3_FOUND)
+    add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+endif()
 
-set(SDLTTF_VENDORED ON CACHE BOOL "")
-add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
+find_package(SDL3_ttf QUIET CONFIG
+    PATHS ${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL_ttf
+    NO_DEFAULT_PATH
+)
+if(NOT SDL3_ttf_FOUND)
+    set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
 
-set(SDLIMAGE_VENDORED ON CACHE BOOL "")
-set(SDLIMAGE_AVIF OFF CACHE BOOL "")
-add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
+    add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
+endif()
+ 
+find_package(SDL3_image QUIET CONFIG
+    PATHS ${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL_image
+    NO_DEFAULT_PATH
+)
+if(NOT SDL3_image_FOUND)
+    set(SDLIMAGE_VENDORED ON CACHE BOOL "" FORCE)
+    set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
+
+    add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
+endif()
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE 
+    SDL3::SDL3
 	SDL3_ttf::SDL3_ttf
 	SDL3_image::SDL3_image
-    SDL3::SDL3
 )
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
@@ -80,3 +100,6 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/vendored/SDL_ttf/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/vendored/SDL_image/include"
 )
+
+get_property(exported_targets GLOBAL PROPERTY EXPORTED_TARGETS)
+message(STATUS "Exported targets: ${exported_targets}")

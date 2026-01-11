@@ -3,8 +3,6 @@ module;
 export module Natsuki.ECS.Component.Position;
 export import Natsuki.ECS.BaseComponent;
 
-export SDL_FRect;
-
 export namespace Natsuki {
 	using Position = SDL_FPoint;
 }

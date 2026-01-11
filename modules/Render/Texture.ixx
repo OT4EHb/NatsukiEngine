@@ -1,3 +1,4 @@
+module;
 #include <string_view>
 #include <SDL3_image/SDL_image.h>
 export module Natsuki.Render.Texture;
@@ -7,26 +8,26 @@ export namespace Natsuki {
 	class Texture {
 		friend class Renderer;
 	private:
-		SDL_Texture *texture;
+		SDL_Texture *texture{nullptr};
 	public:
-		inline Texture(SDL_Renderer *renderer, std::string_view file);
-		//inline Texture(Renderer *renderer, Surface *surface);
+		constexpr inline Texture() = default;
+		inline ~Texture();
 		explicit inline operator SDL_Texture *() {
 			return texture;
 		}
-		inline ~Texture();
+		inline bool load(std::string_view, SDL_Renderer *);
 		inline SDL_FPoint getSize() const;
 	};
 }
 
 using namespace Natsuki;
 
-Texture::Texture(SDL_Renderer *renderer, std::string_view file) {
-	texture = IMG_LoadTexture(renderer, file.data());
-	checkCallSDL(texture != nullptr);
+inline bool Texture::load(std::string_view path, SDL_Renderer *renderer) {
+	texture = IMG_LoadTexture(renderer, path.data());
+	return texture != nullptr;
 }
 
-Texture::~Texture() {
+inline Texture::~Texture() {
 	SDL_DestroyTexture(texture);
 }
 

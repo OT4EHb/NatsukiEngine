@@ -24,8 +24,6 @@ export namespace Natsuki {
 	};
 }
 
-using namespace Natsuki;
-
 inline Uint32 Natsuki::callback(void *timer, Uint32 id, Uint32 interval) {
 	return static_cast<Timer *>(timer)->thisCallback(interval);
 }

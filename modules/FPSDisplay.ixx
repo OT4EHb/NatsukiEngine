@@ -36,12 +36,5 @@ export namespace Natsuki {
 		static inline DeltaTimeNS deltaTime;
 		static inline Uint64 delta{1};
 		static inline Uint64 count;
-		static inline Timer timer{
-			80,
-			[](Uint64 interval) {
-				FPSDisplay::update();
-				return interval;
-			}
-		};
 	};
 }
