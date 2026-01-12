@@ -48,13 +48,15 @@ export namespace Natsuki {
 		inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
 		inline bool render(Sprite &) const;
 		inline bool renderBorder(Sprite &) const;
+
+		inline bool renderDebugText(std::string_view , SDL_FPoint = {0.f,0.f}) const;
 	};
 }
 
 using namespace Natsuki;
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
-	renderer = SDL_CreateRenderer(window.window, driverName.data());
+	renderer = SDL_CreateRenderer(window, driverName.data());
 	checkCallSDL(renderer != nullptr);
 }
 
@@ -155,4 +157,8 @@ inline bool Renderer::renderBorder(Sprite &sprite) const {
 		, {.x = sprite.dst.x, .y = sprite.dst.y}
 	};
 	return renderLines(points);
+}
+
+inline bool Renderer::renderDebugText(std::string_view text, SDL_FPoint position) const {
+	return SDL_RenderDebugText(renderer, position.x, position.y, text.data());
 }

@@ -5,17 +5,20 @@ import Natsuki.SDLException;
 
 export namespace Natsuki {
 	class Window {
-		friend class Renderer;
-		friend class MessageBox;
 	private:
 		SDL_Window *window;
 	public:
+		constexpr inline operator SDL_Window *() {
+			return window;
+		}
 		inline Window(SDL_Window *window);
 		inline Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0);
 		inline ~Window();
 		inline bool show();
 		inline bool hide();
-		inline Window *createPopupWindow(int offset_x, int offset_y, int width, int height, SDL_WindowFlags flags = SDL_WINDOW_TOOLTIP);
+		inline Window *createPopupWindow(int offset_x, int offset_y,
+										 int width, int height,
+										 SDL_WindowFlags flags = SDL_WINDOW_TOOLTIP);
 		inline bool flash(SDL_FlashOperation operation = SDL_FLASH_CANCEL);
 		inline bool raise();
 		inline SDL_Point getSize();

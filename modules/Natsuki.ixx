@@ -7,7 +7,7 @@ export import Natsuki.Resource;
 export import Natsuki.Time;
 export import Natsuki.Utils;
 export import Natsuki.Font;
-export import Natsuki.FPSDisplay;
+export import Natsuki.FPSCounter;
 export import Natsuki.Loger;
 export import Natsuki.MessageBox;
 export import Natsuki.SDL;
