@@ -7,7 +7,17 @@
 ## Сборка
 Доступна сборка через CMake, в данный момент работает только на MSVC (ждем полную поддержку модулей)
 
-[//]: <> (## Быстрый старт)
+## Быстрый старт
+```cmake
+#config.cmake
+set(APP_DIR "your_dir")
+
+#your_dir/CMakeLists.txt
+add_executable(YourGame)
+configure_target(YourGame)
+added_src(YourGame src_dir)
+added_assets(YourGame assets_dir_")
+```
 
 ## Каталоги
 - *modules/* - каталог модулей, добавляются в сборку по необходимости

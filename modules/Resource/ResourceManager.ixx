@@ -91,6 +91,7 @@ export namespace Natsuki {
 				return resource;
 			}
 			ResourceError(path, "\"load\"");
+			return nullptr;
 		}
 
 		std::shared_ptr<T> get(std::string path) {
@@ -105,6 +106,7 @@ export namespace Natsuki {
 					return it->second.lock();
 			}
 			ResourceError(path, "\"get\"");
+			return nullptr;
 		}
 	};
 

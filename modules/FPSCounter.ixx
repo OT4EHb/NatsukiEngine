@@ -21,7 +21,7 @@ export namespace Natsuki {
 
 using namespace Natsuki;
 
-FPSCounter::FPSCounter(double coof):EMAcoof(coof) {
+FPSCounter::FPSCounter(double coof) :EMAcoof(coof) {
 	if (coof > 1.) EMAcoof = 1.;
 	else if (coof < 0.1) EMAcoof = 0.1;
 }
