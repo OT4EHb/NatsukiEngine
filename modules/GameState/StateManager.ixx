@@ -41,7 +41,7 @@ export namespace Natsuki {
 		template<GameStateType T>
 		bool release() {
 			std::type_index type = typeid(T);
-			if (auto it = states.find(type); it != states.end() && current != *it) {
+			if (auto it = states.find(type); it != states.end() && current != it->second) {
 				delete it->second;
 				states.erase(it);
 				return true;

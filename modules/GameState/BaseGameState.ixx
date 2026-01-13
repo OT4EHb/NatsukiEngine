@@ -25,5 +25,5 @@ export namespace Natsuki {
 		virtual ~BaseGameState() = default;
 	};
 
-	export using GameState = BaseGameState;
+	using GameState = BaseGameState;
 }
