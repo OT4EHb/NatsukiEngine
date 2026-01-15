@@ -1,6 +1,8 @@
 module;
 #include <initializer_list>
+#include <unordered_map>
 #include <SDL3/SDL_scancode.h>
+#include <SDL3/SDL_events.h>
 export module Natsuki.GameState.KeyState;
 export import Natsuki.GameState.BaseGameState;
 

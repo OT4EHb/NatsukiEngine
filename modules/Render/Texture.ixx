@@ -6,13 +6,12 @@ import Natsuki.SDLException;
 
 export namespace Natsuki {
 	class Texture {
-		friend class Renderer;
 	private:
 		SDL_Texture *texture{nullptr};
 	public:
 		constexpr inline Texture() = default;
 		inline ~Texture();
-		explicit inline operator SDL_Texture *() {
+		inline operator SDL_Texture *() {
 			return texture;
 		}
 		inline bool load(std::string_view, SDL_Renderer *);

@@ -138,11 +138,11 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 }
 
 inline bool Renderer::render(Texture &texture, const SDL_FRect*src,const SDL_FRect*dst) const {
-	return SDL_RenderTexture(renderer, texture.texture, src, dst);
+	return SDL_RenderTexture(renderer, texture, src, dst);
 }
 
 inline bool Renderer::render(Sprite &sprite) const {
-	return SDL_RenderTextureRotated(renderer, static_cast<SDL_Texture *>(sprite.texture),
+	return SDL_RenderTextureRotated(renderer, *static_cast<Texture*>(sprite),
 									&sprite.src, &sprite.dst, sprite.angle,
 									&sprite.centerRotated, SDL_FLIP_NONE);
 }

@@ -30,12 +30,12 @@ export namespace Natsuki {
 			requires findPosition<components...> &&include<Velocity, components...>
 		static void update(ECS<Size, components...> &ecs) {
 			static DeltaTime deltaTime;
-			Uint64 delta = deltaTime.update();
+			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
-			auto &velocitys = ecs.getComponent<Velocity>();
+			auto &velocitys = ecs.template getComponent<Velocity>();
 			for (size_t i{}; i < size; ++i) {
 				auto &position =
-					ecs.getComponent<
+					ecs.template getComponent<
 					decltype(extractPosition<components...>())
 					>(i);
 				position.x += velocitys[i].dx * delta;
@@ -47,9 +47,9 @@ export namespace Natsuki {
 			requires include<PositionSize, components...> &&include<Velocity, components...>
 		static void update(ECS<Size, components...> &ecs, PositionSize rect) {
 			static DeltaTime deltaTime;
-			Uint64 delta = deltaTime.update();
+			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
-			auto &velocitys = ecs.getComponent<Velocity>();
+			auto &velocitys = ecs.template getComponent<Velocity>();
 			for (size_t i{}; i < size; ++i) {
 				auto &ps = ecs.getComponent<PositionSize>(i);
 				ps.x += velocitys[i].dx * delta;

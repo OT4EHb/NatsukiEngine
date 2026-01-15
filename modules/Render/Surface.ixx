@@ -5,7 +5,6 @@ export module Natsuki.Render.Surface;
 
 export namespace Natsuki {
 	class Surface {
-		friend class Texture;
 	private:
 		SDL_Surface *surface;
 	public:

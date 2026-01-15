@@ -5,9 +5,8 @@ export import Natsuki.Render.Texture;
 
 export namespace Natsuki {
 	class Sprite {
-		friend class Renderer;
 	private:
-		Texture &texture;
+		Texture *texture;
 	public:
 		SDL_FRect src;
 
@@ -16,13 +15,14 @@ export namespace Natsuki {
 		SDL_FPoint centerRotated;
 	public:
 		inline Sprite(Texture &texture, const SDL_FRect &rect) :
-			texture(texture), src(rect),
+			texture(&texture), src(rect),
 			dst{.x = 0, .y = 0, .w = rect.w, .h = rect.h} {
 			setCenter();
 		}
 
-		inline Sprite(const Sprite &other) = default;
-		inline Sprite(Sprite &&other) = default;
+		inline operator Texture *() {
+			return texture;
+		}
 
 		inline SDL_FPoint &getPosition() {
 			return reinterpret_cast<SDL_FPoint &>(dst);

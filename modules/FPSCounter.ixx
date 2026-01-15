@@ -7,9 +7,9 @@ export namespace Natsuki {
 	private:
 		DeltaTime deltaTime{};
 		double smoothedFPS{60};
-		Uint64 factFPS{60};
-		Uint64 frameCounter{0};
-		Uint64 secondAccumulator{0};
+		time_type factFPS{60};
+		time_type frameCounter{0};
+		time_type secondAccumulator{0};
 		double EMAcoof;
 	public:
 		FPSCounter(double=0.9);
@@ -27,7 +27,7 @@ FPSCounter::FPSCounter(double coof) :EMAcoof(coof) {
 }
 
 double FPSCounter::update() {
-	Uint64 delta = deltaTime.update();
+	auto delta = deltaTime.update();
 	if (delta == 0) delta = 1;
 	double fps = 1000. / delta;
 	smoothedFPS = EMAcoof * fps + (1. - EMAcoof) * smoothedFPS;

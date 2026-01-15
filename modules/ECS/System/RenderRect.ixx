@@ -10,12 +10,12 @@ export namespace Natsuki {
 			requires include<PositionSize, components...>
 		static void update(ECS<Size, components...> &ecs, Renderer &ren) {
 			size_t size = ecs.getSize();
-			auto &rects = ecs.getComponent<PositionSize>();
+			auto &rects = ecs.template getComponent<PositionSize>();
 			//ren.setDrawColor(ecs.getComponent<Color>(0));
 			//ren.renderFillRects(rects);
 			for (size_t i{}; i < size; ++i) {
 				auto &rect = rects[i];
-				ren.setDrawColor(ecs.getComponent<Color>(i));
+				ren.setDrawColor(ecs.template getComponent<Color>(i));
 				ren.renderFillRect(rect);
 			}
 		}

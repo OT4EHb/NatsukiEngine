@@ -1,5 +1,6 @@
-module Natsuki.SDL;
+module;
 #include <SDL3_ttf/SDL_ttf.h>
+module Natsuki.SDL;
 using namespace Natsuki;
 
 bool SDL::init(SDL_InitFlags flags) {

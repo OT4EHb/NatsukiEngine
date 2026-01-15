@@ -8,41 +8,49 @@ set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if ((APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin") OR EMSCRIPTEN)
-        set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
-        set(SDL_SHARED OFF)
-    else()
-        set(SDL_SHARED ON)
-    endif()
+    set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
+    set(SDL_SHARED OFF)
+else()
+    set(SDL_SHARED ON)
+endif()
 
-    if(MSVC)
-        if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-            add_definitions(/MP)
-        endif()
+if(MSVC)
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        add_definitions(/MP)
     endif()
+endif()
 
 find_package(SDL3 QUIET CONFIG
     PATHS ${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL
     NO_DEFAULT_PATH
 )
-if(NOT SDL3_FOUND)
+if(WIN32)
+    set(SDL3_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3.dll")
+else()
+    set(SDL3_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3.so")
+endif()
+if(NOT SDL3_FOUND OR NOT EXISTS SDL3_LOCATION)
     add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 endif()
 
+set(SDL3_ttf_FOUND OFF)
 set(SDL3_TTF_LIB "${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL_ttf/SDL3_ttf.lib")
 if (${SDL_SHARED} AND EXISTS ${SDL3_TTF_LIB})
-    add_library(SDL3_ttf::SDL3_ttf SHARED IMPORTED)
     if(WIN32)
         set(SDL3_TTF_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3_ttf.dll")
     else()
         set(SDL3_TTF_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3_ttf.so")
     endif()
-    set_target_properties(SDL3_ttf::SDL3_ttf PROPERTIES
-        IMPORTED_LOCATION ${SDL3_TTF_LOCATION}
-        IMPORTED_IMPLIB ${SDL3_TTF_LIB}
-        INTERFACE_LINK_LIBRARIES SDL3::SDL3
-    )
-    set(SDL3_ttf_FOUND ON)
-    message("Found SDL_ttf")
+    if(EXISTS ${SDL3_TTF_LOCATION})
+        add_library(SDL3_ttf::SDL3_ttf SHARED IMPORTED)
+        set_target_properties(SDL3_ttf::SDL3_ttf PROPERTIES
+            IMPORTED_LOCATION ${SDL3_TTF_LOCATION}
+            IMPORTED_IMPLIB ${SDL3_TTF_LIB}
+            INTERFACE_LINK_LIBRARIES SDL3::SDL3
+        )
+        set(SDL3_ttf_FOUND ON)
+        message("Found SDL_ttf")
+    endif()
 endif()
 if(NOT SDL3_ttf_FOUND)
     set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
@@ -50,21 +58,24 @@ if(NOT SDL3_ttf_FOUND)
     add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
 endif() 
 
+set(SDL3_image_FOUND OFF)
 set(SDL3_IMAGE_LIB "${CMAKE_CURRENT_BINARY_DIR}/vendored/SDL_image/SDL3_image.lib")
 if (${SDL_SHARED} AND EXISTS ${SDL3_IMAGE_LIB})
-    add_library(SDL3_image::SDL3_image SHARED IMPORTED)
     if(WIN32)
         set(SDL3_IMAGE_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3_image.dll")
     else()
         set(SDL3_IMAGE_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/SDL3_image.so")
     endif()
-    set_target_properties(SDL3_image::SDL3_image PROPERTIES
-        IMPORTED_LOCATION ${SDL3_IMAGE_LOCATION}
-        IMPORTED_IMPLIB ${SDL3_IMAGE_LIB}
-        INTERFACE_LINK_LIBRARIES SDL3::SDL3
-    )
-    set(SDL3_image_FOUND ON)
-    message("Found SDL_image")
+    if (EXISTS ${SDL3_IMAGE_LOCATION})
+        add_library(SDL3_image::SDL3_image SHARED IMPORTED)
+        set_target_properties(SDL3_image::SDL3_image PROPERTIES
+            IMPORTED_LOCATION ${SDL3_IMAGE_LOCATION}
+            IMPORTED_IMPLIB ${SDL3_IMAGE_LIB}
+            INTERFACE_LINK_LIBRARIES SDL3::SDL3
+        )
+        set(SDL3_image_FOUND ON)
+        message("Found SDL_image")
+    endif()
 endif()
 if(NOT SDL3_image_FOUND)
     set(SDLIMAGE_VENDORED ON CACHE BOOL "" FORCE)
