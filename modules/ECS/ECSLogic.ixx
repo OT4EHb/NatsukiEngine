@@ -1,11 +1,14 @@
 module;
-#include <array>
 #include <concepts>
 #include <cstddef>
 #include <tuple>
+#include <vector>
+#include <unordered_set>
 export module Natsuki.ECS.ECSLogic;
 export import Natsuki.ECS.Component;
 export import Natsuki.ECS.BaseSystem;
+
+export using ::size_t;
 
 export namespace Natsuki {
 	using Entity = size_t;
@@ -13,28 +16,44 @@ export namespace Natsuki {
 	template<class T, class...Args>
 	concept include = (std::same_as<T, Args> || ...);
 
-	template <size_t Size, ComponentType...components>
+	template <ComponentType...components>
 	class ECS {
 	private:
-		std::tuple<std::array<components, Size>...>data{};
-		size_t currentSize{};
+		std::unordered_set<size_t> noactived;
+		std::tuple<std::vector<components>...>data{};
 	public:
-		Entity addEntity(size_t count = 1) {
-			size_t res = currentSize;
-			currentSize += count;
-			return res;
+		ECS(size_t size = 100) {
+			noactived.reserve(size);
+			std::apply(
+				[size](auto&...vec) {
+					(vec.reserve(size), ...);
+				}, data);
+		}
+
+		constexpr inline size_t getSize() {
+			return std::get<0>(data).size();
+		}
+
+		[[nodiscard]] Entity addEntity() {
+			size_t size;
+			if (noactived.empty()) {
+				size = getSize();
+				std::apply(
+					[](auto&...vec) {
+						(vec.emplace_back(), ...);
+					}, data);
+			}
+			else {
+				auto it = noactived.begin();
+				size = *it;
+				noactived.erase(it);
+			}
+			return size;
 		}
 
 		void dropEntity(size_t index) {
-			if (index < --currentSize) {
-				std::apply([index, size = currentSize](auto&... comp) {
-					((comp[index] = std::move(comp[size])), ...);
-						   }, data);
-			}
-		}
-
-		inline size_t getSize() {
-			return currentSize;
+			if (index < getSize())
+				noactived.insert(index);
 		}
 
 		template <ComponentType T>
@@ -46,7 +65,7 @@ export namespace Natsuki {
 		template <ComponentType T>
 			requires include<T, components...>
 		auto &getComponent() {
-			return std::get<std::array<T, Size>>(data);
+			return std::get<std::vector<T>>(data);
 		}
 	};
 }

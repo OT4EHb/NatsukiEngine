@@ -6,5 +6,5 @@ export namespace Natsuki {
 	class System {};
 
 	template<class T>
-	concept SystemType = std::is_base_of_v<System, T>;
+	concept SystemType = std::derived_from<T, System>;
 }

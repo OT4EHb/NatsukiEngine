@@ -39,7 +39,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event) {
 	try {
 		Game::eventHandler(event);
 	}
-	catch (std::runtime_error &e) {
+	catch (const Natsuki::runtime_error &e) {
 		errorCallback("Runtime Error", e.what());
 	}
 	return Game::getResult();

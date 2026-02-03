@@ -1,5 +1,5 @@
 export module Natsuki.Time.DeltaTime;
-import Natsuki.Time.GlobalTime;
+export import Natsuki.Time.GlobalTime;
 
 export namespace Natsuki {
 	class DeltaTime {

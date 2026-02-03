@@ -6,10 +6,7 @@ import Natsuki.ECS.ECSLogic;
 import Natsuki.Time;
 
 template<class T>
-concept isPosition = requires(const T & t) {
-	{ t.x }->std::convertible_to<float>;
-	{ t.y }->std::convertible_to<float>;
-};
+concept isPosition = std::convertible_to<T, Natsuki::Position>;
 
 template<class...Args>
 concept findPosition = (isPosition<Args> || ...);
@@ -27,9 +24,9 @@ export namespace Natsuki {
 	class Movement :System {
 	public:
 		Movement() = delete;
-		template<size_t Size, ComponentType...components>
+		template<ComponentType...components>
 			requires findPosition<components...> &&include<Velocity, components...>
-		static void update(ECS<Size, components...> &ecs) {
+		static void update(ECS<components...> &ecs) {
 			static DeltaTime deltaTime;
 			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
@@ -44,9 +41,9 @@ export namespace Natsuki {
 			}
 		}
 
-		template<size_t Size, ComponentType...components>
+		template<ComponentType...components>
 			requires include<PositionSize, components...> &&include<Velocity, components...>
-		static void update(ECS<Size, components...> &ecs, PositionSize rect) {
+		static void update(ECS<components...> &ecs, PositionSize rect) {
 			static DeltaTime deltaTime;
 			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();

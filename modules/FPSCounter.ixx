@@ -5,7 +5,7 @@ import Natsuki.Time;
 export namespace Natsuki {
 	class FPSCounter {
 	private:
-		DeltaTime deltaTime{};
+		DeltaTimeNS deltaTime{};
 		double smoothedFPS{60};
 		time_type factFPS{60};
 		time_type frameCounter{0};
@@ -14,7 +14,7 @@ export namespace Natsuki {
 	public:
 		FPSCounter(double=0.9);
 		double update();
-		inline double getFactFPS() const;
+		inline time_type getFactFPS() const;
 		inline double getFrameTime() const;
 	};
 }
@@ -27,13 +27,13 @@ FPSCounter::FPSCounter(double coof) :EMAcoof(coof) {
 }
 
 double FPSCounter::update() {
-	auto delta = deltaTime.update();
+	double delta = deltaTime.update();
 	if (delta == 0) delta = 1;
-	double fps = 1000. / delta;
+	double fps = NS_PER_SECOND / delta;
 	smoothedFPS = EMAcoof * fps + (1. - EMAcoof) * smoothedFPS;
 	++frameCounter;
 	secondAccumulator += delta;
-	if (secondAccumulator >= 1000) {
+	if (secondAccumulator >= NS_PER_SECOND) {
 		factFPS = frameCounter;
 		secondAccumulator = 0;
 		frameCounter = 0;
@@ -41,7 +41,7 @@ double FPSCounter::update() {
 	return smoothedFPS;
 }
 
-double FPSCounter::getFactFPS() const {
+time_type FPSCounter::getFactFPS() const {
 	return factFPS;
 }
 
