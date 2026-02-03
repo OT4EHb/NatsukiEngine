@@ -1,7 +1,8 @@
 module;
 #include <array>
-#include <tuple>
 #include <concepts>
+#include <cstddef>
+#include <tuple>
 export module Natsuki.ECS.ECSLogic;
 export import Natsuki.ECS.Component;
 export import Natsuki.ECS.BaseSystem;

@@ -1,5 +1,6 @@
 module;
 #include <concepts>
+#include <cstddef>
 export module Natsuki.ECS.System.Movement;
 import Natsuki.ECS.ECSLogic;
 import Natsuki.Time;
@@ -51,7 +52,7 @@ export namespace Natsuki {
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
 			for (size_t i{}; i < size; ++i) {
-				auto &ps = ecs.getComponent<PositionSize>(i);
+				auto &ps = ecs.template getComponent<PositionSize>(i);
 				ps.x += velocitys[i].dx * delta;
 				if (ps.x < rect.x) {
 					velocitys[i].dx = fabs(velocitys[i].dx);

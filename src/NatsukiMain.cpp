@@ -1,6 +1,5 @@
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
-#include <stdexcept>
 #include <string>
 
 import Natsuki.SDL;
@@ -19,7 +18,7 @@ static void errorCallback(std::string_view title, std::string_view error) {
 		.show();
 }
 
-static SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
+SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
 	if (!SDL::init()) {
 		return SDL_APP_FAILURE;
 	}
@@ -30,7 +29,7 @@ SDL_AppResult SDL_AppIterate(void *appstate) {
 	try {
 		Game::iterate();
 	}
-	catch (std::runtime_error &e) {
+	catch (const Natsuki::runtime_error &e) {
 		errorCallback("Runtime Error", e.what());
 	}
 	return Game::getResult();

@@ -6,14 +6,15 @@ module;
 export module Natsuki.SDLException;
 import Natsuki.SDL;
 
-export std::runtime_error;
 
 export namespace Natsuki {
+	using std::runtime_error;
+
 	class SDLException :
-		public std::runtime_error {
+		public runtime_error {
 	public:
 		SDLException(std::source_location loc = std::source_location::current()) :
-			std::runtime_error(
+			runtime_error(
 				"Function name:\n "
 				+ std::string(loc.function_name())
 				+ "\nFile: \n "

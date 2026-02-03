@@ -7,7 +7,7 @@ import Natsuki.Window;
 export import Natsuki.SDLException;
 export import Natsuki.Render.Sprite;
 
-export SDL_Vertex;
+export using ::SDL_Vertex;
 
 export namespace Natsuki {
 	class Renderer {

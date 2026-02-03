@@ -1,3 +1,5 @@
+module;
+#include <cstddef>;
 export module Natsuki.ECS.System.RenderRect;
 import Natsuki.ECS.ECSLogic;
 import Natsuki.Render;

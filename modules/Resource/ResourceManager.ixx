@@ -3,6 +3,7 @@ module;
 #include <string_view>
 #include <string>
 #include <stdexcept>
+#include <cstddef>
 #include <memory>
 export module Natsuki.Resource.ResourceManager;
 import Natsuki.Resource.BaseResource;
@@ -31,8 +32,8 @@ export namespace Natsuki {
 			return true;
 		}
 
-		template <class T>
-		void moveToHot(T it) {
+		template <class RT>
+		void moveToHot(RT it) {
 			hotCache.emplace(it->first, it->second);
 			coldCache.erase(it);
 		}
