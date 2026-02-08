@@ -4,5 +4,10 @@ export module Natsuki.ECS.Component.Position;
 export import Natsuki.ECS.BaseComponent;
 
 export namespace Natsuki {
-	using Position = SDL_FPoint;
+	struct Position {
+		SDL_FPoint position{};
+		constexpr inline operator SDL_FPoint &() {
+			return position;
+		}
+	};
 }

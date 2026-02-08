@@ -32,12 +32,11 @@ export namespace Natsuki {
 			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
-			auto &positions = ecs.template getComponent<decltype(extractPosition<components...>())>();
+			auto &positions = ecs.template getComponent<
+				decltype(extractPosition<components...>())
+			>();
 			for (size_t i{}; i < size; ++i) {
 				auto &position = positions[i];
-					/*ecs.template getComponent<
-					decltype(extractPosition<components...>())
-					>(i);*/
 				position.x += velocitys[i].dx * delta;
 				position.y += velocitys[i].dy * delta;
 			}
