@@ -1,6 +1,7 @@
 module;
 #include <concepts>
 #include <cstddef>
+#include <cmath>
 export module Natsuki.ECS.System.Movement;
 import Natsuki.ECS.ECSLogic;
 import Natsuki.Time;
@@ -31,11 +32,12 @@ export namespace Natsuki {
 			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
+			auto &positions = ecs.template getComponent<decltype(extractPosition<components...>())>();
 			for (size_t i{}; i < size; ++i) {
-				auto &position =
-					ecs.template getComponent<
+				auto &position = positions[i];
+					/*ecs.template getComponent<
 					decltype(extractPosition<components...>())
-					>(i);
+					>(i);*/
 				position.x += velocitys[i].dx * delta;
 				position.y += velocitys[i].dy * delta;
 			}
@@ -48,25 +50,27 @@ export namespace Natsuki {
 			auto delta = deltaTime.update();
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
+			auto &positions =ecs.template getComponent<PositionSize>();
 			for (size_t i{}; i < size; ++i) {
-				auto &ps = ecs.template getComponent<PositionSize>(i);
+				auto &ps = positions[i];
+					//ecs.template getComponent<PositionSize>(i);
 				ps.x += velocitys[i].dx * delta;
 				if (ps.x < rect.x) {
-					velocitys[i].dx = fabs(velocitys[i].dx);
+					velocitys[i].dx = std::abs(velocitys[i].dx);
 					ps.x += 10;
 				}
 				else if (ps.x + ps.w > rect.x + rect.w) {
-					velocitys[i].dx = -fabs(velocitys[i].dx);
+					velocitys[i].dx = -std::abs(velocitys[i].dx);
 					ps.x -= 10;
 				}
 
 				ps.y += velocitys[i].dy * delta;
 				if (ps.y < rect.y) {
-					velocitys[i].dy = fabs(velocitys[i].dy);
+					velocitys[i].dy = std::abs(velocitys[i].dy);
 					ps.y += 10;
 				}
 				else if (ps.y + ps.h > rect.y + rect.h) {
-					velocitys[i].dy = -fabs(velocitys[i].dy);
+					velocitys[i].dy = -std::abs(velocitys[i].dy);
 					ps.y -= 10;
 				}
 			}
