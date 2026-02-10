@@ -2,7 +2,7 @@ module;
 #include <string_view>
 #include <SDL3_image/SDL_image.h>
 export module Natsuki.Render.Texture;
-import Natsuki.SDLException;
+import Natsuki.Exception;
 
 export namespace Natsuki {
 	class Texture {

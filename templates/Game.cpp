@@ -4,6 +4,10 @@ import Natsuki;
 
 using namespace Natsuki;
 
+void Game::init() {
+	//
+}
+
 void Game::iterate() {
 	//
 }

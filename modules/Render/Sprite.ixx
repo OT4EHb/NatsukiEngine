@@ -2,38 +2,46 @@ module;
 #include <SDL3/SDL_rect.h>
 export module Natsuki.Render.Sprite;
 export import Natsuki.Render.Texture;
+import Natsuki.ECS.ComponentPool;
+import Natsuki.ECS.Component.PositionSize;
 
 export namespace Natsuki {
-	class Sprite {
-	private:
-		Texture *texture;
-	public:
-		SDL_FRect src;
+	struct SpriteSrc {
+		SDL_FRect srcRect;
 
-		SDL_FRect dst;
+		inline void set(const Texture &texture) {
+			srcRect.x = 0;
+			srcRect.y = 0;
+			SDL_FPoint &p = reinterpret_cast<SDL_FPoint &>
+				(*(reinterpret_cast<char *>(this) + sizeof(SDL_FPoint)));
+			p = texture.getSize();
+		}
+	};
+
+	struct SpriteDst {
+		SDL_FRect destRect;
+
+		inline operator Position &() {
+			return reinterpret_cast<Position &>(*this);
+		}
+
+		inline operator PositionSize &() {
+			return reinterpret_cast<PositionSize &>(*this);
+		}
+	};
+
+	struct SpriteOrigin {
 		double angle{};
-		SDL_FPoint centerRotated;
-	public:
-		inline Sprite(Texture &texture, const SDL_FRect &rect) :
-			texture(&texture), src(rect),
-			dst{.x = 0, .y = 0, .w = rect.w, .h = rect.h} {
-			setCenter();
-		}
+		SDL_FPoint center;
 
-		inline operator Texture *() {
-			return texture;
+		inline void setCenter(SDL_FRect &destRect) {
+			center.x = destRect.w / 2;
+			center.y = destRect.h / 2;
 		}
+	};
 
-		inline SDL_FPoint &getPosition() {
-			return reinterpret_cast<SDL_FPoint &>(dst);
-		}
-
-		inline void setCenter(SDL_FPoint p) {
-			centerRotated = p;
-		}
-		inline void setCenter() {
-			centerRotated.x = dst.w / 2;
-			centerRotated.y = dst.h / 2;
-		}
+	template <ComponentType...components>
+	struct SpritePool : public ComponentPool<SpriteSrc, SpriteDst, SpriteOrigin, components...> {
+		Texture *texture{};
 	};
 }

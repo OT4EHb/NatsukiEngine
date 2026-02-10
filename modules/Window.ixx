@@ -2,7 +2,7 @@ module;
 #include <string_view>
 #include <SDL3/SDL_video.h>
 export module Natsuki.Window;
-import Natsuki.SDLException;
+import Natsuki.Exception;
 
 export namespace Natsuki {
 	class Window {

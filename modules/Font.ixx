@@ -2,7 +2,7 @@ module;
 #include <string>
 #include <SDL3_ttf/SDL_ttf.h>
 export module Natsuki.Font;
-import Natsuki.SDLException;
+import Natsuki.Exception;
 
 export namespace Natsuki {
 	class Font {

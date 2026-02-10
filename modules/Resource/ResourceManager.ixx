@@ -2,15 +2,15 @@ module;
 #include <unordered_map>
 #include <string_view>
 #include <string>
-#include <stdexcept>
 #include <cstddef>
 #include <memory>
 export module Natsuki.Resource.ResourceManager;
 import Natsuki.Resource.BaseResource;
 import Natsuki.Utils.TransparentHash;
+import Natsuki.Exception;
 
 inline void ResourceError(std::string_view path, std::string func) {
-	throw std::runtime_error("failed to " + func + " resource at path \"" + std::string(path) + '"');
+	throw Natsuki::Exception("failed to " + func + " resource at path \"" + std::string(path) + '"');
 }
 
 export namespace Natsuki {

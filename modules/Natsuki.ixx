@@ -11,6 +11,6 @@ export import Natsuki.FPSCounter;
 export import Natsuki.Loger;
 export import Natsuki.MessageBox;
 export import Natsuki.SDL;
-export import Natsuki.SDLException;
+export import Natsuki.Exception;
 export import Natsuki.Text;
 export import Natsuki.Window;

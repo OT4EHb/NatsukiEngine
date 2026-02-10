@@ -2,18 +2,18 @@ module;
 #include <stdexcept>
 #include <source_location>
 #include <string>
+#include <string_view>
 #include <filesystem>
-export module Natsuki.SDLException;
+export module Natsuki.Exception;
 import Natsuki.SDL;
 
 
 export namespace Natsuki {
-	using std::runtime_error;
-
-	class SDLException :
-		public runtime_error {
+	class Exception :
+		public std::runtime_error {
 	public:
-		SDLException(std::source_location loc = std::source_location::current()) :
+		Exception(std::string_view error,
+				  std::source_location loc = std::source_location::current()) :
 			runtime_error(
 				"Function name:\n "
 				+ std::string(loc.function_name())
@@ -22,11 +22,13 @@ export namespace Natsuki {
 				+ "\nLine: "
 				+ std::to_string(loc.line())
 				+ "\nError: "
-				+ std::string(SDL::getError())
+				+ std::string(error)
 			) {}
+		Exception(std::source_location loc = std::source_location::current())
+			:Exception(SDL::getError(), loc) {}
 	};
 
 	inline constexpr void checkCallSDL(bool v, std::source_location loc = std::source_location::current()) {
-		if (!v) throw SDLException(loc);
+		if (!v) throw Exception(loc);
 	}
 }

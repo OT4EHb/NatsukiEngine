@@ -4,7 +4,7 @@ module;
 #include <SDL3/SDL_render.h>
 export module Natsuki.Render.Renderer;
 import Natsuki.Window;
-export import Natsuki.SDLException;
+export import Natsuki.Exception;
 export import Natsuki.Render.Sprite;
 
 export using ::SDL_Vertex;
@@ -46,10 +46,10 @@ export namespace Natsuki {
 								   std::span <const int> = {},
 								   SDL_Texture * = nullptr) const;
 		inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
-		inline bool render(Sprite &) const;
-		inline bool renderBorder(Sprite &) const;
+		inline bool render(Texture &, SpriteSrc &, SpriteDst &, SpriteOrigin &) const;
+		inline bool renderBorder(SpriteDst &) const;
 
-		inline bool renderDebugText(std::string_view , SDL_FPoint = {0.f,0.f}) const;
+		inline bool renderDebugText(std::string_view, SDL_FPoint = {0.f, 0.f}) const;
 	};
 }
 
@@ -137,24 +137,25 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 	);
 }
 
-inline bool Renderer::render(Texture &texture, const SDL_FRect*src,const SDL_FRect*dst) const {
+inline bool Renderer::render(Texture &texture, const SDL_FRect *src, const SDL_FRect *dst) const {
 	return SDL_RenderTexture(renderer, texture, src, dst);
 }
 
-inline bool Renderer::render(Sprite &sprite) const {
-	return SDL_RenderTextureRotated(renderer, *static_cast<Texture*>(sprite),
-									&sprite.src, &sprite.dst, sprite.angle,
-									&sprite.centerRotated, SDL_FLIP_NONE);
+inline bool Renderer::render(Texture &texture, SpriteSrc &src,
+							 SpriteDst &dst, SpriteOrigin &origin) const {
+	return SDL_RenderTextureRotated(renderer, texture,
+									&src.srcRect, &dst.destRect, origin.angle,
+									&origin.center, SDL_FLIP_NONE);
 }
 
 
-inline bool Renderer::renderBorder(Sprite &sprite) const {
+inline bool Renderer::renderBorder(SpriteDst &sprite) const {
 	SDL_FPoint points[5]{
-		{.x = sprite.dst.x, .y = sprite.dst.y}
-		, {.x = sprite.dst.x + sprite.dst.w, .y = sprite.dst.y}
-		, {.x = sprite.dst.x + sprite.dst.w, .y = sprite.dst.y + sprite.dst.h}
-		, {.x = sprite.dst.x, .y = sprite.dst.y + sprite.dst.h}
-		, {.x = sprite.dst.x, .y = sprite.dst.y}
+		{.x = sprite.destRect.x, .y = sprite.destRect.y}
+		, {.x = sprite.destRect.x + sprite.destRect.w, .y = sprite.destRect.y}
+		, {.x = sprite.destRect.x + sprite.destRect.w, .y = sprite.destRect.y + sprite.destRect.h}
+		, {.x = sprite.destRect.x, .y = sprite.destRect.y + sprite.destRect.h}
+		, {.x = sprite.destRect.x, .y = sprite.destRect.y}
 	};
 	return renderLines(points);
 }

@@ -9,6 +9,7 @@ public:
 	Game() = delete;
 	static inline SDL_AppResult getResult();
 	static inline void setResult(SDL_AppResult result);
+	static void init();
 	static void iterate();
 	static void eventHandler(SDL_Event *);
 };
