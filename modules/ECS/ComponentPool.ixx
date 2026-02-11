@@ -1,6 +1,5 @@
 module;
 #include <concepts>
-#include <cstddef>
 #include <tuple>
 #include <vector>
 export module Natsuki.ECS.ComponentPool;
@@ -8,8 +7,6 @@ export import Natsuki.ECS.Component;
 export import Natsuki.ECS.BaseSystem;
 export import Natsuki.ECS.Entity;
 import Natsuki.Exception;
-
-export using ::size_t;
 
 class PoolIterator {
 private:
@@ -112,13 +109,13 @@ export namespace Natsuki {
 			return true;
 		}
 
-		constexpr inline PoolIterator begin() {
+		/*constexpr inline PoolIterator begin() {
 			return PoolIterator(ids.begin());
 		}
 
 		constexpr inline PoolIterator end() {
 			return PoolIterator(ids.end());
-		}
+		}*/
 
 		template <ComponentType T>
 			requires include<T, components...>

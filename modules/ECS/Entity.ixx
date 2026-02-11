@@ -1,4 +1,8 @@
+module;
+#include <cstddef>
 export module Natsuki.ECS.Entity;
+
+export using ::size_t;
 
 export namespace Natsuki {
 	struct Entity {
