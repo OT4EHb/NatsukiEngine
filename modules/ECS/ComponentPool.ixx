@@ -50,7 +50,7 @@ export namespace Natsuki {
 		std::vector<size_t> ids;
 		std::vector<size_t> freeIndices;
 	public:
-		constexpr ComponentPool(size_t size = 100) {
+		constexpr ComponentPool(size_t size) {
 			entitys.resize(size, Entity(-1));
 			ids.reserve(size);
 			freeIndices.reserve(size);

@@ -45,9 +45,9 @@ export namespace Natsuki {
 		inline bool renderGeometry(std::span<const SDL_Vertex>,
 								   std::span <const int> = {},
 								   SDL_Texture * = nullptr) const;
-		inline bool render(Texture &, const SDL_FRect *, const SDL_FRect *) const;
-		inline bool render(Texture &, SpriteSrc &, SpriteDst &, SpriteOrigin &) const;
-		inline bool renderBorder(SpriteDst &) const;
+		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &) const;
+		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &,
+						   const SpriteOrigin &, FlipMode) const;
 
 		inline bool renderDebugText(std::string_view, SDL_FPoint = {0.f, 0.f}) const;
 	};
@@ -137,27 +137,16 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 	);
 }
 
-inline bool Renderer::render(Texture &texture, const SDL_FRect *src, const SDL_FRect *dst) const {
-	return SDL_RenderTexture(renderer, texture, src, dst);
+inline bool Renderer::render(Texture &texture, const SDL_FRect &src,
+							 const SDL_FRect &dst) const {
+	return SDL_RenderTexture(renderer, texture, &src, &dst);
 }
 
-inline bool Renderer::render(Texture &texture, SpriteSrc &src,
-							 SpriteDst &dst, SpriteOrigin &origin) const {
-	return SDL_RenderTextureRotated(renderer, texture,
-									&src.srcRect, &dst.destRect, origin.angle,
-									&origin.center, SDL_FLIP_NONE);
-}
-
-
-inline bool Renderer::renderBorder(SpriteDst &sprite) const {
-	SDL_FPoint points[5]{
-		{.x = sprite.destRect.x, .y = sprite.destRect.y}
-		, {.x = sprite.destRect.x + sprite.destRect.w, .y = sprite.destRect.y}
-		, {.x = sprite.destRect.x + sprite.destRect.w, .y = sprite.destRect.y + sprite.destRect.h}
-		, {.x = sprite.destRect.x, .y = sprite.destRect.y + sprite.destRect.h}
-		, {.x = sprite.destRect.x, .y = sprite.destRect.y}
-	};
-	return renderLines(points);
+inline bool Renderer::render(Texture &texture, const SDL_FRect &src, const SDL_FRect &dst,
+							 const SpriteOrigin &origin, FlipMode flip) const {
+	return SDL_RenderTextureRotated(renderer, texture, &src,
+									&dst, origin.angle,
+									&origin.center, flip);
 }
 
 inline bool Renderer::renderDebugText(std::string_view text, SDL_FPoint position) const {

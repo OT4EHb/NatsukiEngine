@@ -29,6 +29,7 @@ export namespace Natsuki {
 	};
 
 	inline constexpr void checkCallSDL(bool v, std::source_location loc = std::source_location::current()) {
-		if (!v) throw Exception(loc);
+		if (!v) [[unlikely]] 
+			throw Exception(loc);
 	}
 }

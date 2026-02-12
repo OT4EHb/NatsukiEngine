@@ -5,9 +5,10 @@ export import Natsuki.ECS.BaseComponent;
 
 export namespace Natsuki {
 	struct Position {
-		SDL_FPoint point{};
-		constexpr inline operator SDL_FPoint &() {
-			return point;
+		float x;
+		float y;
+		inline operator SDL_FPoint &() {
+			return reinterpret_cast<SDL_FPoint &>(*this);
 		}
 	};
 }

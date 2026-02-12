@@ -21,13 +21,13 @@ export namespace Natsuki {
 
 using namespace Natsuki;
 
+inline Texture::~Texture() {
+	SDL_DestroyTexture(texture);
+}
+
 inline bool Texture::load(std::string_view path, SDL_Renderer *renderer) {
 	texture = IMG_LoadTexture(renderer, path.data());
 	return texture != nullptr;
-}
-
-inline Texture::~Texture() {
-	SDL_DestroyTexture(texture);
 }
 
 inline SDL_FPoint Texture::getSize() const {

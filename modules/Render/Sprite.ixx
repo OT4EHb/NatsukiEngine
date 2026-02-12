@@ -1,9 +1,11 @@
 module;
+#include <memory>
 #include <SDL3/SDL_rect.h>
 export module Natsuki.Render.Sprite;
+export import Natsuki.Render.FlipMode;
 export import Natsuki.Render.Texture;
-import Natsuki.ECS.ComponentPool;
-import Natsuki.ECS.Component.PositionSize;
+export import Natsuki.ECS.ComponentPool;
+export import Natsuki.ECS.Component.PositionSize;
 
 export namespace Natsuki {
 	struct SpriteSrc {
@@ -16,17 +18,9 @@ export namespace Natsuki {
 				(*(reinterpret_cast<char *>(this) + sizeof(SDL_FPoint)));
 			p = texture.getSize();
 		}
-	};
 
-	struct SpriteDst {
-		SDL_FRect destRect;
-
-		inline operator Position &() {
-			return reinterpret_cast<Position &>(*this);
-		}
-
-		inline operator PositionSize &() {
-			return reinterpret_cast<PositionSize &>(*this);
+		constexpr inline operator SDL_FRect &() {
+			return srcRect;
 		}
 	};
 
@@ -40,8 +34,16 @@ export namespace Natsuki {
 		}
 	};
 
+	struct Sprite {
+		Texture texture;
+		SpriteSrc src;
+		SDL_FRect dest;
+		SpriteOrigin origin;
+		FlipMode flip;
+	};
+
 	template <ComponentType...components>
-	struct SpritePool : public ComponentPool<SpriteSrc, SpriteDst, SpriteOrigin, components...> {
-		Texture *texture{};
+	struct SpritePool : public ComponentPool<SpriteSrc, PositionSize, SpriteOrigin, components...> {
+		std::shared_ptr<Texture> texture;
 	};
 }
