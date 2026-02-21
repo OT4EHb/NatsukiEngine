@@ -3,6 +3,7 @@ module;
 #include <SDL3/SDL_messagebox.h>
 export module Natsuki.MessageBox;
 import Natsuki.Window;
+export import Natsuki.Utils.FlagsOperation;
 
 export namespace Natsuki {
 	class MessageBox {
@@ -38,9 +39,7 @@ constexpr inline MessageBox &MessageBox::setFlag(MessageBox::Flags flag) noexcep
 }
 
 constexpr inline MessageBox &MessageBox::addFlag(MessageBox::Flags flag) noexcept {
-	auto sdlFlag = static_cast<SDL_MessageBoxFlags>(flags)
-		| static_cast<SDL_MessageBoxFlags>(flag);
-	flags = static_cast<MessageBox::Flags>(sdlFlag);
+	flags |= flag;
 	return *this;
 }
 

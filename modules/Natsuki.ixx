@@ -9,6 +9,7 @@ export import Natsuki.UI;
 export import Natsuki.Utils;
 export import Natsuki.Exception;
 export import Natsuki.FPSCounter;
+export import Natsuki.Game;
 export import Natsuki.Loger;
 export import Natsuki.MessageBox;
 export import Natsuki.SDL;

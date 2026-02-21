@@ -1,14 +1,16 @@
 module;
 #include <SDL3_ttf/SDL_ttf.h>
 module Natsuki.SDL;
+import Natsuki.Exception;
+
 using namespace Natsuki;
 
-bool SDL::init(SDL_InitFlags flags) {
-	return SDL_Init(flags) &&
-		TTF_Init();
+SDL::SDL(SDL_InitFlags flags) {
+	checkCallSDL(SDL_Init(flags));
+	checkCallSDL(TTF_Init());
 }
 
-void SDL::quit() noexcept {
+SDL::~SDL() {
 	TTF_Quit();
 	SDL_Quit();
 }

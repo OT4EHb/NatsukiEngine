@@ -26,6 +26,7 @@ inline Texture::~Texture() {
 }
 
 inline bool Texture::load(std::string_view path, SDL_Renderer *renderer) {
+	SDL_DestroyTexture(texture);
 	texture = IMG_LoadTexture(renderer, path.data());
 	return texture != nullptr;
 }

@@ -136,6 +136,7 @@ function(configure_target target_name)
     )
 
     target_include_directories(${target_name} PRIVATE
+        "${CMAKE_SOURCE_DIR}/include"
         "${CMAKE_SOURCE_DIR}/vendored/SDL/include"
         "${CMAKE_SOURCE_DIR}/vendored/SDL_ttf/include"
         "${CMAKE_SOURCE_DIR}/vendored/SDL_image/include"

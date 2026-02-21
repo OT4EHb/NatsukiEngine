@@ -7,7 +7,6 @@ module;
 export module Natsuki.Exception;
 import Natsuki.SDL;
 
-
 export namespace Natsuki {
 	class Exception :
 		public std::runtime_error {
