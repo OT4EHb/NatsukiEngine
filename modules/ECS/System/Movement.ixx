@@ -37,7 +37,7 @@ consteval auto extractPositionSize() {
 }
 
 export namespace Natsuki {
-	class Movement :System {
+	class Movement {
 	public:
 		Movement() = delete;
 		template<ComponentType...components>

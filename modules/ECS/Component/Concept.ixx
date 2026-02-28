@@ -1,6 +1,6 @@
 module;
 #include <concepts>
-export module Natsuki.ECS.BaseComponent;
+export module Natsuki.ECS.Component.Concept;
 
 export namespace Natsuki {
 	template<class T>

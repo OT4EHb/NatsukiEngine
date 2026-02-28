@@ -1,6 +1,7 @@
 export module Natsuki;
 
 export import Natsuki.ECS;
+export import Natsuki.Event;
 export import Natsuki.GameState;
 export import Natsuki.Render;
 export import Natsuki.Resource;

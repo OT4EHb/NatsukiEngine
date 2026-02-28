@@ -6,6 +6,8 @@ export import Natsuki.UI.Font;
 export import Natsuki.Exception;
 import Natsuki.UI.TextEngine;
 
+export using ::SDL_Point;
+
 export namespace Natsuki {
 	class Text {
 	private:
@@ -15,6 +17,7 @@ export namespace Natsuki {
 		inline ~Text();
 		inline bool render();
 		inline bool set(std::string_view);
+		inline bool setPosition(SDL_Point);
 	};
 }
 
@@ -35,4 +38,8 @@ bool Text::render() {
 
 bool Text::set(std::string_view str) {
 	return TTF_SetTextString(text, str.data(), str.size());
+}
+
+bool Text::setPosition(SDL_Point p) {
+	return TTF_SetTextPosition(text, p.x, p.y);
 }

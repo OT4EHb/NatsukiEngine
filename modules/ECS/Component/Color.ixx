@@ -1,7 +1,6 @@
 module;
 #include <SDL3/SDL_pixels.h>
 export module Natsuki.ECS.Component.Color;
-export import Natsuki.ECS.BaseComponent;
 
 export namespace Natsuki {
 	using Color = SDL_Color;

@@ -26,6 +26,9 @@ export namespace Natsuki {
 		constexpr inline MessageBox &addFlag(MessageBox::Flags flag) noexcept;
 		constexpr inline MessageBox &setTitle(std::string_view str);
 		constexpr inline MessageBox &setMessage(std::string_view str);
+		constexpr inline MessageBox &setText(std::string_view str) {
+			return setMessage(str);
+		}
 		constexpr inline MessageBox &setParrent(Window &window);
 		inline bool show();
 	};
