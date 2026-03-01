@@ -18,7 +18,7 @@ export namespace Natsuki {
 		std::unordered_map<event_t, handler_type> rare;
 
 		void set_impl(event_t type, handler_type f) {
-			if (isFrequent(type)) {
+			if (isFrequent(type)) [[likely]] {
 				freq[type] = std::move(f);
 			}
 			else {
@@ -45,7 +45,7 @@ export namespace Natsuki {
 		}
 
 		bool has(event_t type) const {
-			if (isFrequent(type)) {
+			if (isFrequent(type)) [[likely]] {
 				return static_cast<bool>(freq[type]);
 			}
 			return rare.find(type) != rare.end();
@@ -53,7 +53,7 @@ export namespace Natsuki {
 
 		SDL_AppResult operator()(SDL_Event *e) {
 			auto &type = e->type;
-			if (isFrequent(type)) {
+			if (isFrequent(type)) [[likely]] {
 				auto &h = freq[type];
 				if (h) {
 					return h(e);
@@ -69,7 +69,7 @@ export namespace Natsuki {
 		}
 
 		void clear(event_t type) {
-			if (isFrequent(type)) {
+			if (isFrequent(type)) [[likely]] {
 				freq[type] = nullptr;
 			}
 			else {

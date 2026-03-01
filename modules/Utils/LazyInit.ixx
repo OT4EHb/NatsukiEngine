@@ -1,34 +1,52 @@
 module;
 #include <concepts>
+#include <optional>
 export module Natsuki.Utils.LazyInit;
 
 export namespace Natsuki {
 	template<class T>
 	class LazyInit {
 	private:
-		alignas(T) std::byte buffer[sizeof(T) + 1];
+		std::optional<T> value;
 	public:
-		constexpr inline LazyInit() {
-			buffer[0] = std::byte{false};
-		}
+		constexpr inline LazyInit() = default;
 
-		constexpr inline operator bool() {
-			return static_cast<bool>(buffer[0]);
+		constexpr explicit inline operator bool() {
+			return value.has_value();
 		}
 
 		template<class...Args>
-		requires std::constructible_from<T, Args...>
-		void init(Args&&...args) {
-			T* a = new(buffer + 1)T(std::forward<Args>(args)...);
-			buffer[0] = std::byte{true};
+			requires std::constructible_from<T, Args...>
+		constexpr inline void init(Args&&...args) {
+			value.emplace(std::forward<Args>(args)...);
 		}
 
-		inline T* get() {
-			return reinterpret_cast<T *>(buffer + 1);
+		constexpr inline void reset() {
+			value.reset();
 		}
-		inline ~LazyInit() {
-			if (*this)
-				get()->~T();
+
+		constexpr inline T *operator->() {
+			return value.operator->();
+		}
+
+		constexpr inline const T *operator->() const {
+			return value.operator->();
+		}
+
+		constexpr inline T &operator*() & {
+			return *value;
+		}
+
+		constexpr inline const T &operator*() const & {
+			return *value;
+		}
+
+		constexpr inline T &&operator*() && {
+			return std::move(*value);
+		}
+
+		constexpr inline const T &&operator*() const && {
+			return std::move(*value);
 		}
 	};
 }
