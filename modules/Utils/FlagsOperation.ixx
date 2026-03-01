@@ -1,27 +1,51 @@
 module;
-#include <cstddef>
+#include <concepts>
 export module Natsuki.Utils.FlagsOperation;
 
-using B = size_t;
-
 export namespace Natsuki {
-	template <class T>
+	template<class T>
+	concept Enum = std::is_enum_v<T>;
+
+	template <Enum T>
 	constexpr T operator|(T lft, T rht) {
+		using B = std::underlying_type_t<T>;
 		return static_cast<T>(static_cast<B>(lft) | static_cast<B>(rht));
 	}
 
-	template <class T>
+	template <Enum T>
 	constexpr T operator&(T lft, T rht) {
+		using B = std::underlying_type_t<T>;
 		return static_cast<T>(static_cast<B>(lft) & static_cast<B>(rht));
 	}
 
-	template <class T>
+	template <Enum T>
 	constexpr T &operator|=(T &lft, T rht) {
-		return reinterpret_cast<T &>(reinterpret_cast<B &>(lft) |= reinterpret_cast<B &>(rht));
+		using B = std::underlying_type_t<T>;
+		lft = lft | rht;
+		return lft;
 	}
 
-	template <class T>
+	template <Enum T>
 	constexpr T &operator&=(T &lft, T rht) {
-		return reinterpret_cast<T &>(reinterpret_cast<B &>(lft) &= reinterpret_cast<B &>(rht));
+		using B = std::underlying_type_t<T>;
+		lft = lft & rht;
+		return lft;
+	}
+
+	template <Enum T>
+	constexpr T operator~(T val) {
+		using B = std::underlying_type_t<T>;
+		return static_cast<T>(~static_cast<B>(val));
+	}
+
+	template <Enum T>
+	constexpr bool has_flag(T val, T flag) {
+		return (val & flag) == flag;
+	}
+
+	template <Enum T, Enum... Flags>
+		requires (std::same_as<T, Flags> && ...)
+	constexpr T make_flags(Flags... flags) {
+		return (static_cast<T>(0) | ... | flags);
 	}
 }
