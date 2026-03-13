@@ -4,77 +4,56 @@ module;
 #include <functional>
 #include <unordered_map>
 #include <SDL3/SDL_init.h>
+#include <SDL3/SDL_events.h>
 export module Natsuki.Event.EventHandler;
+export import Natsuki.Event.KeySystem;
+export import Natsuki.Event.MouseSystem;
 
-export using ::SDL_EventType;
 
 export namespace Natsuki {
 	class EventHandler {
 	private:
-		static inline constexpr auto LAST_EVENT = SDL_EVENT_CLIPBOARD_UPDATE;
+		using Event = SDL_Event &;
+		using handler_type = std::function<SDL_AppResult(Event)>;
 		using event_t = Uint32;
-		using handler_type = std::function<SDL_AppResult(SDL_Event *)>;
-		std::array<handler_type, LAST_EVENT + 1 > freq;
-		std::unordered_map<event_t, handler_type> rare;
-
-		void set_impl(event_t type, handler_type f) {
-			if (isFrequent(type)) [[likely]] {
-				freq[type] = std::move(f);
-			}
-			else {
-				rare[type] = std::move(f);
-			}
-		}
+		std::unordered_map<event_t, handler_type> handlers;
 	public:
-		static constexpr inline bool isFrequent(event_t type) noexcept{
-			return type <= LAST_EVENT;
-		}
+		KeySystem key;
+		MouseSystem mouse;
 
 		template<class F>
-		requires std::invocable<F, SDL_Event*>
-		void set(event_t type, F &&f) {
-			if constexpr (std::is_same_v<std::invoke_result_t<F, SDL_Event *>, SDL_AppResult>) {
-				set_impl(type, std::forward<F>(f));
-			}
-			else {
-				set_impl(type, [h = std::forward<F>(f)](SDL_Event *e) {
-					h(e);
-					return SDL_APP_CONTINUE;
-				});
-			}
+			requires std::invocable<F, Event>
+		void set(SDL_EventType type, F &&f) {
+			handlers[static_cast<event_t>(type)] = std::forward<handler_type>(make_handler<F, Event>(std::forward<F>(f)));
 		}
 
-		bool has(event_t type) const {
-			if (isFrequent(type)) [[likely]] {
-				return static_cast<bool>(freq[type]);
-			}
-			return rare.find(type) != rare.end();
+		bool has(SDL_EventType type) const {
+			return handlers.find(static_cast<event_t>(type)) != handlers.end();
 		}
 
-		SDL_AppResult operator()(SDL_Event *e) {
-			auto &type = e->type;
-			if (isFrequent(type)) [[likely]] {
-				auto &h = freq[type];
-				if (h) {
-					return h(e);
-				}
+		SDL_AppResult operator()(Event e) {
+			const auto &type = e.type;
+			switch (type) {
+				case SDL_EVENT_KEY_DOWN:
+					return key.onDown(e.key);
+				case SDL_EVENT_KEY_UP:
+					return key.onUp(e.key);
+				case SDL_EVENT_MOUSE_BUTTON_DOWN:
+					return mouse.onDown(e.button);
+				case SDL_EVENT_MOUSE_BUTTON_UP:
+					return mouse.onUp(e.button);
+				default:
+					break;
 			}
-			else {
-				auto it = rare.find(type);
-				if (it != rare.end()) {
-					return it->second(e);
-				}
+			auto it = handlers.find(type);
+			if (it != handlers.end()) {
+				return it->second(e);
 			}
 			return SDL_APP_CONTINUE;
 		}
 
-		void clear(event_t type) {
-			if (isFrequent(type)) [[likely]] {
-				freq[type] = nullptr;
-			}
-			else {
-				rare.erase(type);
-			}
+		void clear(SDL_EventType type) {
+			handlers.erase(static_cast<event_t>(type));
 		}
 	};
 }

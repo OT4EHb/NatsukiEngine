@@ -46,7 +46,7 @@ export namespace Natsuki {
 			auto *game = getGame(appstate);
 			checkException(
 				{
-					return (game->eventHandler(event));
+					return (game->eventHandler(*event));
 				}
 			);
 		}
@@ -60,7 +60,7 @@ export namespace Natsuki {
 	};
 
 	template <class T>
-	concept GameConcept = requires(T game, SDL_Event * event) {
+	concept GameConcept = requires(T game, SDL_Event & event) {
 		{ game.iterate() }->std::convertible_to<SDL_AppResult>;
 		{ game.eventHandler(event) }->std::convertible_to<SDL_AppResult>;
 		std::default_initializable<T>;
