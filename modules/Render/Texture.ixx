@@ -4,6 +4,8 @@ module;
 export module Natsuki.Render.Texture;
 import Natsuki.Exception;
 
+export using ::SDL_FPoint;
+
 export namespace Natsuki {
 	class Texture {
 	private:

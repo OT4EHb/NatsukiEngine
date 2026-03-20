@@ -7,6 +7,8 @@ export import Natsuki.Render.Texture;
 export import Natsuki.ECS.ComponentPool;
 export import Natsuki.ECS.Component.PositionSize;
 
+export using ::SDL_FRect;
+
 export namespace Natsuki {
 	struct SpriteSrc {
 		SDL_FRect srcRect;
@@ -35,7 +37,7 @@ export namespace Natsuki {
 	};
 
 	struct Sprite {
-		Texture texture;
+		std::shared_ptr<Texture> texture;
 		SpriteSrc src;
 		SDL_FRect dest;
 		SpriteOrigin origin;
