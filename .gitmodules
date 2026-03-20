@@ -13,3 +13,4 @@
 [submodule "vendored/SDL_mixer"]
 	path = vendored/SDL_mixer
 	url = https://github.com/libsdl-org/SDL_mixer.git
+	branch = release-3.2.x

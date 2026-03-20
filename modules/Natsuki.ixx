@@ -5,6 +5,7 @@ export import Natsuki.Event;
 export import Natsuki.GameState;
 export import Natsuki.Render;
 export import Natsuki.Resource;
+export import Natsuki.Sound;
 export import Natsuki.Time;
 export import Natsuki.UI;
 export import Natsuki.Utils;

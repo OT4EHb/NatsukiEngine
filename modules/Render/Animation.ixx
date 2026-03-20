@@ -28,7 +28,7 @@ export namespace Natsuki {
 			texture = ptr;
 		}
 		void bind(int width, int height) {
-			frames.resize(0);
+			frames.clear();
 			auto size = texture->getSize();
 			for (int h=0.f;h<size.y;h+=height)
 				for (int w = 0.f; w < size.x; w += width) {
