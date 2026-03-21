@@ -7,6 +7,8 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}" CACHE INTERNAL "")
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(FORCE_BUILD OFF CACHE INTERNAL "")
+
 if ((APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin") OR EMSCRIPTEN)
     set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
     set(SDL_SHARED OFF)
@@ -52,7 +54,7 @@ if (${SDL_SHARED} AND EXISTS ${SDL3_TTF_LIB})
         message("Found SDL_ttf")
     endif()
 endif()
-if(NOT SDL3_ttf_FOUND)
+if(FORCE_BUILD OR NOT SDL3_ttf_FOUND)
     set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
 
     add_subdirectory(vendored/SDL_ttf EXCLUDE_FROM_ALL)
@@ -77,7 +79,7 @@ if (${SDL_SHARED} AND EXISTS ${SDL3_IMAGE_LIB})
         message("Found SDL_image")
     endif()
 endif()
-if(NOT SDL3_image_FOUND)
+if(FORCE_BUILD OR NOT SDL3_image_FOUND)
     set(SDLIMAGE_VENDORED ON CACHE BOOL "" FORCE)
     set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
 
@@ -92,9 +94,9 @@ if (${SDL_SHARED} AND EXISTS ${SDL3_MIXER_LIB})
     else()
         set(SDL3_MIXER_LOCATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libSDL3_mixer.so")
     endif()
-    if (EXISTS ${SDL3_IMAGE_LOCATION})
-        add_library(SDL3_mixer::SDL3_mixer SHARED IMPORTED)
-        set_target_properties(SDL3_mixer::SDL3_mixer PROPERTIES
+    if (EXISTS ${SDL3_MIXER_LOCATION})
+        add_library(SDL3_mixer::SDL3_mixer-shared SHARED IMPORTED)
+        set_target_properties(SDL3_mixer::SDL3_mixer-shared PROPERTIES
             IMPORTED_LOCATION ${SDL3_MIXER_LOCATION}
             IMPORTED_IMPLIB ${SDL3_MIXER_LIB}
             INTERFACE_LINK_LIBRARIES SDL3::SDL3
@@ -103,7 +105,7 @@ if (${SDL_SHARED} AND EXISTS ${SDL3_MIXER_LIB})
         message("Found SDL_mixer")
     endif()
 endif()
-if(NOT SDL3_mixer_FOUND)
+if(FORCE_BUILD OR NOT SDL3_mixer_FOUND)
     set(SDLMIXER_VENDORED ON CACHE BOOL "" FORCE)
 
     add_subdirectory(vendored/SDL_mixer EXCLUDE_FROM_ALL)
@@ -154,11 +156,17 @@ function(configure_target target_name)
 	    set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
     endif()
 
+    if(SDL_SHARED)
+        set(MIXER_LIB SDL3_mixer::SDL3_mixer-shared)
+    else()
+        set(MIXER_LIB SDL3_mixer::SDL3_mixer-static)
+    endif()
+
     target_link_libraries(${target_name} PRIVATE 
         SDL3::SDL3
 	    SDL3_ttf::SDL3_ttf
 	    SDL3_image::SDL3_image
-        SDL3_mixer::SDL3_mixer
+        ${MIXER_LIB}
     )
 
     target_include_directories(${target_name} PRIVATE
