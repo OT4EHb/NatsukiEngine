@@ -3,6 +3,8 @@ module;
 export module Natsuki.Sound.Mixer;
 export import Natsuki.Exception;
 
+export using ::Sint64;
+
 export namespace Natsuki {
 	class Mixer {
 	private:
@@ -14,6 +16,27 @@ export namespace Natsuki {
 		}
 		~Mixer() {
 			MIX_DestroyMixer(mixer);
+		}
+		operator MIX_Mixer *() {
+			return mixer;
+		}
+
+		bool setGain(float gain) {
+			return MIX_SetMixerGain(mixer, gain);
+		}
+		float getGain() {
+			return MIX_GetMixerGain(mixer);
+		}
+
+		bool pauseAllTracks() {
+			return MIX_PauseAllTracks(mixer);
+		}
+		bool resumeAllTracks() {
+			return MIX_ResumeAllTracks(mixer);
+		}
+
+		bool stopAllTracks(Sint64 fade_out_ms = 0) {
+			return MIX_StopAllTracks(mixer, fade_out_ms);
 		}
 	};
 }

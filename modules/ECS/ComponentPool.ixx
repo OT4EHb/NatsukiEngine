@@ -4,7 +4,6 @@ module;
 #include <vector>
 export module Natsuki.ECS.ComponentPool;
 export import Natsuki.ECS.Component;
-export import Natsuki.ECS.BaseSystem;
 export import Natsuki.ECS.Entity;
 import Natsuki.Exception;
 

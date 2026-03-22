@@ -180,7 +180,7 @@ function(configure_target target_name)
     )
 endfunction()
 
-function(added_src target_name src_dir)
+function(add_src target_name src_dir)
     file(GLOB_RECURSE SRC_FILES 
         CONFIGURE_DEPENDS
         "${src_dir}/*.cpp"
@@ -207,8 +207,17 @@ function(added_src target_name src_dir)
     )
 endfunction()
 
-function(added_assets target_name src_dir)
-    file(COPY ${src_dir} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+function(add_assets target_name src_dir)
+    get_filename_component(folder_name ${src_dir} NAME)
+
+    add_custom_command(
+        TARGET ${target_name} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+            "${src_dir}"
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${folder_name}"
+        COMMENT "Copying assets from ${src_dir} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+        VERBATIM
+    )
 endfunction()
 
 include(config.cmake)

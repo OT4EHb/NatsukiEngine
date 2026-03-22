@@ -1,5 +1,6 @@
 module;
 #include <concepts>
+#include <utility>
 #include <SDL3/SDL_properties.h>
 export module Natsuki.Utils.Properties;
 export import Natsuki.Exception;
@@ -37,8 +38,7 @@ export namespace Natsuki {
 			std::swap(id, prop.id);
 			return *this;
 		}
-		Properties(Properties &&prop)noexcept :id(prop.id) {
-			prop.id = 0;
+		Properties(Properties &&prop)noexcept :id(std::exchange(prop.id,0)) {
 		}
 
 		bool clear(const char *name) noexcept{
