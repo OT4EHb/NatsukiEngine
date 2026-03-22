@@ -52,8 +52,8 @@ export namespace Natsuki {
 			>();
 			for (size_t i{}; i < size; ++i) {
 				Position &position = positions[i];
-				position.point.x += velocitys[i].dx * delta;
-				position.point.y += velocitys[i].dy * delta;
+				position.x += velocitys[i].dx * delta;
+				position.y += velocitys[i].dy * delta;
 			}
 		}
 

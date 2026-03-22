@@ -120,6 +120,8 @@ function(configure_target target_name)
     endif()
     message("Used ${cxx_std}")
 
+    set_target_properties(${target_name} PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+
     if(WIN32)
         set_target_properties(${target_name} PROPERTIES WIN32_EXECUTABLE TRUE)
     elseif(APPLE)

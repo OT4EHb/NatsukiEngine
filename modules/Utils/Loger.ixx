@@ -143,7 +143,7 @@ export namespace Natsuki {
 		}
 
 		template<class T>
-		requires !std::convertible_to<T,std::string_view>
+		requires (!std::convertible_to<T,std::string_view>)
 		Loger &operator<<(const T &val) {
 			if (isGood()) {
 				*ostream << val;
