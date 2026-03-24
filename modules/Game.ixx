@@ -5,6 +5,7 @@ module;
 #include <SDL3/SDL_init.h>
 export module Natsuki.Game;
 import Natsuki.MessageBox;
+import Natsuki.Metadata;
 
 #define checkException(func) try func \
 catch (const std::runtime_error &e) { \
@@ -14,6 +15,18 @@ catch (const std::runtime_error &e) { \
 	.setMessage(e.what()) \
 	.show(); \
 	return SDL_APP_FAILURE; \
+}
+
+template<class T>
+concept HasMetadata = requires {
+	{ T::setMetadata() }->std::same_as<void>;
+};
+
+template<class T>
+void setMetadata() {
+	if constexpr (HasMetadata<T>) {
+		T::setMetadata();
+	}
 }
 
 export namespace Natsuki {
@@ -27,7 +40,7 @@ export namespace Natsuki {
 		static SDL_AppResult AppInit(void **appstate, int argc, char **argv) {
 			checkException(
 				{
-					auto *game = new T(); *appstate = game;
+					setMetadata<T>(); auto *game = new T(); *appstate = game;
 				}
 			);
 			return SDL_APP_CONTINUE;

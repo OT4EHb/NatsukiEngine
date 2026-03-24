@@ -4,14 +4,17 @@ export module Natsuki.Sound.Mixer;
 export import Natsuki.Exception;
 
 export using ::Sint64;
+export using ::SDL_AudioDeviceID;
+export using ::SDL_AudioSpec;
 
 export namespace Natsuki {
 	class Mixer {
 	private:
 		MIX_Mixer *mixer;
 	public:
-		Mixer() {
-			mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
+		Mixer(SDL_AudioDeviceID id = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, 
+			  const SDL_AudioSpec *spec = nullptr) {
+			mixer = MIX_CreateMixerDevice(id, spec);
 			checkCallSDL(mixer != nullptr);
 		}
 		~Mixer() {

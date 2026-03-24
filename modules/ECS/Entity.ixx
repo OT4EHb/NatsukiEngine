@@ -1,18 +1,16 @@
 module;
-#include <cstddef>
+#include <cstdint>
 export module Natsuki.ECS.Entity;
 
-export using ::size_t;
+export using ::uint64_t;
 
 export namespace Natsuki {
 	struct Entity {
-		size_t id;
-		inline explicit operator size_t&() {
-			return id;
-		}
-		constexpr inline Entity &operator=(size_t other) {
-			id = other;
-			return *this;
+		uint64_t gen : 40;
+		uint64_t id : 24;
+
+		bool operator==(const Entity &ent)const {
+			return gen == ent.gen && id == ent.id;
 		}
 	};
 }

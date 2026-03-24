@@ -3,6 +3,9 @@ module;
 #include <SDL3/SDL_video.h>
 export module Natsuki.Window;
 import Natsuki.Exception;
+import Natsuki.View;
+
+export using ::SDL_WindowID;
 
 export namespace Natsuki {
 	class Window {
@@ -15,6 +18,7 @@ export namespace Natsuki {
 		inline Window(SDL_Window *window);
 		inline Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0);
 		inline ~Window();
+		static inline View<Window> getFromID(SDL_WindowID id);
 		inline bool show();
 		inline bool hide();
 		inline Window *createPopupWindow(int offset_x, int offset_y,
@@ -37,6 +41,10 @@ Window::Window(std::string_view title, int width, int height, SDL_WindowFlags fl
 
 Window::~Window() {
 	SDL_DestroyWindow(window);
+}
+
+inline View<Window> Window::getFromID(SDL_WindowID id) {
+	return View<Window>(SDL_GetWindowFromID(id));
 }
 
 bool Window::show() {
