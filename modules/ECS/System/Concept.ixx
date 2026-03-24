@@ -1,11 +1,11 @@
 module;
 #include <concepts>
 export module Natsuki.ECS.System.Concept;
-export import Natsuki.Time.DeltaTime;
+export import Natsuki.Time;
 
 export namespace Natsuki {
 	template<class T, class...Args>
-	concept DinamicSystem = requires(DeltaTime delta, Args...args) {
+	concept DinamicSystem = requires(time_type delta, Args...args) {
 		T::update(delta, args...);
 	};
 

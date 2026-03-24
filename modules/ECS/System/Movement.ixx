@@ -3,8 +3,8 @@ module;
 #include <cstddef>
 #include <cmath>
 export module Natsuki.ECS.System.Movement;
+import Natsuki.ECS.System.Concept;
 import Natsuki.ECS.ComponentPool;
-import Natsuki.Time;
 
 template<class T>
 concept isPosition = std::convertible_to<T, Natsuki::Position>;
@@ -41,10 +41,8 @@ export namespace Natsuki {
 	public:
 		Movement() = delete;
 		template<ComponentType...components>
-			requires findPosition<components...> &&include<Velocity, components...>
-		static void update(ComponentPool<components...> &ecs) {
-			static DeltaTime deltaTime;
-			auto delta = deltaTime.update();
+			requires findPosition<components...> &&is_one_of<Velocity, components...>
+		static void update(time_type delta, ComponentPool<components...> &ecs) {
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
 			auto &positions = ecs.template getComponent<
@@ -58,10 +56,8 @@ export namespace Natsuki {
 		}
 
 		template<ComponentType...components>
-			requires findPositionSize<components...> &&include<Velocity, components...>
-		static void update(ComponentPool<components...> &ecs, PositionSize rect) {
-			static DeltaTime deltaTime;
-			auto delta = deltaTime.update();
+			requires findPositionSize<components...> &&is_one_of<Velocity, components...>
+		static void update(time_type delta, ComponentPool<components...> &ecs, PositionSize rect) {
 			size_t size = ecs.getSize();
 			auto &velocitys = ecs.template getComponent<Velocity>();
 			auto &positions = ecs.template getComponent<

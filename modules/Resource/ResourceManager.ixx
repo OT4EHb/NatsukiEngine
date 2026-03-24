@@ -87,12 +87,8 @@ export namespace Natsuki {
 					return it->second.lock();
 			}
 			auto resource = std::make_shared<T>();
-			bool result = loadLogic(resource, path, std::forward<Args>(args)...);
-			if (result) {
-				return resource;
-			}
-			ResourceError(path, "\"load\"");
-			return nullptr;
+			checkCallSDL(loadLogic(resource, path, std::forward<Args>(args)...));
+			return resource;
 		}
 
 		std::shared_ptr<T> get(std::string path) {

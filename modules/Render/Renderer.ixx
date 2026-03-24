@@ -48,6 +48,7 @@ export namespace Natsuki {
 		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &) const;
 		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &,
 						   const SpriteOrigin &, FlipMode) const;
+		inline bool render(Sprite&) const;
 
 		inline bool renderDebugText(std::string_view, SDL_FPoint = {0.f, 0.f}) const;
 	};
@@ -147,6 +148,10 @@ inline bool Renderer::render(Texture &texture, const SDL_FRect &src, const SDL_F
 	return SDL_RenderTextureRotated(renderer, texture, &src,
 									&dst, origin.angle,
 									&origin.center, flip);
+}
+
+inline bool Renderer::render(Sprite &spr) const {
+	return render(*spr.texture.get(), spr.src, spr.dest, spr.origin, spr.flip);
 }
 
 inline bool Renderer::renderDebugText(std::string_view text, SDL_FPoint position) const {

@@ -5,14 +5,14 @@ module;
 export module Natsuki.Sound.SoundSystem;
 export import Natsuki.Sound.Track;
 
-export using ::uint64_t;
+export using ::uint32_t;
 
 export namespace Natsuki {
 	class SoundSystem {
 	public:
 		struct TrackID {
-			uint64_t gen : 56;
-			uint64_t id : 8;
+			uint32_t gen : 24;
+			uint32_t id : 8;
 			bool operator==(const TrackID &other)const {
 				return gen == other.gen
 					&& id == other.id;

@@ -14,9 +14,8 @@ export namespace Natsuki {
 		Exception(std::string_view error,
 				  std::source_location loc = std::source_location::current()) :
 			runtime_error(
-				"Function name:\n "
-				+ std::string(loc.function_name())
-				+ "\nFile: \n "
+				"The c++23 call stack will be here, but for now, settle for that:\n"
+				"File: "
 				+ std::filesystem::path(loc.file_name()).filename().string()
 				+ "\nLine: "
 				+ std::to_string(loc.line())
