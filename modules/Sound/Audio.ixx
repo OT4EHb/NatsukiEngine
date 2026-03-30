@@ -17,7 +17,7 @@ export namespace Natsuki {
 			return audio;
 		}
 
-		bool load(std::string_view path, Mixer &mixer, bool predecode = true) {
+		bool load(std::string_view path,Mixer &mixer, bool predecode = true) {
 			MIX_DestroyAudio(audio);
 			audio = MIX_LoadAudio(mixer, path.data(), predecode);
 			return audio != nullptr;

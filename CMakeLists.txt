@@ -210,14 +210,19 @@ endfunction()
 function(add_assets target_name src_dir)
     get_filename_component(folder_name ${src_dir} NAME)
 
-    add_custom_command(
-        TARGET ${target_name} PRE_BUILD
+    set(asset_target "${target_name}_assets")
+    file(GLOB_RECURSE ASSET_FILES "${src_dir}/*")
+
+    add_custom_target(
+        ${asset_target}
+        DEPENDS ${ASSET_FILES}
         COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
             "${src_dir}"
             "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${folder_name}"
         COMMENT "Copying assets from ${src_dir} to ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
         VERBATIM
     )
+    add_dependencies(${target_name} ${asset_target})
 endfunction()
 
 include(config.cmake)
