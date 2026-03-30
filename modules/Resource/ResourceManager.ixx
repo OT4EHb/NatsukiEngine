@@ -87,7 +87,7 @@ export namespace Natsuki {
 					return it->second.lock();
 			}
 			auto resource = std::make_shared<T>();
-			checkCallSDL(loadLogic(resource, path, std::forward<Args>(args)...));
+			checkCall(loadLogic(resource, path, std::forward<Args>(args)...));
 			return resource;
 		}
 

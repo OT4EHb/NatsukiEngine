@@ -29,7 +29,7 @@ export namespace Natsuki {
 		constexpr inline MessageBox &setText(std::string_view str) {
 			return setMessage(str);
 		}
-		constexpr inline MessageBox &setParrent(Window &window);
+		inline MessageBox &setParrent(Window &window);
 		inline bool show();
 	};
 }
@@ -56,7 +56,7 @@ constexpr inline MessageBox &MessageBox::setMessage(std::string_view str) {
 	return *this;
 }
 
-constexpr inline MessageBox &MessageBox::setParrent(Window &window) {
+inline MessageBox &MessageBox::setParrent(Window &window) {
 	parrent = window;
 	return *this;
 }

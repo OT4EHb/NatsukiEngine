@@ -15,7 +15,7 @@ export namespace Natsuki {
 		Mixer(SDL_AudioDeviceID id = SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, 
 			  const SDL_AudioSpec *spec = nullptr) {
 			mixer = MIX_CreateMixerDevice(id, spec);
-			checkCallSDL(mixer != nullptr);
+			checkCall(mixer != nullptr);
 		}
 		~Mixer() {
 			MIX_DestroyMixer(mixer);

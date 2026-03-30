@@ -10,10 +10,10 @@ export namespace Natsuki {
 	public:
 		RendererGuard(Renderer &renderer, const SDL_Color &color = {0, 0, 0, 255}) :
 			renderer(renderer) {
-			checkCallSDL(renderer.clear(color));
+			checkCall(renderer.clear(color));
 		}
 		~RendererGuard() {
-			checkCallSDL(renderer.present());
+			checkCall(renderer.present());
 		}
 	};
 }

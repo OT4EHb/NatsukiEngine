@@ -6,10 +6,10 @@ import Natsuki.Exception;
 
 using namespace Natsuki;
 
-SDL::SDL(SDL_InitFlags flags) {
-	checkCallSDL(SDL_Init(flags));
-	checkCallSDL(TTF_Init());
-	checkCallSDL(MIX_Init());
+SDL::SDL(Flags flags) {
+	checkCall(SDL_Init(static_cast<SDL_InitFlags>(flags)));
+	checkCall(TTF_Init());
+	checkCall(MIX_Init());
 }
 
 SDL::~SDL() {

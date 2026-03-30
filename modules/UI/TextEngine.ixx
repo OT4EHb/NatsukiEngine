@@ -21,7 +21,7 @@ using namespace Natsuki;
 
 TextEngine::TextEngine(Renderer &ren) {
 	engine = TTF_CreateRendererTextEngine(ren);
-	checkCallSDL(engine != nullptr);
+	checkCall(engine != nullptr);
 }
 
 TextEngine::~TextEngine() {

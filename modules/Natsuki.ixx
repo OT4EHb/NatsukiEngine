@@ -15,5 +15,4 @@ export import Natsuki.Game;
 export import Natsuki.MessageBox;
 export import Natsuki.Metadata;
 export import Natsuki.SDL;
-export import Natsuki.View;
 export import Natsuki.Window;

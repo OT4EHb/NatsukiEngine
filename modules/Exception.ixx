@@ -26,7 +26,7 @@ export namespace Natsuki {
 			:Exception(SDL::getError(), loc) {}
 	};
 
-	inline constexpr void checkCallSDL(bool v, std::source_location loc = std::source_location::current()) {
+	inline constexpr void checkCall(bool v, std::source_location loc = std::source_location::current()) {
 		if (!v) [[unlikely]] 
 			throw Exception(loc);
 	}

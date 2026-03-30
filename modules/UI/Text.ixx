@@ -37,7 +37,7 @@ using namespace Natsuki;
 
 Text::Text(TextEngine& engine, Font &font, std::string_view str) {
 	text = TTF_CreateText(engine, font, str.data(), str.size());
-	checkCallSDL(text != nullptr);
+	checkCall(text != nullptr);
 }
 
 Text::~Text() {
@@ -78,6 +78,6 @@ bool Text::append(std::string_view str) {
 
 SDL_Point Text::getSize() {
 	SDL_Point p;
-	checkCallSDL(TTF_GetTextSize(text,&p.x, &p.y));
+	checkCall(TTF_GetTextSize(text,&p.x, &p.y));
 	return p;
 }

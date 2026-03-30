@@ -14,7 +14,7 @@ export namespace Natsuki {
 	public:
 		Properties() {
 			id = SDL_CreateProperties();
-			checkCallSDL(id != 0);
+			checkCall(id != 0);
 		}
 		~Properties() {
 			SDL_DestroyProperties(id);
@@ -26,12 +26,12 @@ export namespace Natsuki {
 
 		Properties &operator=(const Properties &prop) {
 			if (this != &prop) {
-				checkCallSDL(SDL_CopyProperties(prop.id, id));
+				checkCall(SDL_CopyProperties(prop.id, id));
 			}
 			return *this;
 		}
 		Properties(const Properties &prop) :Properties() {
-			checkCallSDL(SDL_CopyProperties(prop.id, id));
+			checkCall(SDL_CopyProperties(prop.id, id));
 		}
 
 		Properties &operator=(Properties &&prop)noexcept {

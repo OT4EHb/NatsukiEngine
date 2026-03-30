@@ -2,19 +2,20 @@ module;
 #include <concepts>
 #include <cstddef>
 #include <memory>
-export module Natsuki.View;
+export module Natsuki.Utils.View;
 
 export namespace Natsuki {
+    template<typename T>
+    concept ViewSafe = requires {
+        typename T::NatsukiView;
+    };
+
 	template<class T>
 	class View {
+        static_assert(ViewSafe<T>, "T must have NatsukiView type alias to be used with View");
 	private:
 		alignas(T) std::byte storage[sizeof(T)];
 	public:
-		template <typename...Args>
-		explicit View(Args&&...args) {
-			std::construct_at(reinterpret_cast<T *>(storage), std::forward<Args>(args)...);
-		}
-
         T *operator->() noexcept {
             return std::launder(reinterpret_cast<T *>(storage));
         }

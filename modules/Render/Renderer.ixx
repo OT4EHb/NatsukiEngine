@@ -58,7 +58,7 @@ using namespace Natsuki;
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
 	renderer = SDL_CreateRenderer(window, driverName.data());
-	checkCallSDL(renderer != nullptr);
+	checkCall(renderer != nullptr);
 }
 
 Renderer::~Renderer() {

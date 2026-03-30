@@ -3,18 +3,29 @@ module;
 export module Natsuki.Sound.Track;
 export import Natsuki.Sound.Audio;
 export import Natsuki.Utils.Properties;
+export import Natsuki.Utils.View;
 
 export namespace Natsuki {
 	class Track {
+	public:
+		using NatsukiView = void;
 	private:
 		MIX_Track *track;
 	public:
+		static View<Track> getFromRaw(MIX_Track *ptr) {
+			View<Track> view;
+			view->track = ptr;
+			return view;
+		}
 		Track(Mixer &mixer) {
 			track = MIX_CreateTrack(mixer);
-			checkCallSDL(track != nullptr);
+			checkCall(track != nullptr);
 		}
 		~Track() {
 			MIX_DestroyTrack(track);
+		}
+		operator MIX_Track *() {
+			return track;
 		}
 
 		bool setAudio(Audio &audio) {
@@ -55,5 +66,11 @@ export namespace Natsuki {
 			return MIX_TrackFramesToMS(track, frames);
 		}
 
+		bool playing() const {
+			return MIX_TrackPlaying(track);
+		}
+		bool paused() const {
+			return MIX_TrackPaused(track);
+		}
 	};
 }
