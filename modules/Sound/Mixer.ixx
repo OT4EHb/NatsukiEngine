@@ -20,7 +20,7 @@ export namespace Natsuki {
 		~Mixer() {
 			MIX_DestroyMixer(mixer);
 		}
-		operator MIX_Mixer *() {
+		MIX_Mixer *getRaw() {
 			return mixer;
 		}
 

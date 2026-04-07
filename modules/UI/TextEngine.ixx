@@ -11,7 +11,7 @@ export namespace Natsuki {
 	public:
 		inline TextEngine(Renderer &);
 		inline ~TextEngine();
-		inline operator TTF_TextEngine *() {
+		TTF_TextEngine *getRaw() {
 			return engine;
 		}
 	};
@@ -20,7 +20,7 @@ export namespace Natsuki {
 using namespace Natsuki;
 
 TextEngine::TextEngine(Renderer &ren) {
-	engine = TTF_CreateRendererTextEngine(ren);
+	engine = TTF_CreateRendererTextEngine(ren.getRaw());
 	checkCall(engine != nullptr);
 }
 

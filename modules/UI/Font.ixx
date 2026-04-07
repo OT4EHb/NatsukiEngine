@@ -20,7 +20,7 @@ export namespace Natsuki {
 	public:
 		inline Font() = default;
 		inline ~Font();
-		inline operator TTF_Font *() {
+		TTF_Font *getRaw() {
 			return font;
 		}
 		inline bool load(std::string_view path, float ptsize);

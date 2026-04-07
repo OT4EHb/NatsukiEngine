@@ -1,9 +1,10 @@
 module;
-#include <unordered_map>
-#include <string_view>
-#include <string>
 #include <cstddef>
+#include <string>
+#include <string_view>
 #include <memory>
+#include <tuple>
+#include <unordered_map>
 export module Natsuki.Resource.ResourceManager;
 import Natsuki.Resource.BaseResource;
 import Natsuki.Utils.TransparentHash;
@@ -32,8 +33,7 @@ export namespace Natsuki {
 			return true;
 		}
 
-		template <class RT>
-		void moveToHot(RT it) {
+		void moveToHot(auto it) {
 			hotCache.emplace(it->first, it->second);
 			coldCache.erase(it);
 		}

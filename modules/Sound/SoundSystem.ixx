@@ -1,6 +1,6 @@
 module;
 #include <cstddef>
-#include <cstdint>
+#include <mutex>
 #include <type_traits>
 #include <vector>
 #include <SDL3_mixer/SDL_mixer.h>
@@ -8,27 +8,28 @@ export module Natsuki.Sound.SoundSystem;
 export import Natsuki.Sound.Track;
 export import Natsuki.Exception;
 
-export using ::uint32_t;
+export using ::size_t;
 
 export namespace Natsuki {
 	class SoundSystem {
 	private:
-		static constexpr size_t SIZE = 32;
 		Mixer mixer;
 		std::vector<Track> tracks;
 		std::vector<MIX_Track*>freeTracks;
+		std::mutex mutex;
 
 		static void stopedTrack(void *data, MIX_Track *track) {
 			SoundSystem *system = reinterpret_cast<SoundSystem *>(data);
+			auto guard=std::lock_guard(system->mutex);
 			system->freeTracks.push_back(track);
 		}
 	public:
-		explicit SoundSystem():mixer() {
-			tracks.reserve(SIZE);
-			freeTracks.resize(SIZE);
-			for (size_t i{}; i < SIZE; ++i) {
+		explicit SoundSystem(size_t trackCount):mixer() {
+			tracks.reserve(trackCount);
+			freeTracks.resize(trackCount);
+			for (size_t i{}; i < trackCount; ++i) {
 				auto &track = tracks.emplace_back(std::ref(mixer));
-				freeTracks[SIZE - 1 - i] = static_cast<MIX_Track *>(track);
+				freeTracks[trackCount - 1 - i] = track.getRaw();
 			}
 		}
 		~SoundSystem() = default;
@@ -37,12 +38,14 @@ export namespace Natsuki {
 			return mixer.stopAllTracks(fade_out_ms);
 		}
 
-		bool empty() {
-			return freeTracks.empty();
+		bool hasFreeTrack() {
+			auto guard = std::lock_guard(mutex);
+			return !freeTracks.empty();
 		}
 
 		View<Track> getFreeTrack() {
-			if (empty()) throw Exception("All tracks are busy");
+			auto guard = std::lock_guard(mutex);
+			if (freeTracks.empty()) throw Exception("All tracks are busy");
 			auto back = freeTracks.back();
 			auto view = Track::getFromRaw(back);
 			MIX_SetTrackStoppedCallback(back, stopedTrack, this);

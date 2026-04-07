@@ -57,7 +57,7 @@ constexpr inline MessageBox &MessageBox::setMessage(std::string_view str) {
 }
 
 inline MessageBox &MessageBox::setParrent(Window &window) {
-	parrent = window;
+	parrent = window.getRaw();
 	return *this;
 }
 

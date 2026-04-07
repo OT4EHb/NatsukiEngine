@@ -12,29 +12,23 @@ export namespace Natsuki {
 		SDL_Texture *texture{nullptr};
 	public:
 		constexpr inline Texture() = default;
-		inline ~Texture();
-		inline operator SDL_Texture *() {
+		inline ~Texture() {
+			SDL_DestroyTexture(texture);
+		}
+		SDL_Texture *getRaw() {
 			return texture;
 		}
-		inline bool load(std::string_view, SDL_Renderer *);
-		inline SDL_FPoint getSize() const;
+
+		inline bool load(std::string_view path, SDL_Renderer *renderer) {
+			SDL_DestroyTexture(texture);
+			texture = IMG_LoadTexture(renderer, path.data());
+			return texture != nullptr;
+		}
+
+		inline SDL_FPoint getSize() const {
+			SDL_FPoint p;
+			SDL_GetTextureSize(texture, &p.x, &p.y);
+			return p;
+		}
 	};
-}
-
-using namespace Natsuki;
-
-inline Texture::~Texture() {
-	SDL_DestroyTexture(texture);
-}
-
-inline bool Texture::load(std::string_view path, SDL_Renderer *renderer) {
-	SDL_DestroyTexture(texture);
-	texture = IMG_LoadTexture(renderer, path.data());
-	return texture != nullptr;
-}
-
-inline SDL_FPoint Texture::getSize() const {
-	SDL_FPoint p;
-	SDL_GetTextureSize(texture, &p.x, &p.y);
-	return p;
 }

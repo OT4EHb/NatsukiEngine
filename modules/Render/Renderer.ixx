@@ -16,7 +16,7 @@ export namespace Natsuki {
 	public:
 		Renderer(Window &window, std::string_view driverName = "");
 		~Renderer();
-		inline operator SDL_Renderer *() {
+		SDL_Renderer *getRaw() {
 			return renderer;
 		}
 
@@ -57,7 +57,7 @@ export namespace Natsuki {
 using namespace Natsuki;
 
 Renderer::Renderer(Window &window, std::string_view driverName) {
-	renderer = SDL_CreateRenderer(window, driverName.data());
+	renderer = SDL_CreateRenderer(window.getRaw(), driverName.data());
 	checkCall(renderer != nullptr);
 }
 
@@ -140,12 +140,12 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 
 inline bool Renderer::render(Texture &texture, const SDL_FRect &src,
 							 const SDL_FRect &dst) const {
-	return SDL_RenderTexture(renderer, texture, &src, &dst);
+	return SDL_RenderTexture(renderer, texture.getRaw(), &src, &dst);
 }
 
 inline bool Renderer::render(Texture &texture, const SDL_FRect &src, const SDL_FRect &dst,
 							 const SpriteOrigin &origin, FlipMode flip) const {
-	return SDL_RenderTextureRotated(renderer, texture, &src,
+	return SDL_RenderTextureRotated(renderer, texture.getRaw(), &src,
 									&dst, origin.angle,
 									&origin.center, flip);
 }

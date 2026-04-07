@@ -16,7 +16,7 @@ export namespace Natsuki {
 
 		Window(SDL_Window *window) :window(window) {};
 	public:
-		operator SDL_Window *() {
+		SDL_Window *getRaw() {
 			return window;
 		}
 		Window(std::string_view title, int width, int height, SDL_WindowFlags flags = 0) :

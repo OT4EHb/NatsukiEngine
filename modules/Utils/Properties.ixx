@@ -6,6 +6,7 @@ export module Natsuki.Utils.Properties;
 export import Natsuki.Exception;
 
 export using ::SDL_PropertiesID;
+export using ::Sint64;
 
 export namespace Natsuki {
 	class Properties {

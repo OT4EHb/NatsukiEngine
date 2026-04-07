@@ -7,10 +7,13 @@ export import Natsuki.Render.Sprite;
 export import Natsuki.Time.GlobalTime;
 
 export namespace Natsuki {
+
+	using AnimationFrames = std::vector<SDL_FRect>;
+
 	class Animation {
 	private:
 		std::shared_ptr<Texture> texture;
-		std::vector<SDL_FRect> frames;
+		AnimationFrames frames;
 		size_t index = 0;
 		time_type delays;//ms
 		time_type current = 0;
@@ -18,7 +21,7 @@ export namespace Natsuki {
 		Animation(size_t count, time_type delays) :delays(delays) {
 			frames.reserve(count);
 		}
-		operator Texture &() {
+		Texture &getTexture() {
 			return *texture.get();
 		}
 		SDL_FRect &getCurrent() {

@@ -18,7 +18,7 @@ export namespace Natsuki {
 	public:
 		inline Text(TextEngine& , Font &, std::string_view);
 		inline ~Text();
-		inline operator TTF_Text *() {
+		TTF_Text *getRaw() {
 			return text;
 		}
 		inline bool render();
@@ -36,7 +36,7 @@ export namespace Natsuki {
 using namespace Natsuki;
 
 Text::Text(TextEngine& engine, Font &font, std::string_view str) {
-	text = TTF_CreateText(engine, font, str.data(), str.size());
+	text = TTF_CreateText(engine.getRaw(), font.getRaw(), str.data(), str.size());
 	checkCall(text != nullptr);
 }
 
@@ -57,7 +57,7 @@ bool Text::setPosition(SDL_Point p) {
 }
 
 bool Text::setFont(Font &font) {
-	return TTF_SetTextFont(text, font);
+	return TTF_SetTextFont(text, font.getRaw());
 }
 
 bool Text::setColor(const Color &color) {
