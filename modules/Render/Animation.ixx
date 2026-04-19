@@ -8,47 +8,68 @@ export import Natsuki.Time.GlobalTime;
 
 export namespace Natsuki {
 
-	using AnimationFrames = std::vector<SDL_FRect>;
+	struct AnimationData {
+		std::shared_ptr<Texture> texture;
+		std::vector<SDL_FRect> frames;
+		std::vector<time_type> delays;
+
+		void addFrame(SDL_FRect frame, time_type delay) {
+			frames.push_back(frame);
+			delays.push_back(delay);
+		}
+
+		void addFrame(int x, int y, int w, int h, time_type delay) {
+			frames.emplace_back(x, y, w, h);
+			delays.push_back(delay);
+		}
+
+		void fromGrid(int width, int height, SDL_FPoint size, time_type delay = 100) {
+			for (int h = 0.f; h < size.y; h += height)
+				for (int w = 0.f; w < size.x; w += width) {
+					frames.emplace_back(w, h, width, height);
+					delays.push_back(delay);
+				}
+		}
+	};
+
+	struct AnimationState {
+		size_t index = 0;
+		time_type current = 0;
+
+		void reset() {
+			index = 0;
+			current = 0;
+		}
+	};
 
 	class Animation {
 	private:
-		std::shared_ptr<Texture> texture;
-		AnimationFrames frames;
-		size_t index = 0;
-		time_type delays;//ms
-		time_type current = 0;
+		std::shared_ptr<AnimationData> data;
 	public:
-		Animation(size_t count, time_type delays) :delays(delays) {
-			frames.reserve(count);
+		AnimationState state;
+		Animation(size_t count):data(std::make_shared<AnimationData>()) {
+			data->frames.reserve(count);
+			data->delays.reserve(count);
 		}
-		Texture &getTexture() {
-			return *texture.get();
+
+		AnimationData *operator->() { return data.get(); }
+		const AnimationData *operator->() const { return data.get(); }
+
+		SDL_FRect &getCurrent() const {
+			return data->frames[state.index];
 		}
-		SDL_FRect &getCurrent() {
-			return frames[index];
-		}
-		void setTexture(std::shared_ptr<Texture> ptr) {
-			texture = ptr;
-		}
-		void bind(int width, int height) {
-			frames.clear();
-			auto size = texture->getSize();
-			for (int h=0.f;h<size.y;h+=height)
-				for (int w = 0.f; w < size.x; w += width) {
-					frames.emplace_back(w, h, width, height);
-			}
-		}
+
 		void update(time_type delta) {
-			current += delta;
-			if (current >= delays) {
-				index = (index + 1) % frames.size();
-				current -= delays;
+			state.current += delta;
+			while (state.current >= data->delays[state.index]) {
+				state.current -= data->delays[state.index];
+				state.index = (state.index + 1) % data->frames.size();
 			}
 		}
 	};
 
 	template <ComponentType...components>
-	struct AnimationPool : public ComponentPool<Animation, PositionSize, SpriteOrigin, components...> {
-
+	struct AnimationPool : public ComponentPool<AnimationState, PositionSize, SpriteOrigin, components...> {
+		AnimationData animationData;
 	};
 }
