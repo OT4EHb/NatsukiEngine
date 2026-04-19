@@ -11,20 +11,24 @@ public:
 	MyGame();
 	~MyGame();
 	SDL_AppResult iterate();
-	SDL_AppResult eventHandler(SDL_Event *);
+	SDL_AppResult eventHandler(SDL_Event &);
+
+	//define to set SDL metadata
+	/*static void setMetadata() {
+		Metadata::setAppName("MyGame");
+	}*/
 };
 
 SET_GAME(MyGame);
 
-SDL_AppResult Game::iterate() {
+SDL_AppResult MyGame::iterate() {
 	// action within one frame
 	return SDL_APP_CONTINUE;
 }
 
-SDL_AppResult Game::eventHandler(SDL_Event *event) {
+SDL_AppResult MyGame::eventHandler(SDL_Event &event) {
 	// window closing handling, optional, works only on the last window
 	if (event->type == SDL_EVENT_QUIT) {
-		setResult(SDL_APP_SUCCESS);
 		return SDL_APP_SUCCESS;
 	}
 	//handling other events

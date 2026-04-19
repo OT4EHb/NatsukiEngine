@@ -1,1 +1,1 @@
-set(APP_DIR "test")
+set(APP_DIR "example/Mineswaper")

@@ -11,9 +11,17 @@ set(FORCE_BUILD OFF CACHE INTERNAL "")
 
 if ((APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin") OR EMSCRIPTEN)
     set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")
-    set(SDL_SHARED OFF)
-else()
+endif()
+
+if (${BUILD_SHARED_LIBS})    
     set(SDL_SHARED ON)
+    set(SDL_STATIC OFF)
+else()
+    #Костыль
+    add_library(SDL3-shared)
+
+    set(SDL_SHARED OFF)
+    set(SDL_STATIC ON)
 endif()
 
 if(MSVC)
@@ -159,16 +167,22 @@ function(configure_target target_name)
     endif()
 
     if(SDL_SHARED)
-        set(MIXER_LIB SDL3_mixer::SDL3_mixer-shared)
-    else()
-        set(MIXER_LIB SDL3_mixer::SDL3_mixer-static)
+        set(SDL_NAME SDL3::SDL3)
+        set(TTF_NAME SDL3_ttf::SDL3_ttf)
+        set(IMAGE_NAME SDL3_image::SDL3_image)
+        set(MIXER_NAME SDL3_mixer::SDL3_mixer-shared)
+    else()    
+        set(SDL_NAME SDL3::SDL3-static)
+        set(TTF_NAME SDL3_ttf::SDL3_ttf-static)
+        set(IMAGE_NAME SDL3_image::SDL3_image-static)
+        set(MIXER_NAME SDL3_mixer::SDL3_mixer-static)
     endif()
 
     target_link_libraries(${target_name} PRIVATE 
-        SDL3::SDL3
-	    SDL3_ttf::SDL3_ttf
-	    SDL3_image::SDL3_image
-        ${MIXER_LIB}
+        ${SDL_NAME}
+	    ${TTF_NAME}
+	    ${IMAGE_NAME}
+        ${MIXER_NAME}
     )
 
     target_include_directories(${target_name} PRIVATE

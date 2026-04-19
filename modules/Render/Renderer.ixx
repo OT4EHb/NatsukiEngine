@@ -7,6 +7,8 @@ import Natsuki.Window;
 export import Natsuki.Exception;
 export import Natsuki.Render.Sprite;
 
+export using ::SDL_Point;
+export using ::SDL_FPoint;
 export using ::SDL_Vertex;
 
 export namespace Natsuki {
@@ -45,8 +47,8 @@ export namespace Natsuki {
 		inline bool renderGeometry(std::span<const SDL_Vertex>,
 								   std::span <const int> = {},
 								   SDL_Texture * = nullptr) const;
-		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &) const;
-		inline bool render(Texture &, const SDL_FRect &, const SDL_FRect &,
+		inline bool render(Texture &, const SDL_FRect &src, const SDL_FRect &dst) const;
+		inline bool render(Texture &, const SDL_FRect &src, const SDL_FRect &dst,
 						   const SpriteOrigin &, FlipMode) const;
 		inline bool render(Sprite&) const;
 
