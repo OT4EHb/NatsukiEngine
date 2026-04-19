@@ -18,7 +18,7 @@ export namespace Natsuki {
 			delays.push_back(delay);
 		}
 
-		void addFrame(int x, int y, int w, int h, time_type delay) {
+		void addFrame(float x, float y, float w, float h, time_type delay) {
 			frames.emplace_back(x, y, w, h);
 			delays.push_back(delay);
 		}
@@ -42,12 +42,67 @@ export namespace Natsuki {
 		}
 	};
 
+	class AnimationFixed {
+	private:
+		std::shared_ptr<Texture> texture;
+		std::vector<SDL_FRect> frames;
+		time_type delay;
+		AnimationState state;
+	public:
+		AnimationFixed(size_t count, time_type delay) :delay(delay) {
+			frames.reserve(count);
+		}
+
+		void addFrame(SDL_FRect frame) {
+			frames.push_back(frame);
+		}
+
+		void addFrame(float x, float y, float w, float h) {
+			frames.emplace_back(x, y, w, h);
+		}
+
+		void fromGrid(int width, int height, SDL_FPoint size) {
+			for (int h = 0.f; h < size.y; h += height)
+				for (int w = 0.f; w < size.x; w += width) {
+					frames.emplace_back(w, h, width, height);
+				}
+		}
+
+		void clear() {
+			frames.clear();
+		}
+
+		void setDelay(time_type delay) {
+			this->delay = delay;
+		}
+
+		void setTexture(std::shared_ptr<Texture> texture) {
+			this->texture = texture;
+		}
+
+		Texture &getTexture() {
+			return *texture.get();
+		}
+
+		const SDL_FRect &getCurrent() const {
+			return frames[state.index];
+		}
+
+		void update(time_type delta) {
+			state.current += delta;
+			while (state.current >= delay) {
+				state.current -= delay;
+				state.index = (state.index + 1) % frames.size();
+			}
+		}
+	};
+
 	class Animation {
 	private:
 		std::shared_ptr<AnimationData> data;
-	public:
 		AnimationState state;
-		Animation(size_t count):data(std::make_shared<AnimationData>()) {
+	public:
+		Animation(size_t count) :data(std::make_shared<AnimationData>()) {
 			data->frames.reserve(count);
 			data->delays.reserve(count);
 		}
@@ -55,7 +110,7 @@ export namespace Natsuki {
 		AnimationData *operator->() { return data.get(); }
 		const AnimationData *operator->() const { return data.get(); }
 
-		SDL_FRect &getCurrent() const {
+		const SDL_FRect &getCurrent() const {
 			return data->frames[state.index];
 		}
 
