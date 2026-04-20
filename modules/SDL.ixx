@@ -23,7 +23,7 @@ export namespace Natsuki {
 			return SDL_GetError();
 		}
 		static inline bool setError(std::string_view error) {
-			return SDL_SetError(error.data());
+			return SDL_SetError("%s\n", error.data());
 		}
 	};
 }

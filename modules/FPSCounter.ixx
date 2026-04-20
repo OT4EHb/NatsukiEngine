@@ -27,12 +27,12 @@ FPSCounter::FPSCounter(double coof) :EMAcoof(coof) {
 }
 
 double FPSCounter::update() {
-	double delta = deltaTime.update();
-	if (delta == 0) delta = 1;
+	auto delta_time = deltaTime.update();
+	double delta = delta_time == 0 ? 1. : static_cast<double>(delta_time);
 	double fps = NS_PER_SECOND / delta;
 	smoothedFPS = EMAcoof * fps + (1. - EMAcoof) * smoothedFPS;
 	++frameCounter;
-	secondAccumulator += delta;
+	secondAccumulator += delta_time;
 	if (secondAccumulator >= NS_PER_SECOND) {
 		factFPS = frameCounter;
 		secondAccumulator = 0;

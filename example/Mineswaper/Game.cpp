@@ -4,8 +4,8 @@ import Natsuki;
 import Area;
 
 class Mineswaper :public Natsuki::Game<Mineswaper> {
-	static constexpr size_t sprite_size = 80;
-	static constexpr float inverse_size = 1.f / 80.f;
+	static constexpr float sprite_size = 80.f;
+	static constexpr float inverse_size = 1.f / sprite_size;
 private:
 	Natsuki::SDL sdl{Natsuki::SDL::Flags::VIDEO};
 	Natsuki::Window window{"Mineswaper", 800, 800};
@@ -35,10 +35,12 @@ SDL_AppResult Mineswaper::eventHandler(SDL_Event &event) {
 		auto &e = event.button;
 		auto result = Result::NONE;
 		if (e.button == SDL_BUTTON_LEFT) {
-			result = area.onClick(e.x * inverse_size, e.y * inverse_size);
+			result = area.onClick(static_cast<size_t>(e.x * inverse_size), 
+								  static_cast<size_t>(e.y * inverse_size));
 		}
 		else if (e.button == SDL_BUTTON_RIGHT) {
-			result = area.setFlag(e.x * inverse_size, e.y * inverse_size);
+			result = area.setFlag(static_cast<size_t>(e.x * inverse_size), 
+								  static_cast<size_t>(e.y * inverse_size));
 		}
 		switch (result) {
 			case Result::WIN:

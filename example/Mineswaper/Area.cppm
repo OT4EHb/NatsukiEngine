@@ -58,7 +58,7 @@ export{
 		}
 
 		void setTotalMine(size_t mine) {
-			size_t limit = width * height * 0.4;
+			size_t limit = static_cast<size_t>(width * height * 0.4);
 			totalMine = std::min(mine, limit);
 			mines = totalMine;
 		}
@@ -103,7 +103,7 @@ export{
 			if (data[i][j].nearbyMines == 0) {
 				for (int ni = -1; ni <= 1; ni++) {
 					for (int nj = -1; nj <= 1; nj++) {
-						if (isValid(i + ni, j + nj))
+						if (isValid(static_cast<int>(i + ni), static_cast<int>(j + nj)))
 							onClick(i + ni, j + nj);
 					}
 				}
@@ -134,34 +134,34 @@ export{
 			}
 		}
 
-		void render(Natsuki::Renderer &ren, int size, SDL_Point start = {0, 0}) {
+		void render(Natsuki::Renderer &ren, float size, SDL_Point start = {0, 0}) {
 			for (size_t i{}; i < height; ++i) {
 				for (size_t j{}; j < width; ++j) {
-					SDL_FRect src{0, 0, 16, 16};
+					SDL_FRect src{0.f, 0.f, 16.f, 16.f};
 					SDL_FRect dst{i * size, j * size, size, size};
 					if (data[i][j].state == TileState::HIDDEN) {
-						src.x = 16;
-						src.y = 32;
+						src.x = 16.f;
+						src.y = 32.f;
 					}
 					else if (data[i][j].state == TileState::FLAGGED) {
-						src.x = 48;
-						src.y = 32;
+						src.x = 48.f;
+						src.y = 32.f;
 					}
 					else {
 						if (data[i][j].isMine) {
-							src.x = 32;
-							src.y = 32;
+							src.x = 32.f;
+							src.y = 32.f;
 						}
 						else {
 							if (data[i][j].nearbyMines == 0) {
-								src.y = 32;
+								src.y = 32.f;
 							}
 							else if (data[i][j].nearbyMines < 5) {
-								src.x = (data[i][j].nearbyMines - 1) * 16;
+								src.x = (data[i][j].nearbyMines - 1) * 16.f;
 							}
 							else {
-								src.y = 16;
-								src.x = (data[i][j].nearbyMines - 5) * 16;
+								src.y = 16.f;
+								src.x = (data[i][j].nearbyMines - 5) * 16.f;
 							}
 						}
 					}
