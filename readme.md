@@ -1,30 +1,33 @@
 # Natsuki Engine
-Это можно назвать ~~игровым движком~~ фреймворком для разработки игр (не рекомендуется к использованию)
+Это можно назвать ~~игровым движком~~ фреймворком
+для разработки игр (не рекомендуется к использованию)
 
 ## Зависимости
-Используются библиотеки [SDL3](https://github.com/libsdl-org/SDL), [SDL_image](https://github.com/libsdl-org/SDL_image), [SDL_ttf](https://github.com/libsdl-org/SDL_ttf)
+Используются библиотеки [SDL3](https://github.com/libsdl-org/SDL),
+[SDL_image](https://github.com/libsdl-org/SDL_image),
+[SDL_ttf](https://github.com/libsdl-org/SDL_ttf),
+[SDL_mixer](https://github.com/libsdl-org/SDL_mixer)
 
 ## Сборка
-Доступна сборка через CMake, в данный момент работает только на MSVC (ждем полную поддержку модулей)
+Доступна сборка через CMake, протестирована с Ninja + MSVC.
 
 ## Быстрый старт
 ```cmake
-#config.cmake
-set(APP_DIR "your_dir")
-
-#your_dir/CMakeLists.txt
+#CMakeLists.txt
+cmake_minimum_required...
+project...
+#Configure
+add_subdirectory(${ENGINE_ROOT})
 add_executable(YourGame)
-configure_target(YourGame)
-added_src(YourGame src_dir)
-added_assets(YourGame assets_dir_")
+natsuki_target(YourGame)
+natsuki_assets(YourGame ${ASSETS_DIR})
 ```
 
-## Каталоги
-- *modules/* - каталог модулей, добавляются в сборку по необходимости
-- *src/* - каталог исходных файлов, добавляются в сборку по необходимости
-- *templates/* - каталог шаблонов, эти файлы должны содержать реализацию под конкретную игру и быть добавлены в сборку
+## Примеры
+Представлены в директории example
 
 ## Реализованные системы
 В данный момент реализованы абстракции над библиотекой (не рекомендуется к использованию),
 менеджер ресурсов (не рекомендуется к использованию),
-конечный автомат игровых состояний (не рекомендуется к использованию, будет переписан на компилтайм)
+конечный автомат игровых состояний (не рекомендуется к использованию, будет переписан на компилтайм (уже сломался)),
+звуковая система (не рекомендуется к использованию)

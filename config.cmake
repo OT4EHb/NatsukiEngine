@@ -1,1 +1,0 @@
-set(APP_DIR "example/Mineswaper")

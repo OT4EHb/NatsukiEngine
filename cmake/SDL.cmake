@@ -1,0 +1,148 @@
+function(is_vendored_built lib_name vendor_dir result_var)
+    if(WIN32)
+        if(BUILD_SHARED_LIBS)
+            set(patterns "*.dll" "bin/*.dll")
+        else()
+            set(patterns "*.lib" "lib/*.lib")
+        endif()
+    elseif(APPLE)
+        if(BUILD_SHARED_LIBS)
+            set(patterns "*.dylib" "lib/*.dylib")
+        else()
+            set(patterns "*.a" "lib/*.a")
+        endif()
+    else()
+        if(BUILD_SHARED_LIBS)
+            set(patterns "*.so" "lib/*.so")
+        else()
+            set(patterns "*.a" "lib/*.a")
+        endif()
+    endif()
+    
+    set(built FALSE)
+    foreach(pattern ${patterns})
+        file(GLOB files "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${pattern}")
+        message(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+        if(files)
+            message("Find ${lib_name} in ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+            set(built TRUE)
+            break()
+        endif()
+        file(GLOB files "${CMAKE_CURRENT_BINARY_DIR}/vendored/${vendor_dir}/${pattern}")
+        if(files)
+            message("Find ${lib_name} in vendored")
+            set(built TRUE)
+            break()
+        endif()
+    endforeach()
+    
+    set(${result_var} ${built} PARENT_SCOPE)
+endfunction()
+
+function(add_vendored_if_needed lib_name vendor_dir)
+    is_vendored_built(${lib_name} ${vendor_dir} already_built)
+    
+    if(already_built AND NOT FORCE_VENDORED_SDL)
+        message(STATUS "✓ ${lib_name} - using existing artifacts (skipping rebuild)")
+        create_imported_target(${lib_name} ${vendor_dir})
+        return()
+    endif()
+    
+    message(STATUS "🔨 ${lib_name} - building vendored")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendored/${vendor_dir} EXCLUDE_FROM_ALL)
+endfunction()
+
+function(create_imported_target lib_name vendor_dir)
+    set(target_name "${lib_name}::${lib_name}")
+    
+    if(TARGET ${target_name})
+        return()
+    endif()
+    
+    set(base_path "${CMAKE_CURRENT_BINARY_DIR}/vendored/${vendor_dir}")
+    
+    if(WIN32)
+        if(BUILD_SHARED_LIBS)
+            file(GLOB lib_file "${base_path}/*.lib")
+            file(GLOB dll_file "${base_path}/*.dll")
+            if(lib_file AND dll_file)
+                add_library(${target_name} SHARED IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_IMPLIB ${lib_file}
+                    IMPORTED_LOCATION ${dll_file}
+                )
+            endif()
+        else()
+            file(GLOB lib_file "${base_path}/*.lib")
+            if(lib_file)
+                add_library(${target_name} STATIC IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_LOCATION ${lib_file}
+                )
+            endif()
+        endif()
+    elseif(APPLE)
+        if(BUILD_SHARED_LIBS)
+            file(GLOB dylib_file "${base_path}/*.dylib")
+            if(dylib_file)
+                add_library(${target_name} SHARED IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_LOCATION ${dylib_file}
+                )
+            endif()
+        else()
+            file(GLOB a_file "${base_path}/*.a")
+            if(a_file)
+                add_library(${target_name} STATIC IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_LOCATION ${a_file}
+                )
+            endif()
+        endif()
+    else() # Linux
+        if(BUILD_SHARED_LIBS)
+            file(GLOB so_file "${base_path}/*.so")
+            if(so_file)
+                add_library(${target_name} SHARED IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_LOCATION ${so_file}
+                )
+            endif()
+        else()
+            file(GLOB a_file "${base_path}/*.a")
+            if(a_file)
+                add_library(${target_name} STATIC IMPORTED)
+                set_target_properties(${target_name} PROPERTIES
+                    IMPORTED_LOCATION ${a_file}
+                )
+            endif()
+        endif()
+    endif()
+    
+    if(TARGET ${target_name})
+        message(STATUS "Created imported target ${target_name} from existing artifacts")
+    endif()
+endfunction()
+
+if(USE_SYSTEM_SDL AND NOT FORCE_VENDORED_SDL)
+    find_package(SDL3 CONFIG QUIET)
+    find_package(SDL3_ttf CONFIG QUIET)
+    find_package(SDL3_image CONFIG QUIET)
+    find_package(SDL3_mixer CONFIG QUIET)
+endif()
+
+if(NOT SDL3_FOUND)
+    add_vendored_if_needed(SDL3 "SDL")
+endif()
+
+if(NOT SDL3_ttf_FOUND)
+    add_vendored_if_needed(SDL3_ttf "SDL_ttf")
+endif()
+
+if(NOT SDL3_image_FOUND)
+    add_vendored_if_needed(SDL3_image "SDL_image")
+endif()
+
+if(NOT SDL3_mixer_FOUND)
+    add_vendored_if_needed(SDL3_mixer "SDL_mixer")
+endif()
