@@ -1,7 +1,6 @@
 #define SDL_MAIN_USE_CALLBACKS
 #include <SDL3/SDL_main.h>
 #include <concepts>
-import Natsuki.Game;
 
 #define SET_GAME(GameClass) \
     static_assert(std::derived_from<GameClass, Natsuki::Game<GameClass> >, \

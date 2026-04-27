@@ -1,4 +1,5 @@
 #include <NatsukiMain.hpp>
+#include <functional>
 
 import Natsuki;
 import Area;

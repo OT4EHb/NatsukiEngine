@@ -6,6 +6,7 @@ module;
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_mouse.h>
 export module Natsuki.Event.MouseSystem;
+export import Natsuki.Event.HandlerType;
 
 export using ::SDL_AppResult;
 export using ::SDL_MouseButtonEvent;
