@@ -4,8 +4,8 @@ module;
 #include <string>
 #include <string_view>
 #include <filesystem>
+#include <SDL3/SDL_error.h>
 export module Natsuki.Exception;
-import Natsuki.SDL;
 
 export namespace Natsuki {
 	class Exception :
@@ -23,7 +23,7 @@ export namespace Natsuki {
 				+ std::string(error)
 			) {}
 		Exception(std::source_location loc = std::source_location::current())
-			:Exception(SDL::getError(), loc) {}
+			:Exception(SDL_GetError(), loc) {}
 	};
 
 	inline constexpr void checkCall(bool v, std::source_location loc = std::source_location::current()) {

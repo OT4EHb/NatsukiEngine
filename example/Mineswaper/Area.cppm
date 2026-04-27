@@ -140,7 +140,7 @@ export{
 			width(width), height(height),
 			distX(0, width - 1), distY(0, height - 1) {
 
-			texture.load("res/minesweeper.png", ren.getRaw());
+			Natsuki::checkCall(texture.load("res/minesweeper.png", ren.getRaw()));
 			setTotalMine(mine);
 			std::random_device rd;
 			rng.seed(rd());
