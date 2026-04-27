@@ -26,15 +26,19 @@ export{
 	};
 
 	class Area {
+		static constexpr size_t period = 5;
 	private:
 		std::vector<std::vector<Tile>>data;
-		size_t width;
-		size_t height;
+		const size_t width;
+		const size_t height;
 		size_t totalMine;
 		std::mt19937 rng;
+		std::uniform_int_distribution<size_t> distX;
+		std::uniform_int_distribution<size_t> distY;
 		Natsuki::Texture texture;
 		size_t hidden;
 		size_t mines;
+		uint16_t count;
 
 		bool isValid(int i, int j) const {
 			return i >= 0 && i < static_cast<int>(height) &&
@@ -57,14 +61,84 @@ export{
 			}
 		}
 
+		void dropMine(size_t i, size_t j) {
+			data[i][j].isMine = false;
+			for (int di = -1; di <= 1; ++di) {
+				for (int dj = -1; dj <= 1; ++dj) {
+					if (di == 0 && dj == 0) continue;
+
+					int ni = static_cast<int>(i) + di;
+					int nj = static_cast<int>(j) + dj;
+
+					if (isValid(ni, nj)) {
+						if (--(data[ni][nj].nearbyMines) == 0
+							&& data[ni][nj].state == TileState::REVEALED)
+							open(ni, nj);
+					}
+				}
+			}
+		}
+
 		void setTotalMine(size_t mine) {
 			size_t limit = static_cast<size_t>(width * height * 0.4);
 			totalMine = std::min(mine, limit);
 			mines = totalMine;
 		}
+
+		bool findHidden(size_t &i, size_t &j) {
+			for (int k{}; k < 10; ++k) {
+				i = distX(rng);
+				j = distY(rng);
+				if (data[i][j].state == TileState::HIDDEN
+					&& data[i][j].isMine == false) return true;
+			}
+			return false;
+		}
+
+		bool findMine(size_t &i, size_t &j) {
+			for (int k{}; k < 10; ++k) {
+				i = distX(rng);
+				j = distY(rng);
+				if (data[i][j].isMine == true) return true;
+			}
+			return false;
+		}
+
+		void swapMines() {
+			size_t i0, j0;
+			if (!findMine(i0, j0)) return;
+			size_t i1, j1;
+			for (int k{}; k < 10; ++k) {
+				if (!findHidden(i1, j1)) return;
+				if (i0 != i1 || j0 != j1) {
+					setMine(i1, j1);
+					dropMine(i0, j0);
+					return;
+				}
+			}
+		}
+
+		void open(size_t i, size_t j) {
+			--hidden;
+			data[i][j].state = TileState::REVEALED;
+			if (data[i][j].nearbyMines == 0) {
+				for (int di = -1; di <= 1; di++) {
+					for (int dj = -1; dj <= 1; dj++) {
+						if (di == 0 && dj == 0) continue;
+						int ni = i + di;
+						int nj = j + dj;
+						if (isValid(static_cast<int>(ni), static_cast<int>(nj))
+							&& data[ni][nj].state==TileState::HIDDEN) {
+							open(ni, nj);
+						}
+					}
+				}
+			}
+		}
 	public:
 		Area(size_t width, size_t height, size_t mine, Natsuki::Renderer &ren) :
-			width(width), height(height) {
+			width(width), height(height),
+			distX(0, width - 1), distY(0, height - 1) {
 
 			texture.load("res/minesweeper.png", ren.getRaw());
 			setTotalMine(mine);
@@ -76,7 +150,7 @@ export{
 		void reset() {
 			data.assign(height, std::vector<Tile>(width));
 
-			hidden = width * height;
+			hidden = width * height - mines;
 			std::vector<size_t> indices(hidden);
 			std::iota(indices.begin(), indices.end(), 0);
 			std::shuffle(indices.begin(), indices.end(), rng);
@@ -97,32 +171,24 @@ export{
 		Result onClick(size_t i, size_t j) {
 			if (data[i][j].state != TileState::HIDDEN) return Result::NONE;
 			if (data[i][j].isMine) return Result::LOSE;
-			--hidden;
-			data[i][j].state = TileState::REVEALED;
+			open(i, j);
 			if (hidden == 0) return Result::WIN;
-			if (data[i][j].nearbyMines == 0) {
-				for (int ni = -1; ni <= 1; ni++) {
-					for (int nj = -1; nj <= 1; nj++) {
-						if (isValid(static_cast<int>(i + ni), static_cast<int>(j + nj)))
-							onClick(i + ni, j + nj);
-					}
-				}
+			++count;
+			if (count % period == 0) {
+				count = 0;
+				swapMines();
 			}
 			return Result::NONE;
 		}
 
-		Result setFlag(size_t i, size_t j) {
-			if (data[i][j].state == TileState::REVEALED) return Result::NONE;
+		void setFlag(size_t i, size_t j) {
+			if (data[i][j].state == TileState::REVEALED) return;
 			if (data[i][j].state == TileState::HIDDEN) {
-				--hidden;
 				data[i][j].state = TileState::FLAGGED;
 			}
 			else {
-				++hidden;
 				data[i][j].state = TileState::HIDDEN;
 			}
-			if (hidden == 0) return Result::WIN;
-			return Result::NONE;
 		}
 
 		void allOpen() {
