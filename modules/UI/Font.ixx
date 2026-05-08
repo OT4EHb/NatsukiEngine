@@ -29,6 +29,7 @@ export namespace Natsuki {
 		inline float getSize();
 		inline bool getDPI(int *hdpi, int *vdpi);
 		inline void setStyle(Style);
+		inline bool addFallback(Font &);
 	};
 }
 
@@ -62,4 +63,8 @@ bool Font::getDPI(int *hdpi, int *vdpi) {
 
 void Font::setStyle(Style style) {
 	TTF_SetFontStyle(font, static_cast<TTF_FontStyleFlags>(style));
+}
+
+bool Font::addFallback(Font &fallback) {
+	return TTF_AddFallbackFont(font, fallback.font);
 }
