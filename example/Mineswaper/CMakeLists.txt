@@ -18,8 +18,12 @@ target_sources(Mineswaper
             "Area.cppm"
 )
 
+target_include_directories(Mineswaper PRIVATE "include")
+
 target_sources(Mineswaper
     PRIVATE
-        "Game.cpp"
+        "src/Game.cpp"
+        "src/MenuState.cpp"
+        "src/GameState.cpp"
 )
 natsuki_assets(Mineswaper "${CMAKE_CURRENT_SOURCE_DIR}/res")
