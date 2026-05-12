@@ -6,7 +6,7 @@ module;
 #include <tuple>
 #include <unordered_map>
 export module Natsuki.Resource.ResourceManager;
-import Natsuki.Resource.BaseResource;
+import Natsuki.Resource.Concept;
 import Natsuki.Utils.TransparentHash;
 import Natsuki.Exception;
 

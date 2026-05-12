@@ -8,7 +8,6 @@ module;
 export module Natsuki.Event.KeySystem;
 export import Natsuki.Event.HandlerType;
 
-export using ::SDL_AppResult;
 export using ::SDL_Scancode;
 export using ::SDL_KeyboardEvent;
 

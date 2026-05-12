@@ -43,8 +43,7 @@ export namespace Natsuki {
 				should = lvl >= loger.minLevel;
 				if (should) {
 					loger << "[" << Loger::levelToString(lvl) << "] "
-						<< "[" << loc.file_name() << ":" << loc.line() << ":"
-						<< loc.function_name() << "] ";
+						<< "[" << loc.file_name() << ":" << loc.line()<< "] ";
 				}
 			}
 			~Message() {
@@ -74,7 +73,7 @@ export namespace Natsuki {
 			Message &operator=(Message &&) = delete;
 		};
 
-		Loger() = delete;
+		Loger() = default;
 
 		Loger(std::ostream &stream):
 		ostream(&stream), isTemp(false){

@@ -9,6 +9,7 @@ export module Natsuki.Event.EventHandler;
 export import Natsuki.Event.KeySystem;
 export import Natsuki.Event.MouseSystem;
 
+export using ::SDL_Event;
 
 export namespace Natsuki {
 	class EventHandler {

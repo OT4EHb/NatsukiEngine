@@ -8,7 +8,6 @@ module;
 export module Natsuki.Event.MouseSystem;
 export import Natsuki.Event.HandlerType;
 
-export using ::SDL_AppResult;
 export using ::SDL_MouseButtonEvent;
 
 export namespace Natsuki {

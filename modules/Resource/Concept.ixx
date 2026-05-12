@@ -1,6 +1,6 @@
 module;
 #include <string_view>
-export module Natsuki.Resource.BaseResource;
+export module Natsuki.Resource.Concept;
 
 export namespace Natsuki {
 	template<class R, class... Args>

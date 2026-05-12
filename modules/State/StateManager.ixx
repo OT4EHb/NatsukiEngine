@@ -1,4 +1,5 @@
 module;
+#include <concepts>
 #include <variant>
 export module Natsuki.State.StateManager;
 import Natsuki.State.Concept;
@@ -7,7 +8,7 @@ export namespace Natsuki {
 	template<typename...States>
 	class StateManager {
 	private:
-		std::variant<std::monostate, States...> current;
+		std::variant<States...> current;
 
 		template<typename T>
 		constexpr static void callEnter(T &state) {
@@ -23,7 +24,15 @@ export namespace Natsuki {
 			}
 		}
 	public:
-		constexpr StateManager() :current(std::monostate{}) {}
+		template<typename T>
+			requires (std::is_same_v<T, States> || ...)
+		constexpr StateManager(T&&startState) :
+			current(std::forward<T>(startState)) {
+
+			std::visit([](auto &state) {
+				callEnter(state);
+			}, current);
+		}
 
 		template<typename T>
 		constexpr bool is() const {
@@ -37,7 +46,7 @@ export namespace Natsuki {
 			std::visit([](auto &state) {
 				callExit(state);
 			}, current);
-			current = T(std::forward<Args>(args)...);
+			current.template emplace<T>(std::forward<Args>(args)...);
 			std::visit([](auto &state) {
 				callEnter(state);
 			}, current);
