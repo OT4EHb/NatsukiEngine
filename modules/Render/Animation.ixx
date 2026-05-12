@@ -26,8 +26,12 @@ export namespace Natsuki {
 		void fromGrid(int width, int height, SDL_FPoint size, time_type delay = 100) {
 			for (int h = 0; h < size.y; h += height)
 				for (int w = 0; w < size.x; w += width) {
-					frames.emplace_back(w, h, width, height);
-					delays.push_back(delay);
+					addFrame(static_cast<float>(w),
+							 static_cast<float>(h),
+							 static_cast<float>(width),
+							 static_cast<float>(height),
+							 delay
+					);
 				}
 		}
 	};
@@ -64,7 +68,11 @@ export namespace Natsuki {
 		void fromGrid(int width, int height, SDL_FPoint size) {
 			for (int h = 0; h < size.y; h += height)
 				for (int w = 0; w < size.x; w += width) {
-					frames.emplace_back(w, h, width, height);
+					addFrame(static_cast<float>(w),
+							 static_cast<float>(h),
+							 static_cast<float>(width),
+							 static_cast<float>(height)
+					);
 				}
 		}
 

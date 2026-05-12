@@ -10,25 +10,19 @@ export import Natsuki.ECS.Component.PositionSize;
 export using ::SDL_FRect;
 
 export namespace Natsuki {
-	struct SpriteSrc {
-		SDL_FRect srcRect;
-
+	struct SpriteSrc :public SDL_FRect {
 		inline void set(const Texture &texture) {
-			srcRect.x = 0;
-			srcRect.y = 0;
+			x = 0;
+			y = 0;
 			SDL_FPoint &p = reinterpret_cast<SDL_FPoint &>
 				(*(reinterpret_cast<char *>(this) + sizeof(SDL_FPoint)));
 			p = texture.getSize();
-		}
-
-		constexpr inline operator SDL_FRect &() {
-			return srcRect;
 		}
 	};
 
 	struct SpriteOrigin {
 		double angle{};
-		SDL_FPoint center;
+		SDL_FPoint center{};
 
 		inline void setCenter(SDL_FRect &destRect) {
 			center.x = destRect.w / 2;
@@ -39,7 +33,7 @@ export namespace Natsuki {
 	struct Sprite {
 		std::shared_ptr<Texture> texture;
 		SpriteSrc src;
-		SDL_FRect dest;
+		PositionSize dest;
 		SpriteOrigin origin;
 		FlipMode flip;
 	};

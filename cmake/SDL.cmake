@@ -44,8 +44,11 @@ function(add_vendored_if_needed lib_name vendor_dir)
     
     if(already_built AND NOT FORCE_VENDORED_SDL)
         message(STATUS "✓ ${lib_name} - using existing artifacts (skipping rebuild)")
+        set(target_name "${lib_name}::${lib_name}")
         create_imported_target(${lib_name} ${vendor_dir})
-        return()
+        if (TARGET ${target_name})
+            return()
+        endif()
     endif()
     
     message(STATUS "🔨 ${lib_name} - building vendored")
