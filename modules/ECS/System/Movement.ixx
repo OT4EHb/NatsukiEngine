@@ -50,8 +50,8 @@ export namespace Natsuki {
 			>();
 			for (size_t i{}; i < size; ++i) {
 				Position &position = positions[i];
-				position.x += velocitys[i].dx * delta;
-				position.y += velocitys[i].dy * delta;
+				position.x += velocitys[i].x * delta;
+				position.y += velocitys[i].y * delta;
 			}
 		}
 
@@ -65,23 +65,23 @@ export namespace Natsuki {
 			>();
 			for (size_t i{}; i < size; ++i) {
 				PositionSize &ps = positions[i];
-				ps.x += velocitys[i].dx * delta;
+				ps.x += velocitys[i].x * delta;
 				if (ps.x < rect.x) {
-					velocitys[i].dx = std::abs(velocitys[i].dx);
+					velocitys[i].x = std::abs(velocitys[i].x);
 					ps.x += 10;
 				}
 				else if (ps.x + ps.w > rect.x + rect.w) {
-					velocitys[i].dx = -std::abs(velocitys[i].dx);
+					velocitys[i].x = -std::abs(velocitys[i].x);
 					ps.x -= 10;
 				}
 
 				ps.y += velocitys[i].dy * delta;
 				if (ps.y < rect.y) {
-					velocitys[i].dy = std::abs(velocitys[i].dy);
+					velocitys[i].y = std::abs(velocitys[i].y);
 					ps.y += 10;
 				}
 				else if (ps.y + ps.h > rect.y + rect.h) {
-					velocitys[i].dy = -std::abs(velocitys[i].dy);
+					velocitys[i].y = -std::abs(velocitys[i].y);
 					ps.y -= 10;
 				}
 			}

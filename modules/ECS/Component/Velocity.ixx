@@ -1,8 +1,7 @@
 export module Natsuki.ECS.Component.Velocity;
+export import Natsuki.Math;
 
 export namespace Natsuki {
-	struct Velocity {
-		float dx;
-		float dy;
+	struct Velocity :public  FPoint {
 	};
 }
