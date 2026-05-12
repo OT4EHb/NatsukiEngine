@@ -10,10 +10,10 @@ export namespace Natsuki {
 
 	struct AnimationData {
 		std::shared_ptr<Texture> texture;
-		std::vector<SDL_FRect> frames;
+		std::vector<FRect> frames;
 		std::vector<time_type> delays;
 
-		void addFrame(SDL_FRect frame, time_type delay) {
+		void addFrame(FRect frame, time_type delay) {
 			frames.push_back(frame);
 			delays.push_back(delay);
 		}
@@ -49,7 +49,7 @@ export namespace Natsuki {
 	class AnimationFixed {
 	private:
 		std::shared_ptr<Texture> texture;
-		std::vector<SDL_FRect> frames;
+		std::vector<FRect> frames;
 		time_type delay;
 		AnimationState state;
 	public:
@@ -57,7 +57,7 @@ export namespace Natsuki {
 			frames.reserve(count);
 		}
 
-		void addFrame(SDL_FRect frame) {
+		void addFrame(FRect frame) {
 			frames.push_back(frame);
 		}
 
@@ -92,7 +92,7 @@ export namespace Natsuki {
 			return *texture.get();
 		}
 
-		const SDL_FRect &getCurrent() const {
+		const FRect &getCurrent() const {
 			return frames[state.index];
 		}
 
@@ -118,7 +118,7 @@ export namespace Natsuki {
 		AnimationData *operator->() { return data.get(); }
 		const AnimationData *operator->() const { return data.get(); }
 
-		const SDL_FRect &getCurrent() const {
+		const FRect &getCurrent() const {
 			return data->frames[state.index];
 		}
 

@@ -7,8 +7,6 @@ import Natsuki.Window;
 export import Natsuki.Exception;
 export import Natsuki.Render.Sprite;
 
-export using ::SDL_Point;
-export using ::SDL_FPoint;
 export using ::SDL_Vertex;
 
 export namespace Natsuki {
@@ -25,34 +23,34 @@ export namespace Natsuki {
 		inline bool setDrawColor(const SDL_Color &c) const;
 		inline SDL_Color getDrawColor() const;
 
-		inline bool setScale(const SDL_FPoint) const;
-		inline SDL_FPoint getScale() const;
+		inline bool setScale(const FPoint) const;
+		inline FPoint getScale() const;
 
 		inline bool clear(const SDL_Color &color = {0, 0, 0, 255}) const;
 		inline bool present() const;
 		inline bool setVSync(int vsync = 1) const;
 
-		inline bool renderFillRect(const SDL_FRect &rect) const;
-		inline bool renderFillRects(std::span<const SDL_FRect>) const;
+		inline bool renderFillRect(const FRect &rect) const;
+		inline bool renderFillRects(std::span<const FRect>) const;
 
-		inline bool render(const SDL_FRect &rect) const;
-		inline bool render(std::span<const SDL_FRect>) const;
+		inline bool render(const FRect &rect) const;
+		inline bool render(std::span<const FRect>) const;
 
-		inline bool renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const;
-		inline bool renderLines(std::span<const SDL_FPoint>) const;
+		inline bool renderLine(const FPoint &p1, const FPoint &p2) const;
+		inline bool renderLines(std::span<const FPoint>) const;
 
-		inline bool render(const SDL_FPoint &point) const;
-		inline bool render(std::span<const SDL_FPoint>) const;
+		inline bool render(const FPoint &point) const;
+		inline bool render(std::span<const FPoint>) const;
 
 		inline bool renderGeometry(std::span<const SDL_Vertex>,
 								   std::span <const int> = {},
 								   SDL_Texture * = nullptr) const;
-		inline bool render(Texture &, const SDL_FRect &src, const SDL_FRect &dst) const;
-		inline bool render(Texture &, const SDL_FRect &src, const SDL_FRect &dst,
+		inline bool render(Texture &, const FRect &src, const FRect &dst) const;
+		inline bool render(Texture &, const FRect &src, const FRect &dst,
 						   const SpriteOrigin &, FlipMode) const;
 		inline bool render(Sprite&) const;
 
-		inline bool renderDebugText(std::string_view, SDL_FPoint = {0.f, 0.f}) const;
+		inline bool renderDebugText(std::string_view, FPoint = {0.f, 0.f}) const;
 	};
 }
 
@@ -77,12 +75,12 @@ inline SDL_Color Renderer::getDrawColor() const {
 	return color;
 }
 
-inline bool Renderer::setScale(const SDL_FPoint scale) const {
+inline bool Renderer::setScale(const FPoint scale) const {
 	return SDL_SetRenderScale(renderer, scale.x, scale.y);
 }
 
-inline SDL_FPoint Renderer::getScale() const {
-	SDL_FPoint scale;
+inline FPoint Renderer::getScale() const {
+	FPoint scale;
 	SDL_GetRenderScale(renderer, &scale.x, &scale.y);
 	return scale;
 }
@@ -100,35 +98,35 @@ inline bool Renderer::setVSync(int vsync) const {
 	return SDL_SetRenderVSync(renderer, vsync);
 }
 
-inline bool Renderer::renderFillRect(const SDL_FRect &rect) const {
+inline bool Renderer::renderFillRect(const FRect &rect) const {
 	return SDL_RenderFillRect(renderer, &rect);
 }
 
-inline bool Renderer::renderFillRects(std::span<const SDL_FRect>rects) const {
+inline bool Renderer::renderFillRects(std::span<const FRect>rects) const {
 	return SDL_RenderFillRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
-inline bool Renderer::render(const SDL_FRect &rect) const {
+inline bool Renderer::render(const FRect &rect) const {
 	return SDL_RenderRect(renderer, &rect);
 }
 
-inline bool Renderer::render(std::span<const SDL_FRect>rects) const {
+inline bool Renderer::render(std::span<const FRect>rects) const {
 	return SDL_RenderRects(renderer, rects.data(), static_cast<int>(rects.size()));
 }
 
-inline bool Renderer::renderLine(const SDL_FPoint &p1, const SDL_FPoint &p2) const {
+inline bool Renderer::renderLine(const FPoint &p1, const FPoint &p2) const {
 	return SDL_RenderLine(renderer, p1.x, p1.y, p2.x, p2.y);
 }
 
-inline bool Renderer::renderLines(std::span<const SDL_FPoint>points) const {
+inline bool Renderer::renderLines(std::span<const FPoint>points) const {
 	return SDL_RenderLines(renderer, points.data(), static_cast<int>(points.size()));
 }
 
-inline bool Renderer::render(const SDL_FPoint &point) const {
+inline bool Renderer::render(const FPoint &point) const {
 	return SDL_RenderPoint(renderer, point.x, point.y);
 }
 
-inline bool Renderer::render(std::span<const SDL_FPoint>points) const {
+inline bool Renderer::render(std::span<const FPoint>points) const {
 	return SDL_RenderPoints(renderer, points.data(), static_cast<int>(points.size()));
 }
 
@@ -140,12 +138,12 @@ inline bool Renderer::renderGeometry(std::span<const SDL_Vertex>vertices,
 	);
 }
 
-inline bool Renderer::render(Texture &texture, const SDL_FRect &src,
-							 const SDL_FRect &dst) const {
+inline bool Renderer::render(Texture &texture, const FRect &src,
+							 const FRect &dst) const {
 	return SDL_RenderTexture(renderer, texture.getRaw(), &src, &dst);
 }
 
-inline bool Renderer::render(Texture &texture, const SDL_FRect &src, const SDL_FRect &dst,
+inline bool Renderer::render(Texture &texture, const FRect &src, const FRect &dst,
 							 const SpriteOrigin &origin, FlipMode flip) const {
 	return SDL_RenderTextureRotated(renderer, texture.getRaw(), &src,
 									&dst, origin.angle,
@@ -153,9 +151,9 @@ inline bool Renderer::render(Texture &texture, const SDL_FRect &src, const SDL_F
 }
 
 inline bool Renderer::render(Sprite &spr) const {
-	return render(*spr.texture.get(), spr.src, spr.dest, spr.origin, spr.flip);
+	return render(*spr.texture.get(), spr.src, spr.dst, spr.origin, spr.flip);
 }
 
-inline bool Renderer::renderDebugText(std::string_view text, SDL_FPoint position) const {
+inline bool Renderer::renderDebugText(std::string_view text, FPoint position) const {
 	return SDL_RenderDebugText(renderer, position.x, position.y, text.data());
 }

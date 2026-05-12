@@ -2,6 +2,7 @@ export module Natsuki;
 
 export import Natsuki.ECS;
 export import Natsuki.Event;
+export import Natsuki.Math;
 export import Natsuki.Render;
 export import Natsuki.Resource;
 export import Natsuki.Sound;

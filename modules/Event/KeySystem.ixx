@@ -19,7 +19,11 @@ export namespace Natsuki {
 		using handler_type = std::function<SDL_AppResult(Event)>;
 		std::array<handler_type, SIZE> keyDown;
 		std::array<handler_type, SIZE> keyUp;
+		int sizeState;
+		const bool *state;
 	public:
+		KeySystem() :state{SDL_GetKeyboardState(&sizeState)} {}
+
 		template<class F>
 			requires std::invocable<F, Event>
 		void setDown(SDL_Scancode scan, F &&f) {
@@ -54,6 +58,11 @@ export namespace Natsuki {
 
 		void clearUp(SDL_Scancode scan) {
 			keyUp[scan] = nullptr;
+		}
+
+		bool check(SDL_Scancode scan) {
+			if (scan >= sizeState) return false;
+			return state[scan];
 		}
 	};
 }

@@ -200,11 +200,11 @@ export{
 			}
 		}
 
-		void render(Natsuki::Renderer &ren, float size, SDL_Point start = {0, 0}) {
+		void render(Natsuki::Renderer &ren, float size, Natsuki::Point start = {0, 0}) {
 			for (size_t i{}; i < height; ++i) {
 				for (size_t j{}; j < width; ++j) {
-					SDL_FRect src{0.f, 0.f, 16.f, 16.f};
-					SDL_FRect dst{i * size, j * size, size, size};
+					Natsuki::FRect src{0.f, 0.f, 16.f, 16.f};
+					Natsuki::FRect dst{i * size, j * size, size, size};
 					if (data[i][j].state == TileState::HIDDEN) {
 						src.x = 16.f;
 						src.y = 32.f;

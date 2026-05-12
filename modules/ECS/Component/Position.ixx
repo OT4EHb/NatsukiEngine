@@ -1,7 +1,6 @@
-module;
-#include <SDL3/SDL_rect.h>
 export module Natsuki.ECS.Component.Position;
+export import Natsuki.Math;
 
 export namespace Natsuki {
-	struct Position :public SDL_FPoint {};
+	struct Position :public FPoint {};
 }
